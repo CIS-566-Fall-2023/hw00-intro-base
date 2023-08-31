@@ -90,6 +90,7 @@ function main() {
       // square,
     ], color = color);
     stats.end();
+    
 
     // Tell the browser to call `tick` again whenever it renders a new frame
     requestAnimationFrame(tick);
