@@ -1,8 +1,9 @@
-import {vec3} from 'gl-matrix';
+import {vec3, vec4} from 'gl-matrix';
 const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
 import Icosphere from './geometry/Icosphere';
 import Square from './geometry/Square';
+import Cube from './geometry/Cube';
 import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
@@ -13,10 +14,14 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
+  Red: 255, 
+  Green: 0, 
+  Blue: 0,
 };
 
 let icosphere: Icosphere;
 let square: Square;
+let cube: Cube;
 let prevTesselations: number = 5;
 
 function loadScene() {
@@ -24,6 +29,7 @@ function loadScene() {
   icosphere.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
+  cube = new Cube(vec3.fromValues(0, 0, 0));
 }
 
 function main() {
@@ -39,6 +45,9 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
+  gui.add(controls, 'Red', 0, 255).step(1);
+  gui.add(controls, 'Green', 0, 255).step(1);
+  gui.add(controls, 'Blue', 0, 255).step(1);
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -75,11 +84,13 @@ function main() {
       prevTesselations = controls.tesselations;
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
-    }
+    } 
     renderer.render(camera, lambert, [
       icosphere,
-      // square,
-    ]);
+      //square,
+      //cube,
+    ],
+    vec4.fromValues(controls.Red/255, controls.Green/255, controls.Blue/255, 1));
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame
