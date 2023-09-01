@@ -12,33 +12,81 @@
 precision highp float;
 
 uniform vec4 u_Color; // The color with which to render this instance of geometry.
-uniform float uTime; // Current time
+uniform float u_Time; // Current time
 
 // These are the interpolated values out of the rasterizer, so you can't know
 // their specific values without knowing the vertices that contributed to them
-in vec4 fs_Nor;
-in vec4 fs_LightVec;
-in vec4 fs_Col;
+in vec3 fs_Nor;
+in vec3 fs_Pos;
+in vec3 fs_Col;
+in vec2 fs_Uv;
 
 out vec4 out_Col; // This is the final output color that you will see on your
                   // screen for the pixel that is currently being processed.
 
+vec3 lightPosition(float time) {
+    //return vec3(5, 5, 3);
+    return vec3(cos(time), sin(time), 0.6) * 5.0;
+}
+
+uint hash(uint seed) {
+    seed = (seed ^ uint(61)) ^ (seed >> uint(16));
+    seed *= uint(9);
+    seed = seed ^ (seed >> uint(4));
+    seed *= uint(0x27d4eb2d);
+    seed = seed ^ (seed >> uint(15));
+    return seed;
+}
+
+float rand(inout uint seed) {
+    seed = hash(seed);
+    return float(seed) * (1.0 / 4294967296.0);
+}
+
+float VoronoiNoise(vec2 uv) {
+    float minDist = 2.;
+    vec2 base = floor(uv);
+    vec2 closest;
+
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            vec2 cell = base + vec2(i, j);
+            uint seed = floatBitsToUint((cell.x + 1.0) * (cell.y + 1.0));
+            vec2 cellPos = cell + vec2(rand(seed), rand(seed));
+
+            if (length(cellPos - uv) < minDist) {
+                minDist = length(cellPos - uv);
+                closest = cell;
+            }
+        }
+    }
+    uint seed = floatBitsToUint((closest.x + 1.0) * (closest.y + 1.0));
+    //return minDist * rand(seed);
+    return pow(minDist, 1.5);
+    //return rand(seed);
+}
+
 void main()
 {
     // Material base color (before shading)
-        vec4 diffuseColor = u_Color;
+    vec3 diffuseColor = u_Color.rgb;
+    diffuseColor = vec3(fs_Uv, 1.0);
 
-        // Calculate the diffuse term for Lambert shading
-        float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));
-        // Avoid negative lighting values
-        // diffuseTerm = clamp(diffuseTerm, 0, 1);
+    // Calculate the diffuse term for Lambert shading
 
-        float ambientTerm = 0.2;
+    vec3 wi = normalize(lightPosition(u_Time) - fs_Pos);
 
-        float lightIntensity = diffuseTerm + ambientTerm;   //Add a small float value to the color multiplier
+    float diffuseTerm = dot(fs_Nor, wi);
+    // Avoid negative lighting values
+    // diffuseTerm = clamp(diffuseTerm, 0, 1);
+
+    float ambientTerm = 0.2;
+
+    float lightIntensity = diffuseTerm + ambientTerm;   //Add a small float value to the color multiplier
                                                             //to simulate ambient lighting. This ensures that faces that are not
                                                             //lit by our point light are not completely black.
 
-        // Compute final shaded color
-        out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
+    // Compute final shaded color
+    out_Col = vec4(diffuseColor * lightIntensity, 1.0);
+    //out_Col = vec4(vec3(floor(u_FragmentTime)), 1.0);
 }

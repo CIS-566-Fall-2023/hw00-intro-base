@@ -3,10 +3,11 @@ import Drawable from '../rendering/gl/Drawable';
 import {gl} from '../globals';
 
 class Cube extends Drawable {
-    positions : Float32Array;
-    normals : Float32Array;
-    indices : Uint32Array;
-    center : vec4;
+    positions: Float32Array;
+    normals: Float32Array;
+    uvs: Float32Array;
+    indices: Uint32Array;
+    center: vec4;
 
     constructor(center: vec3) {
         super();
@@ -57,16 +58,6 @@ class Cube extends Drawable {
             0, 0, +1, 0,
             0, 0, +1, 0,
 
-            -1, 0, 0, 0,
-            -1, 0, 0, 0,
-            -1, 0, 0, 0,
-            -1, 0, 0, 0,
-
-            +1, 0, 0, 0,
-            +1, 0, 0, 0,
-            +1, 0, 0, 0,
-            +1, 0, 0, 0,
-
             0, -1, 0, 0,
             0, -1, 0, 0,
             0, -1, 0, 0,
@@ -76,6 +67,25 @@ class Cube extends Drawable {
             0, +1, 0, 0,
             0, +1, 0, 0,
             0, +1, 0, 0,
+
+            -1, 0, 0, 0,
+            -1, 0, 0, 0,
+            -1, 0, 0, 0,
+            -1, 0, 0, 0,
+
+            +1, 0, 0, 0,
+            +1, 0, 0, 0,
+            +1, 0, 0, 0,
+            +1, 0, 0, 0,
+        ]);
+
+        this.uvs = new Float32Array([
+            0, 0, 1, 0, 1, 1, 0, 1,
+            0, 0, 1, 0, 1, 1, 0, 1,
+            0, 0, 1, 0, 1, 1, 0, 1,
+            0, 0, 1, 0, 1, 1, 0, 1,
+            0, 0, 1, 0, 1, 1, 0, 1,
+            0, 0, 1, 0, 1, 1, 0, 1,
         ]);
 
         this.indices = new Uint32Array([
@@ -90,6 +100,7 @@ class Cube extends Drawable {
         this.generatePos();
         this.generateNor();
         this.generateIdx();
+        this.generateUv();
 
         this.count = this.indices.length;
 
@@ -101,6 +112,9 @@ class Cube extends Drawable {
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.bufPos);
         gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.STATIC_DRAW);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.bufUv);
+        gl.bufferData(gl.ARRAY_BUFFER, this.uvs, gl.STATIC_DRAW);
 
         console.log(`Created cube`);
     }
