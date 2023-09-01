@@ -1,29 +1,36 @@
-import {vec3} from 'gl-matrix';
+import { vec3, vec4 } from 'gl-matrix';
 const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
 import Icosphere from './geometry/Icosphere';
 import Square from './geometry/Square';
+import Cube from './geometry/Cube'
 import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
-import {setGL} from './globals';
-import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
+import { setGL } from './globals';
+import ShaderProgram, { Shader } from './rendering/gl/ShaderProgram';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
+  color: [255, 0, 0]
 };
 
 let icosphere: Icosphere;
 let square: Square;
+let cube: Cube;
 let prevTesselations: number = 5;
+let prevColor: number[] = controls.color;
+let tickCount = 0;
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
   icosphere.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
+  cube = new Cube(vec3.fromValues(0, 0, 0));
+  cube.create();
 }
 
 function main() {
@@ -39,10 +46,11 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
+  gui.addColor(controls, 'color')
 
   // get canvas and webgl context
-  const canvas = <HTMLCanvasElement> document.getElementById('canvas');
-  const gl = <WebGL2RenderingContext> canvas.getContext('webgl2');
+  const canvas = <HTMLCanvasElement>document.getElementById('canvas');
+  const gl = <WebGL2RenderingContext>canvas.getContext('webgl2');
   if (!gl) {
     alert('WebGL 2 not supported!');
   }
@@ -57,11 +65,12 @@ function main() {
 
   const renderer = new OpenGLRenderer(canvas);
   renderer.setClearColor(0.2, 0.2, 0.2, 1);
+  renderer.setGeometryColor(controls.color);
   gl.enable(gl.DEPTH_TEST);
 
-  const lambert = new ShaderProgram([
-    new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
-    new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+  const customshader = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/custom-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/custom-frag.glsl')),
   ]);
 
   // This function will be called every frame
@@ -70,15 +79,21 @@ function main() {
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
-    if(controls.tesselations != prevTesselations)
-    {
+    if (controls.tesselations != prevTesselations) {
       prevTesselations = controls.tesselations;
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
     }
-    renderer.render(camera, lambert, [
-      icosphere,
+    if (controls.color != prevColor) {
+      prevColor = controls.color;
+      renderer.setGeometryColor(controls.color);
+    }
+    tickCount += 1;
+    customshader.setTick(tickCount);
+    renderer.render(camera, customshader, [
+      // icosphere,
       // square,
+      cube
     ]);
     stats.end();
 
@@ -86,7 +101,7 @@ function main() {
     requestAnimationFrame(tick);
   }
 
-  window.addEventListener('resize', function() {
+  window.addEventListener('resize', function () {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.setAspectRatio(window.innerWidth / window.innerHeight);
     camera.updateProjectionMatrix();
