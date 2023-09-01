@@ -1,3 +1,13 @@
+# Project Description
+[Live Demo Here](https://liunicholas6.github.io/hw00-intro-base/)
+- Created a cube mesh in `src/Cube.ts` using vertices/normals/indices generated from `codegen\cubegen.hs`
+- Added color selector in DAT.GUI
+- Applied Worley Noise coloring in frag shader
+- Applied trig function size-scaling and perlin noise vertex displacement
+
+![Photo of demo](photos/cube.png)
+
+
 # HW 0: Intro to Javascript and WebGL
 
 <p align="center">
