@@ -1,3 +1,11 @@
+# Demo
+
+![Demo](screenshot.gif)
+
+[Live Site](https://yuezhang1027.github.io/CIS5660-hw00-intro-base/)
+
+I use a FBM shader aside with cosine function to create vertex displacement along normal, and a worley noise to create water wave-like effect on sphere's surface.
+
 # HW 0: Intro to Javascript and WebGL
 
 <p align="center">
