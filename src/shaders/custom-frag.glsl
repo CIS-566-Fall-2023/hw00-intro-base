@@ -56,6 +56,23 @@ vec2 toConcentricDisk(vec2 v) {
 	return vec2(r * cos(phi), r * sin(phi));
 }
 
+vec3 colorWheel(float x) {
+	const float Div = 1.0 / 4.0;
+
+	if (x < Div) {
+		return vec3(0.0, x / Div, 1.0);
+    }
+	else if (x < Div * 2.0) {
+		return vec3(0.0, 1.0, 2.0 - x / Div);
+    }
+	else if (x < Div * 3.0) {
+		return vec3(x / Div - 2.0, 1.0, 0.0);
+    }
+	else {
+		return vec3(1.0, 4.0 - x / Div, 0.0);
+    }
+}
+
 uint hash(uint seed) {
     seed = (seed ^ uint(61)) ^ (seed >> uint(16));
     seed *= uint(9);
@@ -111,7 +128,8 @@ void main()
     //vec2 uv = toConcentricDisk(fs_Uv);
 
     // Material base color (before shading)
-    vec3 diffuseColor = u_Color.rgb * VoronoiNoise(uv, vec2(u_VoronoiScale), u_Time);
+    float noise = VoronoiNoise(uv, vec2(u_VoronoiScale), u_Time);
+    vec3 diffuseColor = u_Color.rgb * noise;
 
     // Calculate the diffuse term for Lambert shading
 
@@ -126,6 +144,8 @@ void main()
     // diffuseTerm = clamp(diffuseTerm, 0, 1);
 
     float ambientTerm = 0.2;
+
+    diffuseTerm = 1.0;
 
     float lightIntensity = diffuseTerm + ambientTerm;   //Add a small float value to the color multiplier
                                                             //to simulate ambient lighting. This ensures that faces that are not

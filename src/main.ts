@@ -32,6 +32,8 @@ function loadScene() {
   square.create();
 
   cube = new Cube(vec3.fromValues(0, 0, 0));
+  cube.scale = vec3.fromValues(0.2, 0.2, 0.2);
+  cube.rotation = vec3.fromValues(45, 45, 45);
   cube.create();
 }
 
@@ -99,10 +101,13 @@ function main() {
     param.noiseScale = controls.voronoiScale;
     param.displacement = controls.displacement;
 
+    let rotation = 0.4;
+    vec3.add(cube.rotation, cube.rotation, vec3.fromValues(rotation, rotation, rotation));
+
     renderer.render(camera, customShader, param, [
       //icosphere,
       square,
-      //cube,
+      cube,
     ]);
     stats.end();
 
