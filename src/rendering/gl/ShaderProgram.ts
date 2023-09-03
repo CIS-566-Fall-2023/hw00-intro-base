@@ -18,6 +18,18 @@ export class Shader {
   }
 };
 
+export class ShaderData {
+  model : mat4;
+  viewProj : mat4;
+  color : vec4;
+
+  constructor(model : mat4, viewProj : mat4, color : vec4) {
+    this.model = model;
+    this.viewProj = viewProj;
+    this.color = color;
+  }
+};
+
 class ShaderProgram {
   prog: WebGLProgram;
 
