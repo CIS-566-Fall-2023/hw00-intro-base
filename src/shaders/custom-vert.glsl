@@ -116,9 +116,9 @@ void main()
                                                             // perpendicular to the surface after the surface is transformed by
                                                             // the model matrix.
     fs_ViewPos = vec3(u_ModelView * vec4(pos, 1.0));
-    vec4 modelposition = u_Model * vec4(pos, 1.0);   // Temporarily store the transformed vertex positions for use below
-    fs_Pos = modelposition.xyz;
+    vec4 trPos = u_Model * vec4(pos, 1.0);   // Temporarily store the transformed vertex positions for use below
+    fs_Pos = trPos.xyz;
 
-    gl_Position = u_ViewProj * modelposition;// gl_Position is a built-in variable of OpenGL which is
+    gl_Position = u_ViewProj * trPos;// gl_Position is a built-in variable of OpenGL which is
                                              // used to render the final positions of the geometry's vertices
 }
