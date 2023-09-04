@@ -1,3 +1,17 @@
+# Absorption
+<div align="center">
+  <img src="./demo.jpg"/>
+</div>
+<br>
+
+- Implemented Worley noise for vertex displacement and fragment shading. Did a little magic uv mapping to produce rotation and concentration effects.
+- [Live Demo Link](https://hummawhite.github.io/cis566-hw00-intro-base/)
+
+### Demo
+https://github.com/HummaWhite/cis566-hw00-intro-base/assets/48054481/6ba704c5-cba4-4cb8-a8c1-15fa59b0ba2d
+
+
+
 # HW 0: Intro to Javascript and WebGL
 
 <p align="center">
