@@ -1,4 +1,4 @@
-import {vec3} from 'gl-matrix';
+import {vec3, vec4} from 'gl-matrix';
 const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
 import Icosphere from './geometry/Icosphere';
@@ -7,23 +7,39 @@ import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
 import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
+import Cube from './geometry/Cube';
+import DrawParam from './rendering/gl/DrawParam';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
-  tesselations: 5,
+  tesselations: 800,
+  color: [1, 0.7, 0.5],
+  voronoiScale: 64.0,
+  displacement: 0.1,
+  timeScale: 1.0,
   'Load Scene': loadScene, // A function pointer, essentially
 };
 
 let icosphere: Icosphere;
 let square: Square;
 let prevTesselations: number = 5;
+let cube : Cube;
 
 function loadScene() {
-  icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
-  icosphere.create();
-  square = new Square(vec3.fromValues(0, 0, 0));
+  square = new Square(vec3.fromValues(0, 0, 0), controls.tesselations);
+  square.scale = vec3.fromValues(4, 4, 4);
+  square.position = vec3.fromValues(0, -1, 0);
   square.create();
+
+  cube = new Cube(vec3.fromValues(0, 0, 0));
+  cube.scale = vec3.fromValues(0.2, 0.2, 0.2);
+  cube.rotation = vec3.fromValues(45, 45, 45);
+  cube.create();
+}
+
+function getGUIColor() {
+  return vec4.fromValues(controls.color[0] / 255.0, controls.color[1] / 255.0, controls.color[2] / 255.0, 1.0);
 }
 
 function main() {
@@ -37,7 +53,11 @@ function main() {
 
   // Add controls to the gui
   const gui = new DAT.GUI();
-  gui.add(controls, 'tesselations', 0, 8).step(1);
+  gui.add(controls, 'tesselations', 0, 1600).step(1);
+  gui.addColor(controls, 'color').setValue([255, 255, 255]);
+  gui.add(controls, 'voronoiScale', 0.01, 100.0);
+  gui.add(controls, 'displacement', 0, 1);
+  gui.add(controls, 'timeScale', 0.0, 10.0);
   gui.add(controls, 'Load Scene');
 
   // get canvas and webgl context
@@ -59,26 +79,38 @@ function main() {
   renderer.setClearColor(0.2, 0.2, 0.2, 1);
   gl.enable(gl.DEPTH_TEST);
 
-  const lambert = new ShaderProgram([
-    new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
-    new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+  const customShader = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/custom-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/custom-frag.glsl')),
   ]);
 
   // This function will be called every frame
   function tick() {
     camera.update();
     stats.begin();
+
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+
     renderer.clear();
-    if(controls.tesselations != prevTesselations)
-    {
+
+    if(controls.tesselations != prevTesselations) {
       prevTesselations = controls.tesselations;
-      icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
-      icosphere.create();
+      loadScene();
     }
-    renderer.render(camera, lambert, [
-      icosphere,
-      // square,
+
+    let param = new DrawParam();
+    param.color = getGUIColor();
+    param.noiseScale = controls.voronoiScale;
+    param.displacement = controls.displacement;
+    param.timeScale = controls.timeScale;
+
+    let rotation = 0.4;
+    vec3.add(cube.rotation, cube.rotation, vec3.fromValues(rotation, rotation, rotation));
+
+    renderer.render(camera, customShader, param, [
+      //icosphere,
+      square,
+      cube,
     ]);
     stats.end();
 

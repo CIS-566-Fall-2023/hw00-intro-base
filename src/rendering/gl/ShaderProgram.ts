@@ -1,4 +1,4 @@
-import {vec4, mat4} from 'gl-matrix';
+import {vec2, vec3, vec4, mat3, mat4} from 'gl-matrix';
 import Drawable from './Drawable';
 import {gl} from '../../globals';
 
@@ -24,11 +24,9 @@ class ShaderProgram {
   attrPos: number;
   attrNor: number;
   attrCol: number;
+  attrUv: number;
 
-  unifModel: WebGLUniformLocation;
-  unifModelInvTr: WebGLUniformLocation;
-  unifViewProj: WebGLUniformLocation;
-  unifColor: WebGLUniformLocation;
+  uniformRecord: Map<string, WebGLUniformLocation>;
 
   constructor(shaders: Array<Shader>) {
     this.prog = gl.createProgram();
@@ -44,10 +42,8 @@ class ShaderProgram {
     this.attrPos = gl.getAttribLocation(this.prog, "vs_Pos");
     this.attrNor = gl.getAttribLocation(this.prog, "vs_Nor");
     this.attrCol = gl.getAttribLocation(this.prog, "vs_Col");
-    this.unifModel      = gl.getUniformLocation(this.prog, "u_Model");
-    this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
-    this.unifViewProj   = gl.getUniformLocation(this.prog, "u_ViewProj");
-    this.unifColor      = gl.getUniformLocation(this.prog, "u_Color");
+    this.attrUv = gl.getAttribLocation(this.prog, "vs_Uv");
+    this.uniformRecord = new Map<string, WebGLUniformLocation>();
   }
 
   use() {
@@ -57,31 +53,56 @@ class ShaderProgram {
     }
   }
 
-  setModelMatrix(model: mat4) {
-    this.use();
-    if (this.unifModel !== -1) {
-      gl.uniformMatrix4fv(this.unifModel, false, model);
+  getUniformLocation(name: string) {
+    if (this.uniformRecord.has(name)) {
+      return this.uniformRecord.get(name);
     }
-
-    if (this.unifModelInvTr !== -1) {
-      let modelinvtr: mat4 = mat4.create();
-      mat4.transpose(modelinvtr, model);
-      mat4.invert(modelinvtr, modelinvtr);
-      gl.uniformMatrix4fv(this.unifModelInvTr, false, modelinvtr);
+    else {
+      let loc = gl.getUniformLocation(this.prog, name);
+      this.uniformRecord.set(name, loc);
+      return loc;
     }
   }
 
-  setViewProjMatrix(vp: mat4) {
-    this.use();
-    if (this.unifViewProj !== -1) {
-      gl.uniformMatrix4fv(this.unifViewProj, false, vp);
+  setUniformFloat1(name: string, val: GLfloat) {
+    let loc = this.getUniformLocation(name);
+    if (loc !== -1) {
+      gl.uniform1f(loc, val);
     }
   }
 
-  setGeometryColor(color: vec4) {
-    this.use();
-    if (this.unifColor !== -1) {
-      gl.uniform4fv(this.unifColor, color);
+  setUniformFloat2(name: string, val: vec2) {
+    let loc = this.getUniformLocation(name);
+    if (loc !== -1) {
+      gl.uniform2fv(loc, val);
+    }
+  }
+
+  setUniformFloat3(name: string, val: vec3) {
+    let loc = this.getUniformLocation(name);
+    if (loc !== -1) {
+      gl.uniform3fv(loc, val);
+    }
+  }
+
+  setUniformFloat4(name: string, val: vec4) {
+    let loc = this.getUniformLocation(name);
+    if (loc !== -1) {
+      gl.uniform4fv(loc, val);
+    }
+  }
+
+  setUniformMatrix3x3(name: string, val: mat3) {
+    let loc = this.getUniformLocation(name);
+    if (loc !== -1) {
+      gl.uniformMatrix3fv(loc, false, val);
+    }
+  }
+
+  setUniformMatrix4x4(name: string, val: mat4) {
+    let loc = this.getUniformLocation(name);
+    if (loc !== -1) {
+      gl.uniformMatrix4fv(loc, false, val);
     }
   }
 
@@ -98,11 +119,17 @@ class ShaderProgram {
       gl.vertexAttribPointer(this.attrNor, 4, gl.FLOAT, false, 0, 0);
     }
 
+    if (this.attrUv != -1 && d.bindUv()) {
+      gl.enableVertexAttribArray(this.attrUv);
+      gl.vertexAttribPointer(this.attrUv, 2, gl.FLOAT, false, 0, 0);
+    }
+
     d.bindIdx();
     gl.drawElements(d.drawMode(), d.elemCount(), gl.UNSIGNED_INT, 0);
 
     if (this.attrPos != -1) gl.disableVertexAttribArray(this.attrPos);
     if (this.attrNor != -1) gl.disableVertexAttribArray(this.attrNor);
+    if (this.attrUv != -1) gl.disableVertexAttribArray(this.attrUv);
   }
 };
 
