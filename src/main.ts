@@ -13,7 +13,7 @@ import DrawParam from './rendering/gl/DrawParam';
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
-  tesselations: 200,
+  tesselations: 800,
   color: [1, 0.7, 0.5],
   voronoiScale: 64.0,
   displacement: 0.1,
@@ -52,7 +52,7 @@ function main() {
 
   // Add controls to the gui
   const gui = new DAT.GUI();
-  gui.add(controls, 'tesselations', 0, 200).step(1);
+  gui.add(controls, 'tesselations', 0, 1600).step(1);
   gui.addColor(controls, 'color').setValue([255, 255, 255]);
   gui.add(controls, 'voronoiScale', 0.01, 100.0);
   gui.add(controls, 'displacement', 0, 1);
