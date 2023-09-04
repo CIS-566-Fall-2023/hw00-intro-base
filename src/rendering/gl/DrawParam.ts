@@ -5,6 +5,7 @@ class DrawParam {
   color: vec4;
   noiseScale: number;
   displacement: number;
+  timeScale: number;
 }
 
 export default DrawParam;

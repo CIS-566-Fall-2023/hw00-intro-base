@@ -30,7 +30,7 @@ class OpenGLRenderer {
     prog.use();
 
     let viewProj = mat4.create();
-    let time = this.frameCount / 60.0;
+    let time = this.frameCount * param.timeScale / 60.0;
 
     mat4.multiply(viewProj, camera.projectionMatrix, camera.viewMatrix);
 

@@ -17,6 +17,7 @@ const controls = {
   color: [1, 0.7, 0.5],
   voronoiScale: 64.0,
   displacement: 0.1,
+  timeScale: 1.0,
   'Load Scene': loadScene, // A function pointer, essentially
 };
 
@@ -56,6 +57,7 @@ function main() {
   gui.addColor(controls, 'color').setValue([255, 255, 255]);
   gui.add(controls, 'voronoiScale', 0.01, 100.0);
   gui.add(controls, 'displacement', 0, 1);
+  gui.add(controls, 'timeScale', 0.0, 10.0);
   gui.add(controls, 'Load Scene');
 
   // get canvas and webgl context
@@ -100,6 +102,7 @@ function main() {
     param.color = getGUIColor();
     param.noiseScale = controls.voronoiScale;
     param.displacement = controls.displacement;
+    param.timeScale = controls.timeScale;
 
     let rotation = 0.4;
     vec3.add(cube.rotation, cube.rotation, vec3.fromValues(rotation, rotation, rotation));
