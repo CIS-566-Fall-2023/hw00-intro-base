@@ -85,7 +85,7 @@ function main() {
     }
     lambert.setGeometryColor(vec4.fromValues(controls.color[0] / 255, controls.color[1] / 255, controls.color[2] / 255, controls.color[3] / 255));
     lambert.setTime(time);
-    time += 0.005;
+    time += 0.01;
     renderer.render(camera, lambert, [
       icosphere,
       // square,
