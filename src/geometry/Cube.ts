@@ -2,20 +2,50 @@ import {vec3, vec4} from 'gl-matrix';
 import Drawable from '../rendering/gl/Drawable';
 import {gl} from '../globals';
 
+let pos = [-1, -1, 1, 1,
+  1, -1, 1, 1,
+  1, 1, 1, 1,
+  -1, 1, 1, 1,
+  -1, -1, -1, 1,
+  -1, 1, -1, 1,
+  1, 1, -1, 1,
+  1, -1, -1, 1,
+
+  1, -1, -1, 1,
+  1, 1, -1, 1,
+  1, 1, 1, 1,
+  1, -1, 1, 1,
+  -1, -1, -1, 1,
+  -1, -1, 1, 1,
+  -1, 1, 1, 1,
+  -1, 1, -1, 1,
+  
+  -1, 1, -1, 1,
+  1, 1, -1, 1,
+  1, 1, 1, 1,
+  -1, 1, 1, 1,
+  -1, -1, -1, 1,
+  -1, -1, 1, 1,
+  1, -1, 1, 1,
+  1, -1, -1, 1
+ ];
+
 class Cube extends Drawable {
   indices: Uint32Array;
   positions: Float32Array;
   normals: Float32Array;
   center: vec4;
+  scale: vec3;
 
-  constructor(center: vec3) {
+  constructor(center: vec3, scale = vec3.fromValues(1, 1, 1)) {
     super(); // Call the constructor of the super class. This is required.
     this.center = vec4.fromValues(center[0], center[1], center[2], 1);
+    this.scale = scale;
   }
 
   create() {
 
-  this.indices = new Uint32Array([
+    this.indices = new Uint32Array([
                                     0, 1, 2,
                                     0, 2, 3,
                                     4, 5, 6,
@@ -29,7 +59,7 @@ class Cube extends Drawable {
                                     20, 21, 22,
                                     20, 22, 23
                                 ]);
-  this.normals = new Float32Array([0, 0, 1, 0,
+    this.normals = new Float32Array([0, 0, 1, 0,
                                    0, 0, 1, 0,
                                    0, 0, 1, 0,
                                    0, 0, 1, 0,
@@ -54,33 +84,16 @@ class Cube extends Drawable {
                                    0, -1, 0, 0,
                                    0, -1, 0, 0
                                 ]);
-  this.positions = new Float32Array([-1, -1, 1, 1,
-                                     1, -1, 1, 1,
-                                     1, 1, 1, 1,
-                                     -1, 1, 1, 1,
-                                     -1, -1, -1, 1,
-                                     -1, 1, -1, 1,
-                                     1, 1, -1, 1,
-                                     1, -1, -1, 1,
 
-                                     1, -1, -1, 1,
-                                     1, 1, -1, 1,
-                                     1, 1, 1, 1,
-                                     1, -1, 1, 1,
-                                     -1, -1, -1, 1,
-                                     -1, -1, 1, 1,
-                                     -1, 1, 1, 1,
-                                     -1, 1, -1, 1,
-                                     
-                                     -1, 1, -1, 1,
-                                     1, 1, -1, 1,
-                                     1, 1, 1, 1,
-                                     -1, 1, 1, 1,
-                                     -1, -1, -1, 1,
-                                     -1, -1, 1, 1,
-                                     1, -1, 1, 1,
-                                     1, -1, -1, 1
-                                    ]);
+    for(let i = 0; i < pos.length; i += 4){
+      pos[i] *= this.scale[0];
+      pos[i] += this.center[0];
+      pos[i + 1] *= this.scale[1];
+      pos[i + 1] += this.center[1];
+      pos[i + 2] *= this.scale[2];
+      pos[i + 2] += this.center[2];
+    }
+    this.positions = new Float32Array(pos);
 
     this.generateIdx();
     this.generatePos();

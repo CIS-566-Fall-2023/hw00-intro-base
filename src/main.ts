@@ -21,13 +21,14 @@ let icosphere: Icosphere;
 let square: Square;
 let cube: Cube;
 let prevTesselations: number = 5;
+let time: number = 0;
 
 function loadScene() {
-  icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
+  icosphere = new Icosphere(vec3.fromValues(0, -1, 0), 1, controls.tesselations);
   icosphere.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
-  cube = new Cube(vec3.fromValues(0, 0, 0));
+  cube = new Cube(vec3.fromValues(0, 1.2, 0), vec3.fromValues(0.75, 0.75, 0.75));
   cube.create();
 }
 
@@ -79,12 +80,14 @@ function main() {
     if(controls.tesselations != prevTesselations)
     {
       prevTesselations = controls.tesselations;
-      icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
+      icosphere = new Icosphere(vec3.fromValues(0, -1, 0), 1, prevTesselations);
       icosphere.create();
     }
     lambert.setGeometryColor(vec4.fromValues(controls.color[0] / 255, controls.color[1] / 255, controls.color[2] / 255, controls.color[3] / 255));
+    lambert.setTime(time);
+    time += 0.005;
     renderer.render(camera, lambert, [
-      // icosphere,
+      icosphere,
       // square,
       cube
     ]);

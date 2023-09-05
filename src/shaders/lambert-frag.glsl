@@ -78,20 +78,21 @@ void main()
     // float lightIntensity = diffuseTerm + ambientTerm;
     // out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
 
-    float noise = 0.0f;
+    vec3 col = vec3(0.0f, 0.0f, 0.0f);
+    // float noise = 0.0f;
     // noise += clamp(perlinNoise(fs_Pos.xyz * 3.0f) + 0.3f, 0.0f, 1.0f);
-    noise += 0.5f * worleyNoise(fs_Pos.xyz * 2.5f);
+    col += 0.5f * worleyNoise(fs_Pos.xyz * 2.5f) * u_Color.xyz;
 
     float amp = 0.5f;
     float freq = 1.0f;
     for(int i = 0; i < 3; i++)
     {
         // noise += amp * 0.7f * clamp(perlinNoise(fs_Pos.xyz * 3.0f * freq) + 0.5f, 0.0f, 1.0f);
-        noise += amp * 0.7f * (1.0f - abs(perlinNoise(fs_Pos.xyz * 3.0f * freq)));
+        col += amp * 0.7f * (1.0f - abs(perlinNoise(fs_Pos.xyz * 3.0f * freq))) * vec3(0.9f, 0.05f, 0.2f);
         // noise += amp * worleyNoise(fs_Pos.xyz * 2.5f * freq);
         freq *= 2.0f;
         amp /= 2.0f;
     }
     
-    out_Col = vec4(u_Color.xyz * noise, u_Color.a);
+    out_Col = vec4(col, u_Color.a);
 }
