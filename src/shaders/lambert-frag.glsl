@@ -71,16 +71,7 @@ float worleyNoise(vec3 pos){
 
 void main()
 {
-    // vec4 diffuseColor = u_Color;     // Material base color (before shading)
-    // float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));
-    // diffuseTerm = clamp(diffuseTerm, 0, 1);     // Avoid negative lighting values
-    // float ambientTerm = 0.2;
-    // float lightIntensity = diffuseTerm + ambientTerm;
-    // out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
-
     vec3 col = vec3(0.0f, 0.0f, 0.0f);
-    // float noise = 0.0f;
-    // noise += clamp(perlinNoise(fs_Pos.xyz * 3.0f) + 0.3f, 0.0f, 1.0f);
     col += 0.5f * worleyNoise(fs_Pos.xyz * 2.5f) * u_Color.xyz;
 
     float amp = 0.5f;
@@ -88,8 +79,8 @@ void main()
     for(int i = 0; i < 3; i++)
     {
         // noise += amp * 0.7f * clamp(perlinNoise(fs_Pos.xyz * 3.0f * freq) + 0.5f, 0.0f, 1.0f);
-        col += amp * 0.7f * (1.0f - abs(perlinNoise(fs_Pos.xyz * 3.0f * freq))) * vec3(0.9f, 0.05f, 0.2f);
         // noise += amp * worleyNoise(fs_Pos.xyz * 2.5f * freq);
+        col += amp * 0.7f * (1.0f - abs(perlinNoise(fs_Pos.xyz * 3.0f * freq))) * vec3(0.9f, 0.05f, 0.2f);
         freq *= 2.0f;
         amp /= 2.0f;
     }
