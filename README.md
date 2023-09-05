@@ -1,5 +1,18 @@
 # HW 0: Intro to Javascript and WebGL
 
+## ScreenShot
+
+[Live Demo](https://jackxty.github.io/hw00-intro-base/)
+(https://jackxty.github.io/hw00-intro-base/)
+
+In fragment shader, I use normal worley noise as basis of color. Tnen I use perlin noise with fbm, to add detail for the color. I use 1 - abs(perlinNosie) instead of original perlin noise, to get interesting pattern. For fbm part, I sample perlin noise three times with 1x, 2x and 4x frequency to add details for perlin noise.
+
+In vertex shader, I let the vertex move along the normal direction. The move speed is decided by sin(u_Time + cos(u_Time)) rather than sin(u_Time), to make the vertex movement even less uniform. And the movement magnitude is also decided by worley noise.
+
+![](img2.png)
+![](img0.png)
+![](img1.png)
+
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>

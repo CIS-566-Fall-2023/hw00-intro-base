@@ -19,6 +19,8 @@ uniform mat4 u_ViewProj;    // The matrix that defines the camera's transformati
                             // We've written a static matrix for you to use for HW2,
                             // but in HW3 you'll have to generate one yourself
 
+uniform float u_Time;
+
 in vec4 vs_Pos;             // The array of vertex positions passed to the shader
 
 in vec4 vs_Nor;             // The array of vertex normals passed to the shader
@@ -28,9 +30,34 @@ in vec4 vs_Col;             // The array of vertex colors passed to the shader.
 out vec4 fs_Nor;            // The array of normals that has been transformed by u_ModelInvTr. This is implicitly passed to the fragment shader.
 out vec4 fs_LightVec;       // The direction in which our virtual light lies, relative to each vertex. This is implicitly passed to the fragment shader.
 out vec4 fs_Col;            // The color of each vertex. This is implicitly passed to the fragment shader.
+out vec4 fs_Pos;
 
 const vec4 lightPos = vec4(5, 5, 3, 1); //The position of our virtual light, which is used to compute the shading of
                                         //the geometry in the fragment shader.
+
+
+vec3 random3(vec3 pos){
+    return fract(vec3(
+        9175.3f * cos(dot(pos, vec3(135.235f, 593.3f, -354.1f))), 
+        124.9f * sin(dot(pos, vec3(937.1f, -2031.1f, 24.6f))), 
+        -1234.62f * sin(dot(pos, vec3(-752.91f, -468.57f, 462.24f)))
+    ));
+}
+
+float worleyNoise(vec3 pos){
+    float sum = 0.0f;
+    float minDis = 1.0f;
+    for(int dx = -1; dx <= 1; dx++){
+        for(int dy = -1; dy <= 1; dy++){
+            for(int dz = -1; dz <= 1; dz++){
+                vec3 grid = floor(pos + vec3(0.001f, 0.001f, 0.001f) + vec3(dx, dy, dz));
+                float dis = length(grid + random3(grid) - pos);
+                minDis = min(dis, minDis);
+            }
+        }
+    }
+    return 1.0f - minDis;
+}
 
 void main()
 {
@@ -42,9 +69,11 @@ void main()
                                                             // model matrix. This is necessary to ensure the normals remain
                                                             // perpendicular to the surface after the surface is transformed by
                                                             // the model matrix.
+    
+    vec3 vPos = vs_Pos.xyz + 0.35f * worleyNoise(vs_Pos.xyz * 2.5f) * normalize(fs_Nor.xyz) * sin(u_Time + cos(u_Time));
 
-
-    vec4 modelposition = u_Model * vs_Pos;   // Temporarily store the transformed vertex positions for use below
+    vec4 modelposition = u_Model * vec4(vPos, 1.0f);   // Temporarily store the transformed vertex positions for use below
+    fs_Pos = modelposition;
 
     fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
 
