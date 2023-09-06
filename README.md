@@ -68,7 +68,7 @@ To check if everything is on the right track:
 
 ## Resources
 - Javascript modules https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
-- Typescript https://www.typescriptlang.org/docs/home.html
+- Typescript https://www.typescriptlang.org/docs/home.htmls
 - dat.gui https://workshop.chromeexperiments.com/examples/gui/
 - glMatrix http://glmatrix.net/docs/
 - WebGL
