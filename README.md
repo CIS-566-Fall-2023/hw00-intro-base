@@ -74,4 +74,4 @@ To check if everything is on the right track:
 - WebGL
   - Interfaces https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API
   - Types https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Types
-  - Constants https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Constants
+  - Constants https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Constant
