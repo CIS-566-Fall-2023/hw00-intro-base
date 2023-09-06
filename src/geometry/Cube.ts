@@ -129,7 +129,17 @@ class Cube extends Drawable {
       //UL
       0.0, 0.0, 1.0, 1.0
     ]);
-
+    for(let i=0;i<24;++i){
+      let idx0 = i*4;
+      this.positions[idx0]-=0.5;
+      this.positions[idx0+1]-=0.5;
+      this.positions[idx0+2]-=0.5;
+      this.positions[idx0+3]-=0.5;
+      // this.positions[idx0]*=2;
+      // this.positions[idx0+1]*=2;
+      // this.positions[idx0+2]*=2;
+      // this.positions[idx0+3]*=2;
+    }
     this.generateIdx();
     this.generatePos();
     this.generateNor();

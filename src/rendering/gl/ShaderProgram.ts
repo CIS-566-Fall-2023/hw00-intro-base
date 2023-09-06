@@ -30,6 +30,8 @@ class ShaderProgram {
   unifViewProj: WebGLUniformLocation;
   unifColor: WebGLUniformLocation;
 
+  unifMap: Map<string,WebGLUniformLocation>;
+
   constructor(shaders: Array<Shader>) {
     this.prog = gl.createProgram();
 
@@ -40,7 +42,7 @@ class ShaderProgram {
     if (!gl.getProgramParameter(this.prog, gl.LINK_STATUS)) {
       throw gl.getProgramInfoLog(this.prog);
     }
-
+    this.unifMap = new Map();
     this.attrPos = gl.getAttribLocation(this.prog, "vs_Pos");
     this.attrNor = gl.getAttribLocation(this.prog, "vs_Nor");
     this.attrCol = gl.getAttribLocation(this.prog, "vs_Col");
@@ -48,6 +50,34 @@ class ShaderProgram {
     this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
     this.unifViewProj   = gl.getUniformLocation(this.prog, "u_ViewProj");
     this.unifColor      = gl.getUniformLocation(this.prog, "u_Color");
+  }
+
+  addUnif(name:string){
+    this.unifMap.set(name,gl.getUniformLocation(this.prog, name));
+  }
+
+  setUnifMat4(name:string, v: mat4){
+    this.use();
+    if(this.unifMap.has(name)){
+      let loc = this.unifMap.get(name);
+      if(loc!=-1)gl.uniformMatrix4fv(loc, false, v);
+    }
+  }
+
+  setUnifFloat(name:string, v:number){
+    this.use();
+    if(this.unifMap.has(name)){
+      let loc = this.unifMap.get(name);
+      if(loc!=-1)gl.uniform1f(loc,v);
+    }
+  }
+
+  setUnifVec4(name:string, v:vec4){
+    this.use();
+    if(this.unifMap.has(name)){
+      let loc = this.unifMap.get(name);
+      if(loc!=-1)gl.uniform4fv(loc,v);
+    }
   }
 
   use() {
