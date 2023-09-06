@@ -67,7 +67,8 @@ void main()
             tmpPos.xy = vec2(sinT,cosT) * len;
         }
     }
-    tmpPos.z = tmpPos.z + 0.5*tmpPos.z*sin(u_time);
+    tmpPos += tmpPos * vec3(0,1,0) * sinT;
+    //tmpPos.z = tmpPos.z + 0.5*vs_Nor.z*sin(u_time);
     vec4 modelposition = u_Model * vec4(tmpPos,1.0);   // Temporarily store the transformed vertex positions for use below
 
     fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
