@@ -53,7 +53,7 @@ void main()
     float time = vs_Pos.z<0.0?u_time:u_time;
     float cosT = cos(time);
     cosT = cosT  + 0.5 * cosT *sin(u_time);
-    float sinT = sin(time);
+    float sinT = cosT - sin(time);
     if(xSign>0.0){
         if(ySign>0.0){
             tmpPos.xy = vec2(cosT,-sinT) * len;
