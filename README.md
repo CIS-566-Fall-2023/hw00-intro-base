@@ -1,4 +1,25 @@
-# HW 0: Intro to Javascript and WebGL
+# HW 0: Intro to Javascript and WebGL - Noise!
+
+## Results: A Blooming Cyberpunk Snow Lotus
+
+### [*Live Site*](https://lindadaism.github.io/ProceduralGraphics-intro-base/)
+
+![A Blooming Cyberpunk Snow Lotus](/images/cover.png)
+
+![Demo GIF](/images/demo-min.gif)
+
+#### Interactions using GUI:
+
+  - Set the geometry with any color you like using the RGB color panel
+  - Toggle "Water Wave" feature to see color variation compared to diffuse color
+  - Toggle "Deformation" feature to see shape change
+
+For the custom fragment shader, I applied a Perlin-based FBM noise to the material base color to create a water wave effect. Specifically, I took the absolute value of a 3D Perlin noise sampled with `fs_Pos * frequency` plus an offset of the accumulative time. The offset calculated using `u_Time` gives the visual of waves passing across the geometry surface.
+
+For the vertex deformation, I chose the classic FBM noise sampled with plain `vs_Pos` to add some organic variation. The spiky flower pedals are animated through trigonometric functions (e.g. `sin`, `cos`) that non-uniformly modify the shape's vertex positions over time.
+
+
+## Project Overview
 
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
@@ -69,7 +90,7 @@ To check if everything is on the right track:
 ## Resources
 - Javascript modules https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
 - Typescript https://www.typescriptlang.org/docs/home.html
-- dat.gui https://workshop.chromeexperiments.com/examples/gui/
+- dat.gui https://github.com/dataarts/dat.gui/blob/master/API.md
 - glMatrix http://glmatrix.net/docs/
 - WebGL
   - Interfaces https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API
