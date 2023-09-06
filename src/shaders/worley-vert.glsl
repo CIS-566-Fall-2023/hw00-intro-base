@@ -52,7 +52,7 @@ void main()
     float ySign = vs_Pos.y;
     float time = vs_Pos.z<0.0?u_time:u_time;
     float cosT = cos(time);
-    cosT *= sin(u_time);
+    cosT = cosT  + 0.5 * cosT *sin(u_time);
     float sinT = sin(time);
     if(xSign>0.0){
         if(ySign>0.0){

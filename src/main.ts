@@ -113,15 +113,16 @@ function main() {
     lambert.setUnifFloat("u_time",time);
     let model = mat4.create();
     mat4.identity(model);
-    worley.setModelMatrix(model);
+    model[0] = 0.6;
+    model[5] = 0.6;
+    model[10] = 0.6;
+    lambert.setModelMatrix(model);
+    
     model[14] = 1.5 * Math.sin(time);
     model[13] = 0
     model[12] = 1.5 * Math.cos(time);
-    model[0] = 0.5;
-    model[5] = 0.5;
-    model[10] = 0.5;
-    lambert.setModelMatrix(model);
 
+    worley.setModelMatrix(model);
     //render
     renderer.render(camera, lambert, [
       icosphere,
