@@ -28,6 +28,8 @@ let icosphere: Icosphere;
 let square: Square;
 let cube: Cube;
 let prevTesselations: number = 5;
+let rotAngle: number = 0;
+let lastTime: number = 0;
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
@@ -87,6 +89,7 @@ function main() {
 
     let header : string = '#version 300 es\nprecision highp float;\n'
     let t = timeStamp / 1000.0;
+    let dt = (timeStamp - lastTime) / 1000.0;
 
     if (!controls['Debug Noise']) {
       if(controls.tesselations != prevTesselations) {
@@ -108,6 +111,10 @@ function main() {
       ));
 
       let scale : number = 0.4 + 0.1 * Math.sin(t);
+      rotAngle += 60 * dt;
+      let model = mat4.scale(mat4.create(), mat4.create(), vec3.fromValues(scale, scale, scale));
+      model = mat4.rotateY(model, model, rotAngle * Math.PI / 180.0);
+
       renderer.render(camera, 
         new ShaderProgram([
           new Shader(gl.VERTEX_SHADER, [header, require('./shaders/perlin.glsl'), require('./shaders/tumor-vert.glsl')]),
@@ -115,8 +122,8 @@ function main() {
         ]),
         [icosphere],
         new ShaderData(
-          mat4.scale(mat4.create(), mat4.create(), vec3.fromValues(scale, scale, scale)),
-          vec4.fromValues(controls.col.r, controls.col.g, controls.col.b, 1),
+          model,
+          vec4.create(),
           t)
       );
     } else {
@@ -133,11 +140,10 @@ function main() {
         )
       );
     }
-
-
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame
+    lastTime = timeStamp;
     requestAnimationFrame(tick);
   }
 
