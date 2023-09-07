@@ -30,6 +30,7 @@ function loadScene() {
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
   cube = new Cube(vec3.fromValues(0, 0, 0));
+  cube.create();
 }
 
 function main() {
@@ -87,8 +88,8 @@ function main() {
     } 
     renderer.render(camera, lambert, [
       icosphere,
-      //square,
-      //cube,
+      square,
+      cube,
     ],
     vec4.fromValues(controls.Red/255, controls.Green/255, controls.Blue/255, 1));
     stats.end();
