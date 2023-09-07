@@ -23,15 +23,9 @@ class OpenGLRenderer {
   }
 
   render(camera: Camera, prog: ShaderProgram, drawables: Array<Drawable>, shaderData : ShaderData) {
-    let model : mat4 = shaderData.model;
-    let viewProj : mat4 = shaderData.viewProj;
-    let color : vec4 = shaderData.color;
-
-    mat4.identity(model);
-    mat4.multiply(viewProj, camera.projectionMatrix, camera.viewMatrix);
-    prog.setModelMatrix(model);
-    prog.setViewProjMatrix(viewProj);
-    prog.setGeometryColor(color);
+    prog.setModelMatrix(shaderData.model);
+    prog.setViewProjMatrix(mat4.multiply(mat4.create(), camera.projectionMatrix, camera.viewMatrix));
+    prog.setGeometryColor(shaderData.color);
     prog.setTime(shaderData.time);
 
     for (let drawable of drawables) {

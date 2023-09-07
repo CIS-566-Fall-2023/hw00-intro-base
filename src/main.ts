@@ -18,9 +18,9 @@ const controls = {
   'Debug Noise': false,
   // colors
   col: {
-    r: 1.0,
-    g: 0.0,
-    b: 0.0
+    r: 0.5,
+    g: 0.5,
+    b: 0.5
   }
 };
 
@@ -85,37 +85,56 @@ function main() {
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
 
-    let shader : ShaderProgram;
-    let geometry : Drawable[];
-
     let header : string = '#version 300 es\nprecision highp float;\n'
+    let t = timeStamp / 1000.0;
 
     if (!controls['Debug Noise']) {
-      shader = new ShaderProgram([
-        new Shader(gl.VERTEX_SHADER, [require('./shaders/lambert-vert.glsl')]),
-        new Shader(gl.FRAGMENT_SHADER, [header, require('./shaders/perlin.glsl'), require('./shaders/lambert-frag.glsl')]),
-      ]);
-      geometry = [cube];
-
       if(controls.tesselations != prevTesselations) {
         prevTesselations = controls.tesselations;
         icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
         icosphere.create();
       }
+
+      renderer.render(camera, 
+        new ShaderProgram([
+          new Shader(gl.VERTEX_SHADER, [header, require('./shaders/lambert-vert.glsl')]),
+          new Shader(gl.FRAGMENT_SHADER, [header, require('./shaders/perlin.glsl'), require('./shaders/lambert-frag.glsl')]),
+        ]),
+        [cube],
+        new ShaderData(
+          mat4.create(),
+          vec4.fromValues(controls.col.r, controls.col.g, controls.col.b, 1),
+          t
+      ));
+
+      let scale : number = 0.4 + 0.1 * Math.sin(t);
+      renderer.render(camera, 
+        new ShaderProgram([
+          new Shader(gl.VERTEX_SHADER, [header, require('./shaders/perlin.glsl'), require('./shaders/tumor-vert.glsl')]),
+          new Shader(gl.FRAGMENT_SHADER, [header, require('./shaders/perlin.glsl'), require('./shaders/tumor-frag.glsl')]),
+        ]),
+        [icosphere],
+        new ShaderData(
+          mat4.scale(mat4.create(), mat4.create(), vec3.fromValues(scale, scale, scale)),
+          vec4.fromValues(controls.col.r, controls.col.g, controls.col.b, 1),
+          t)
+      );
     } else {
-      shader = new ShaderProgram([
-        new Shader(gl.VERTEX_SHADER, [require('./shaders/noise-vert.glsl')]),
-        new Shader(gl.FRAGMENT_SHADER, [header, require('./shaders/perlin.glsl'), require('./shaders/noise-frag.glsl')]),
-      ])
-      geometry = [square];
+      renderer.render(camera,
+        new ShaderProgram([
+          new Shader(gl.VERTEX_SHADER, [header, require('./shaders/noise-vert.glsl')]),
+          new Shader(gl.FRAGMENT_SHADER, [header, require('./shaders/perlin.glsl'), require('./shaders/noise-frag.glsl')]),
+        ]),
+        [square],
+        new ShaderData(
+          mat4.create(),
+          vec4.fromValues(controls.col.r, controls.col.g, controls.col.b, 1),
+          t
+        )
+      );
     }
 
-    renderer.render(camera, shader, geometry, new ShaderData(
-      mat4.create(),
-      mat4.create(),
-      vec4.fromValues(controls.col.r, controls.col.g, controls.col.b, 1),
-      timeStamp / 1000.0
-    ));
+
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame

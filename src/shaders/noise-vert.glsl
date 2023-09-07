@@ -1,6 +1,3 @@
-#version 300 es
-precision highp float;
-
 // keep these uniforms to simplify the code in main.ts
 uniform mat4 u_Model;
 uniform mat4 u_ModelInvTr;

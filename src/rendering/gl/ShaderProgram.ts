@@ -32,13 +32,11 @@ export class Shader {
 
 export class ShaderData {
   model : mat4;
-  viewProj : mat4;
   color : vec4;
   time : number;
 
-  constructor(model : mat4, viewProj : mat4, color : vec4, time : number) {
+  constructor(model : mat4, color : vec4, time : number) {
     this.model = model;
-    this.viewProj = viewProj;
     this.color = color;
     this.time = time;
   }
