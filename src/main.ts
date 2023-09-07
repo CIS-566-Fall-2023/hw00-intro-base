@@ -32,7 +32,7 @@ function loadScene() {
   icosphere.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
-  cube = new Cube(vec3.fromValues(0, 0, 0), vec3.fromValues(0.5, 0.5, 0.5));
+  cube = new Cube(vec3.fromValues(0, 0, 0), vec3.fromValues(1, 1, 1));
   cube.create();
 }
 
@@ -80,7 +80,7 @@ function main() {
   ]);
 
   // This function will be called every frame
-  function tick() {
+  function tick(timeStamp : number) {
     camera.update();
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
@@ -98,7 +98,8 @@ function main() {
     ], new ShaderData(
       mat4.create(),
       mat4.create(),
-      vec4.fromValues(controls.col.r, controls.col.g, controls.col.b, 1)
+      vec4.fromValues(controls.col.r, controls.col.g, controls.col.b, 1),
+      timeStamp / 1000.0
     ));
     stats.end();
 
@@ -117,7 +118,7 @@ function main() {
   camera.updateProjectionMatrix();
 
   // Start the render loop
-  tick();
+  tick(0);
 }
 
 main();
