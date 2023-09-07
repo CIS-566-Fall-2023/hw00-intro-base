@@ -73,6 +73,8 @@ function main() {
     new Shader(gl.VERTEX_SHADER, require('./shaders/noise-vert.glsl')),
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/noise-frag.glsl')),
   ]);
+  
+  let time = 0;
 
   // This function will be called every frame
   function tick() {
@@ -91,8 +93,10 @@ function main() {
       //square,
       cube,
     ],
-    vec4.fromValues(controls.Red/255, controls.Green/255, controls.Blue/255, 1));
+    vec4.fromValues(controls.Red/255, controls.Green/255, controls.Blue/255, 1),
+    time);
     stats.end();
+    time += 1;
 
     // Tell the browser to call `tick` again whenever it renders a new frame
     requestAnimationFrame(tick);
