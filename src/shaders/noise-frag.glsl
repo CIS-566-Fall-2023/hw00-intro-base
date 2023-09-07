@@ -13,15 +13,12 @@ in vec4 fs_Pos;
 
 out vec4 out_Col; // This is the final output color that you will see on your
 
-vec3 random3(vec3 gridpoint) {
-    // returns a vec3 in the range [0, 1]
-    float x = gridpoint.x;
-    x = (1.0 - (x * (x * x * 15731.0 + 789221.0) + 1376312589.0)) / 10737741824.0;
-    float y = gridpoint.y;
-    y = (7.0 - (y * y * y * 7907.0 + 26317.0)) / 0.1123422 * 11002549.0;
-    float z = gridpoint.z;
-    z = (2000004023.0 - (z * (1.0 - z) * z + 500713.0) / 75759451.0);
-    return vec3(x,y,z);
+vec3 random3(vec3 p)
+{
+    return fract(sin(vec3(dot(p, vec3(127.1, 311.7, 191.999)),
+                           dot(p, vec3(269.5, 183.3, 191.999)),
+                           dot(p, vec3(420.6, 631.2, 191.999))))
+                   * 43758.5453f);
 }
 
 float surflet(vec3 p, vec3 gridPoint) {
@@ -31,7 +28,7 @@ float surflet(vec3 p, vec3 gridPoint) {
     vec3 t = vec3(1) - 6.0 * pow(t2, vec3(5)) + 15.0 * pow(t2, vec3(4)) - 10.0 * pow(t2, vec3(3));
     
     // Get the random vector for the grid point 
-    vec3 gradient = random3(gridPoint) * 2.0 - vec3(1, 1, 1);
+    vec3 gradient = random3(gridPoint) * 12.0 - vec3(1, 1, 1);
     
     // Get the vector from the grid point to P
     vec3 diff = p - gridPoint;
@@ -58,21 +55,21 @@ float perlinNoise3D(vec3 p) {
 
 void main()
 {
-    //float v = perlinNoise3D(vs_Pos.xyz);
-        // Material base color (before shading)
-        vec4 diffuseColor = u_Color;
+    float a = perlinNoise3D(fs_Pos.xyz);
+    float b = perlinNoise3D(fs_Pos.xyz * vec3(5.0));
+    float c = perlinNoise3D(fs_Pos.xyz * vec3(10.0));
 
-        // Calculate the diffuse term for Lambert shading
-        float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));
-        // Avoid negative lighting values
-        // diffuseTerm = clamp(diffuseTerm, 0, 1);
+    vec3 inverseColor = vec3(255.0- u_Color.r, 255.0 - u_Color.g, 255.0 - u_Color.b) / 255.0;
+    vec4 diffuseColor1 = vec4(a * u_Color.rgb, 1.0);
+    vec4 diffuseColor2 = vec4(b * inverseColor, 1.0);
+    vec4 diffuseColor3 = vec4(c * u_Color.rgb, 1.0);
+    vec4 diffuseColor = diffuseColor1 + 0.25 * diffuseColor2 + diffuseColor3;
 
-        float ambientTerm = 0.2;
+    float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));
 
-        float lightIntensity = diffuseTerm + ambientTerm;   //Add a small float value to the color multiplier
-                                                            //to simulate ambient lighting. This ensures that faces that are not
-                                                            //lit by our point light are not completely black.
+    float ambientTerm = 0.2;
 
-        // Compute final shaded color
-        out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
+    float lightIntensity = diffuseTerm + ambientTerm;
+
+    out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor1.a);
 }
