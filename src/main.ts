@@ -8,12 +8,14 @@ import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
 import ShaderProgram, {ShaderData, Shader} from './rendering/gl/ShaderProgram';
+import Drawable from './rendering/gl/Drawable';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
+  'Debug Noise': false,
   // colors
   col: {
     r: 1.0,
@@ -49,6 +51,7 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
+  gui.add(controls, 'Debug Noise');
   const folder = gui.addFolder('Color');
   folder.add(controls.col, 'r', 0, 1).step(0.01);
   folder.add(controls.col, 'g', 0, 1).step(0.01);
@@ -74,28 +77,40 @@ function main() {
   renderer.setClearColor(0.2, 0.2, 0.2, 1);
   gl.enable(gl.DEPTH_TEST);
 
-  const lambert = new ShaderProgram([
-    new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
-    new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
-  ]);
-
   // This function will be called every frame
   function tick(timeStamp : number) {
+    // log
     camera.update();
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
-    if(controls.tesselations != prevTesselations)
-    {
-      prevTesselations = controls.tesselations;
-      icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
-      icosphere.create();
+
+    let shader : ShaderProgram;
+    let geometry : Drawable[];
+
+    let header : string = '#version 300 es\nprecision highp float;\n'
+
+    if (!controls['Debug Noise']) {
+      shader = new ShaderProgram([
+        new Shader(gl.VERTEX_SHADER, [require('./shaders/lambert-vert.glsl')]),
+        new Shader(gl.FRAGMENT_SHADER, [header, require('./shaders/perlin.glsl'), require('./shaders/lambert-frag.glsl')]),
+      ]);
+      geometry = [cube];
+
+      if(controls.tesselations != prevTesselations) {
+        prevTesselations = controls.tesselations;
+        icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
+        icosphere.create();
+      }
+    } else {
+      shader = new ShaderProgram([
+        new Shader(gl.VERTEX_SHADER, [require('./shaders/noise-vert.glsl')]),
+        new Shader(gl.FRAGMENT_SHADER, [header, require('./shaders/perlin.glsl'), require('./shaders/noise-frag.glsl')]),
+      ])
+      geometry = [square];
     }
-    renderer.render(camera, lambert, [
-      // icosphere,
-      // square,
-      cube
-    ], new ShaderData(
+
+    renderer.render(camera, shader, geometry, new ShaderData(
       mat4.create(),
       mat4.create(),
       vec4.fromValues(controls.col.r, controls.col.g, controls.col.b, 1),
@@ -118,7 +133,7 @@ function main() {
   camera.updateProjectionMatrix();
 
   // Start the render loop
-  tick(0);
+  requestAnimationFrame(tick);
 }
 
 main();

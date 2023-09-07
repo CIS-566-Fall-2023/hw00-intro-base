@@ -2,16 +2,28 @@ import {vec4, mat4} from 'gl-matrix';
 import Drawable from './Drawable';
 import {gl} from '../../globals';
 
-var activeProgram: WebGLProgram = null;
+var activeProgram: WebGLProgram = -1;
 
 export class Shader {
   shader: WebGLShader;
 
-  constructor(type: number, source: string) {
-    this.shader = gl.createShader(type);
+  constructor(type: number, sources: Array<string>) {
+    let res = gl.createShader(type);
+    if(res === null) {
+      throw "Shader creation failed";
+    }
+
+    this.shader = res;
+    let source = '';
+  
+    for (const src of sources) {
+      // Read the contents of each file and append it to the source string
+      source += src + '\n';
+    }
+  
     gl.shaderSource(this.shader, source);
     gl.compileShader(this.shader);
-
+  
     if (!gl.getShaderParameter(this.shader, gl.COMPILE_STATUS)) {
       throw gl.getShaderInfoLog(this.shader);
     }
@@ -46,7 +58,11 @@ class ShaderProgram {
   unifTime: WebGLUniformLocation;
 
   constructor(shaders: Array<Shader>) {
-    this.prog = gl.createProgram();
+    let res = gl.createProgram();
+    if (res === null) {
+      throw "ShaderProgram creation failed";
+    }
+    this.prog = res;
 
     for (let shader of shaders) {
       gl.attachShader(this.prog, shader.shader);
@@ -59,11 +75,19 @@ class ShaderProgram {
     this.attrPos = gl.getAttribLocation(this.prog, "vs_Pos");
     this.attrNor = gl.getAttribLocation(this.prog, "vs_Nor");
     this.attrCol = gl.getAttribLocation(this.prog, "vs_Col");
-    this.unifModel      = gl.getUniformLocation(this.prog, "u_Model");
-    this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
-    this.unifViewProj   = gl.getUniformLocation(this.prog, "u_ViewProj");
-    this.unifColor      = gl.getUniformLocation(this.prog, "u_Color");
-    this.unifTime = gl.getUniformLocation(this.prog, "u_Time");
+
+    let get_uniform = (name : string) => {
+      let res = gl.getUniformLocation(this.prog, name);
+      if(res === null) {
+        return -1;
+      }
+      return res;
+    }
+    this.unifModel = get_uniform("u_Model");
+    this.unifModelInvTr = get_uniform("u_ModelInvTr");
+    this.unifViewProj   = get_uniform("u_ViewProj");
+    this.unifColor      = get_uniform("u_Color");
+    this.unifTime = get_uniform("u_Time");
   }
 
   use() {
