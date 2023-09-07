@@ -8,6 +8,7 @@ import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
 import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
+import {vec4, mat4} from 'gl-matrix';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
@@ -37,10 +38,14 @@ function main() {
   stats.domElement.style.top = '0px';
   document.body.appendChild(stats.domElement);
 
+  var palette = {
+    color: [ 255, 0, 0] // RGB array
+  };
   // Add controls to the gui
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
+  gui.addColor(palette, 'color');
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -70,6 +75,7 @@ function main() {
   function tick() {
     camera.update();
     stats.begin();
+    lambert.setGeometryColor(vec4.fromValues(palette.color[0]/255, palette.color[1]/255, palette.color[2]/255, 1));
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
     if(controls.tesselations != prevTesselations)
