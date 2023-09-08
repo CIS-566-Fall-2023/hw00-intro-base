@@ -1,5 +1,6 @@
 # HW 0: Intro to Javascript and WebGL
-
+![showcase](https://github.com/LichengCAO/CIS5660hw0/assets/81556019/9ab1ef98-f46e-47c4-838d-22bf1db6ef7d)
+live demo: https://lichengcao.github.io/CIS5660hw0/
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>
