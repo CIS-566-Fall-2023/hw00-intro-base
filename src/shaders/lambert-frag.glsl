@@ -12,7 +12,7 @@
 precision highp float;
 
 uniform vec4 u_Color; // The color with which to render this instance of geometry.
-
+uniform float u_time;
 // These are the interpolated values out of the rasterizer, so you can't know
 // their specific values without knowing the vertices that contributed to them
 in vec4 fs_Nor;
@@ -28,7 +28,7 @@ void main()
         vec4 diffuseColor = u_Color;
 
         // Calculate the diffuse term for Lambert shading
-        float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));
+        float diffuseTerm = clamp(dot(normalize(fs_Nor), normalize(vec4(cos(u_time),0.0,sin(u_time),0.0))),0.1,1.0);
         // Avoid negative lighting values
         // diffuseTerm = clamp(diffuseTerm, 0, 1);
 

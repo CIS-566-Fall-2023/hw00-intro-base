@@ -1,5 +1,6 @@
 # HW 0: Intro to Javascript and WebGL
-
+![showcase](https://github.com/LichengCAO/CIS5660hw0/assets/81556019/9ab1ef98-f46e-47c4-838d-22bf1db6ef7d)
+live demo: https://lichengcao.github.io/CIS5660hw0/
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>
@@ -68,10 +69,10 @@ To check if everything is on the right track:
 
 ## Resources
 - Javascript modules https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
-- Typescript https://www.typescriptlang.org/docs/home.html
+- Typescript https://www.typescriptlang.org/docs/home.htmls
 - dat.gui https://workshop.chromeexperiments.com/examples/gui/
 - glMatrix http://glmatrix.net/docs/
 - WebGL
   - Interfaces https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API
   - Types https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Types
-  - Constants https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Constants
+  - Constants https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Constant
