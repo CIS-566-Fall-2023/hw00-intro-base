@@ -1,8 +1,8 @@
-var CameraControls = require('3d-view-controls');
-import {vec3, mat4} from 'gl-matrix';
+import { vec3, mat4 } from 'gl-matrix';
+import CameraControls from '3d-view-controls';
 
 class Camera {
-  controls: any;
+  controls: ReturnType<typeof CameraControls>;
   projectionMatrix: mat4 = mat4.create();
   viewMatrix: mat4 = mat4.create();
   fovy: number = 45;
@@ -20,7 +20,12 @@ class Camera {
       center: target,
     });
     vec3.add(this.target, this.position, this.direction);
-    mat4.lookAt(this.viewMatrix, this.controls.eye, this.controls.center, this.controls.up);
+    mat4.lookAt(
+      this.viewMatrix,
+      this.controls.eye,
+      this.controls.center,
+      this.controls.up,
+    );
   }
 
   setAspectRatio(aspectRatio: number) {
@@ -28,14 +33,25 @@ class Camera {
   }
 
   updateProjectionMatrix() {
-    mat4.perspective(this.projectionMatrix, this.fovy, this.aspectRatio, this.near, this.far);
+    mat4.perspective(
+      this.projectionMatrix,
+      this.fovy,
+      this.aspectRatio,
+      this.near,
+      this.far,
+    );
   }
 
   update() {
     this.controls.tick();
     vec3.add(this.target, this.position, this.direction);
-    mat4.lookAt(this.viewMatrix, this.controls.eye, this.controls.center, this.controls.up);
+    mat4.lookAt(
+      this.viewMatrix,
+      this.controls.eye,
+      this.controls.center,
+      this.controls.up,
+    );
   }
-};
+}
 
 export default Camera;
