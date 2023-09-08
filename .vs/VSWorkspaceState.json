@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\geometry",
+    "\\src\\rendering",
+    "\\src\\rendering\\gl",
+    "\\src\\shaders"
+  ],
+  "SelectedNode": "\\src\\geometry\\Square.ts",
+  "PreviewInSolutionExplorer": false
+}
