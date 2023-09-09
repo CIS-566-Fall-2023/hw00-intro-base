@@ -72,7 +72,8 @@ class Cube extends Drawable {
 
         for (let component = 0; component < 3; ++component) {
           this.normals[vertexIndex + component] = normal[component];
-          this.positions[vertexIndex + component] = newVertPosition[component];
+          this.positions[vertexIndex + component] =
+            newVertPosition[component] + this.center[component];
         }
         this.normals[vertexIndex + 3] = 0;
         this.positions[vertexIndex + 3] = 1;
