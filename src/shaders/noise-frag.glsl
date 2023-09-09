@@ -5,7 +5,7 @@ out vec4 out_Col;
 
 void main()
 {
-    float noise = perlin(vec3(fs_Pos * 4.5 + u_Time * 0.25));
+    float noise = fbm(vec3(fs_Pos * 4.5 + u_Time * 0.25));
     noise = (noise + 1.0) / 2.0;
     out_Col = vec4(vec3(1.0) * noise, 1.0);
 }

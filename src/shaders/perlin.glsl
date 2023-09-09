@@ -31,3 +31,13 @@ float perlin(vec3 p) {
     }
     return ret;
 }
+float fbm(vec3 p) {
+    float ret = 0.0;
+    float amp = 1.0;
+    for (int i=0; i<4; ++i) {
+        ret += amp * perlin(p);
+        p *= 2.0;
+        amp *= 0.5;
+    }
+    return ret;
+}
