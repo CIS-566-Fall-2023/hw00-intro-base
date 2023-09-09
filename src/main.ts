@@ -3,6 +3,7 @@ const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
 import Icosphere from './geometry/Icosphere';
 import Square from './geometry/Square';
+import Cube from './geometry/Cube';
 import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
