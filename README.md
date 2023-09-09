@@ -1,4 +1,16 @@
 # HW 0: Intro to Javascript and WebGL
+# Overview
+
+1. Implemented Perlin Noise & FBM Noise.
+2. All Noise function takes fs_Pos or its variation as input.
+3. Applied Noise to Cube's surface color, whose three channels are controlled noise functions taking fs_Pos's different variation as input.
+4. Applied FBM Noise and trigonometric function to Cube's vertex position so that it changes over time and looks like jelly.
+5. [Live Demo](https://grahamzen.github.io/hw00-intro-base/)
+
+# Screenshots
+
+![1694225521202](image/README/1694225521202.png)
+![1694225550441](image/README/1694225550441.png)
 
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">

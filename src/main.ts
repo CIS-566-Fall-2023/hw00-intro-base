@@ -3,10 +3,12 @@ const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
 import Icosphere from './geometry/Icosphere';
 import Square from './geometry/Square';
+import Cube from './geometry/Cube';
 import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
 import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
+import {vec4, mat4} from 'gl-matrix';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
@@ -17,13 +19,14 @@ const controls = {
 
 let icosphere: Icosphere;
 let square: Square;
+let cube: Cube;
 let prevTesselations: number = 5;
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
   icosphere.create();
-  square = new Square(vec3.fromValues(0, 0, 0));
-  square.create();
+  cube = new Cube(vec3.fromValues(0, 0, 0));
+  cube.create();
 }
 
 function main() {
@@ -35,10 +38,14 @@ function main() {
   stats.domElement.style.top = '0px';
   document.body.appendChild(stats.domElement);
 
+  var palette = {
+    color: [ 255, 0, 0] // RGB array
+  };
   // Add controls to the gui
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
+  gui.addColor(palette, 'color');
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -64,20 +71,23 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
 
+  var curr_prog = lambert;
   // This function will be called every frame
-  function tick() {
+  function tick(timeStamp: number) {
     camera.update();
     stats.begin();
+    curr_prog.setGeometryColor(vec4.fromValues(palette.color[0]/255, palette.color[1]/255, palette.color[2]/255, 1));
+    curr_prog.setTime(0.001 * timeStamp);
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
     if(controls.tesselations != prevTesselations)
     {
       prevTesselations = controls.tesselations;
-      icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
-      icosphere.create();
+      cube = new Cube(vec3.fromValues(0, 0, 0));
+      cube.create();
     }
-    renderer.render(camera, lambert, [
-      icosphere,
+    renderer.render(camera, curr_prog, [
+        cube,
       // square,
     ]);
     stats.end();
@@ -97,7 +107,7 @@ function main() {
   camera.updateProjectionMatrix();
 
   // Start the render loop
-  tick();
+  requestAnimationFrame(tick);
 }
 
 main();
