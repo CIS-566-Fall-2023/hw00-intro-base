@@ -1,26 +1,29 @@
-import { vec3 } from 'gl-matrix';
 import * as DAT from 'dat.gui';
+import { vec3, vec4 } from 'gl-matrix';
 import Stats from 'stats-js';
 
+import Camera from './Camera';
+import { GAMMA } from './constants';
+import Cube from './geometry/Cube';
 import Icosphere from './geometry/Icosphere';
 import Square from './geometry/Square';
-import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
-import Camera from './Camera';
 import { setGL } from './globals';
+import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import ShaderProgram, { Shader } from './rendering/gl/ShaderProgram';
-import Cube from './geometry/Cube';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
+  color: [255, 0, 0] as [number, number, number],
   'Load Scene': loadScene, // A function pointer, essentially
 };
 
 let icosphere: Icosphere;
 let square: Square;
 let cube: Cube;
-let prevTesselations: number = 5;
+let prevTesselations: number = controls.tesselations;
+let prevColor = [0, 0, 0] as [number, number, number];
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
@@ -44,6 +47,7 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
+  gui.addColor(controls, 'color');
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement>document.getElementById('canvas');
@@ -69,6 +73,7 @@ function main() {
     new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
+  lambert.setGeometryColor([1, 0, 0, 1]);
 
   // This function will be called every frame
   function tick() {
@@ -80,6 +85,16 @@ function main() {
       prevTesselations = controls.tesselations;
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
+    }
+    if (!vec3.equals(controls.color, prevColor)) {
+      prevColor = controls.color;
+      const newColor = vec4.fromValues(...prevColor, 0);
+      vec4.scale(newColor, newColor, 1 / 256);
+      for (let component = 0; component < 3; ++component) {
+        newColor[component] **= GAMMA;
+      }
+      newColor[3] = 1;
+      lambert.setGeometryColor(newColor);
     }
     renderer.render(camera, lambert, [
       // icosphere,
