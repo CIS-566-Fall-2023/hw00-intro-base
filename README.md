@@ -1,11 +1,25 @@
 # HW 0: Intro to Javascript and WebGL
 
+## Overview
+- I implemented a simple 3D perlin noise function.
+- The scene consists of a cube and a mutated sphere.
+- The cube's fragment shader discards fragments based on the perlin noise function, creating a "shattered" effect.
+- The cube's vertex shader uses a trigonometric function to modify the cube's vertex positions over time.
+- The sphere's vertex shader uses the perlin noise function to extrude the vertices of the sphere. This gives the sphere a spiky and organic appearance.
+- The sphere's fragment shader uses the perlin noise function to modify the sphere's color over time, making it much more lively.
+- [live demo](https://dw218192.github.io/hw00-intro-base/)
+
+## Screenshots
+![Alt text](./images/1694142956318.png)
+![Alt text](./images/1694143027599.png)
+
+## Objective
+
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>
 <p align="center">(source: Ken Perlin)</p>
 
-## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
 - Practice implementing noise
