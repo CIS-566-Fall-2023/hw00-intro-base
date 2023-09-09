@@ -1,5 +1,15 @@
 # HW 0: Intro to Javascript and WebGL
 
+# Outcome
+![](./capture.png)
+- Implement Worly noise and use it for alpha blend
+- Color gradient
+- Use FBM noise to modify the vertices on the sphere and cube
+- use sin, cos functions to modify vertices on the cube
+
+## [Live Demo](https://mengxuanhuang.github.io/CIS5660_HW0/)
+![](./CIS566_HW0.gif)
+
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>
