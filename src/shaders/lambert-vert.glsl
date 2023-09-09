@@ -88,7 +88,7 @@ void main()
     float amp = 4.0;
     float time = u_Time * freq;
     vec3 pos = vs_Pos.xyz + amp* vec3(sin(time), sin(time), sin(time));
-    vec3 noise = vec3(fbm(vec3(pos.x, pos.y, pos.z)), fbm(vec3(pos.y, pos.z, pos.x)), fbm(vec3(pos.z, pos.x, pos.y)));
+    vec3 noise = vec3(fbm(pos.xyz), fbm(pos.yzx), fbm(pos.zxy));
     pos = vs_Pos.xyz + noise- vec3(0.5);
     vec4 modelposition = u_Model * vec4(pos.xyz, 1.0);   // Temporarily store the transformed vertex positions for use below
 
