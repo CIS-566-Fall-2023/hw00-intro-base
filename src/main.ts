@@ -9,7 +9,7 @@ import Camera from './Camera';
 import {setGL} from './globals';
 import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 import FrameBuffer from './rendering/gl/FrameBuffer';
-// test
+
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
@@ -106,7 +106,7 @@ function main() {
     if(controls.tesselations != prevTesselations)
     {
       prevTesselations = controls.tesselations;
-      icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 0.005, prevTesselations);
+      icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 0.1, prevTesselations);
       icosphere.create();
     }
     const color = hexToVec3(controls.diffuse_color);
