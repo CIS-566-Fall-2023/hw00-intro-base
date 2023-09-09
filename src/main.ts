@@ -15,7 +15,7 @@ import ShaderProgram, { Shader } from './rendering/gl/ShaderProgram';
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
-  color: [255, 0, 0] as [number, number, number],
+  color: [113, 106, 195] as [number, number, number],
   'Load Scene': loadScene, // A function pointer, essentially
 };
 
@@ -69,11 +69,11 @@ function main() {
   renderer.setClearColor(0.2, 0.2, 0.2, 1);
   gl.enable(gl.DEPTH_TEST);
 
-  const lambert = new ShaderProgram([
+  const fancyShader = new ShaderProgram([
     new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
-    new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/fancy-frag.glsl')),
   ]);
-  lambert.setGeometryColor([1, 0, 0, 1]);
+  fancyShader.setGeometryColor([1, 0, 0, 1]);
 
   // This function will be called every frame
   function tick() {
@@ -94,9 +94,9 @@ function main() {
         newColor[component] **= GAMMA;
       }
       newColor[3] = 1;
-      lambert.setGeometryColor(newColor);
+      fancyShader.setGeometryColor(newColor);
     }
-    renderer.render(camera, lambert, [
+    renderer.render(camera, fancyShader, [
       // icosphere,
       cube,
     ]);

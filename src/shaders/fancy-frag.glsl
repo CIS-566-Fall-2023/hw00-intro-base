@@ -14,10 +14,12 @@
 // position, light position, and vertex color.
 precision highp float;
 
-uniform vec4 u_Color; // The color with which to render this instance of geometry.
+uniform vec4 u_CamPos; // position of the camera in world space
+uniform vec4 u_Color;  // The color with which to render this instance of geometry.
 
 // These are the interpolated values out of the rasterizer, so you can't know
 // their specific values without knowing the vertices that contributed to them
+in vec4 fs_Pos;
 in vec4 fs_Nor;
 in vec4 fs_LightVec;
 in vec4 fs_Col;
@@ -25,7 +27,11 @@ in vec4 fs_Col;
 out vec4 out_Col; // This is the final output color that you will see on your
                   // screen for the pixel that is currently being processed.
 
-const float LIGHT_INTENSITY = 150.;
+const float LAMBERT_INTENSITY = 200.;
+const vec3 LIGHT_COLOR = vec3(1, 1, 1);
+
+const float PHONG_INTENSITY = 10.;
+const float SHININESS = 20.;
 
 vec3 reinhardJodie(vec3 color) {
     float luminance = dot(color, vec3(0.2126, 0.7152, 0.0722));
@@ -44,16 +50,26 @@ void main()
 
         // Calculate the diffuse term for Lambert shading
         float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));
-        // Avoid negative lighting values
-        diffuseTerm = clamp(diffuseTerm, 0., 1.);
+        // Remap to half-lambert shading
+        float halfLambert = (diffuseTerm + 1.) * 0.5;
 
-        float ambientTerm = 0.2;
+        // Calculate light falloff
+        float lightInvSqIntensity = 1. / dot(vec3(fs_LightVec), vec3(fs_LightVec));
 
-        float lightIntensity = diffuseTerm + ambientTerm;   //Add a small float value to the color multiplier
-                                                            //to simulate ambient lighting. This ensures that faces that are not
-                                                            //lit by our point light are not completely black.
+        // Calculate blinn-phong reflection model
+        vec3 lightDir   = normalize(vec3(fs_LightVec));
+        vec3 viewDir    = normalize(vec3(u_CamPos - fs_Pos));
+        vec3 halfwayDir = normalize(lightDir + viewDir);
 
-        vec3 finalLinearColor = diffuseColor.rgb * lightIntensity;
+        float specularIntensity = pow(max(dot(vec3(fs_Nor), halfwayDir), 0.0), SHININESS);
+        vec3 specular = LIGHT_COLOR * specularIntensity;
+
+        vec3 finalLinearColor = lightInvSqIntensity
+              * (halfLambert * LAMBERT_INTENSITY * diffuseColor.rgb
+                  + specular * PHONG_INTENSITY);
+
         // Compute final shaded color
+        // out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
         out_Col = vec4(gammaCorrect(reinhardJodie(finalLinearColor)), diffuseColor.a);
+        // out_Col = vec4(abs(u_CamPos.rgb * 0.5), 1.);
 }

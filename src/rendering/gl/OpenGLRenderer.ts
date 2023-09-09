@@ -1,4 +1,4 @@
-import { mat4 } from 'gl-matrix';
+import { mat4, vec4 } from 'gl-matrix';
 
 import Camera from '../../Camera';
 import { gl } from '../../globals';
@@ -31,6 +31,14 @@ class OpenGLRenderer {
     mat4.multiply(viewProj, camera.projectionMatrix, camera.viewMatrix);
     prog.setModelMatrix(model);
     prog.setViewProjMatrix(viewProj);
+    prog.setCamPos(
+      vec4.fromValues(
+        camera.controls.eye[0],
+        camera.controls.eye[1],
+        camera.controls.eye[2],
+        1,
+      ),
+    );
 
     drawables.forEach((drawable) => {
       prog.draw(drawable);
