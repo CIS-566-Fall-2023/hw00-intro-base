@@ -1,10 +1,6 @@
 const float density = 2.5;
 const float PI = 3.1415926535;
 
-float cos_lerp(float a, float b, float t) {
-    float mu2 = (1.0 - cos(t * PI)) / 2.0;
-    return (a * (1.0 - mu2) + b * mu2);
-}
 float hash(vec3 p3) {
 	p3  = fract(p3 * vec3(.1031,.11369,.13787));
     p3 += dot(p3, p3.yzx + 19.19);
@@ -21,45 +17,17 @@ float perlin(vec3 p) {
     p *= density;
     vec3 min_corner = floor(p); // min corner of the cell
     vec3 local = fract(p); // fraction of the point within the cell
-
-    vec3 gs[8]; // gradients at each corner
-    vec3 falloffs[8]; // falloff values
+    float ret = 0.0;
     for (int dx=0; dx<=1; ++dx) {
         for (int dy=0; dy<=1; ++dy) {
             for (int dz=0; dz<=1; ++dz) {
                 vec3 corner = min_corner + vec3(dx, dy, dz);
-                gs[dx + 2 * dy + 4 * dz] = grad(corner);
-                falloffs[dx + 2 * dy + 4 * dz] = fade(p, corner);
+                vec3 g = grad(corner);
+                vec3 d = local - vec3(dx, dy, dz);
+                vec3 f = fade(p, corner);
+                ret += dot(g, d) * f.x * f.y * f.z;
             }
         }
-    }
-    vec3 vs[8]; // distance vectors from each corner to the point
-    for (int dx=0; dx<=1; ++dx) {
-        for (int dy=0; dy<=1; ++dy) {
-            for (int dz=0; dz<=1; ++dz) {
-                vs[dx + 2 * dy + 4 * dz] = local - vec3(dx, dy, dz);
-            }
-        }
-    }
-    float dots[8]; // dot products of gradients and distance vectors
-    float ret = 0.0;
-    for (int i=0; i<8; ++i) {
-        dots[i] = dot(gs[i], vs[i]);
-        dots[i] *= falloffs[i].x * falloffs[i].y * falloffs[i].z;
-        ret += dots[i];
     }
     return ret;
-
-    // // interpolate along x
-    // float dots_x[4];
-    // for (int i=0; i<4; ++i) {
-    //     dots_x[i] = cos_lerp(dots[i], dots[i + 4], f.x);
-    // }
-    // // interpolate along y
-    // float dots_y[2];
-    // for (int i=0; i<2; ++i) {
-    //     dots_y[i] = cos_lerp(dots_x[i], dots_x[i + 2], f.y);
-    // }
-    // // interpolate along z
-    // return cos_lerp(dots_y[0], dots_y[1], f.z);
 }
