@@ -8,6 +8,7 @@ class Icosphere extends Drawable {
   positions: Float32Array;
   normals: Float32Array;
   center: vec4;
+  raduis: number;
 
   constructor(center: vec3, public radius: number, public subdivisions: number) {
     super(); // Call the constructor of the super class. This is required.
@@ -150,6 +151,7 @@ class Icosphere extends Drawable {
     // Populate one position for each normal
     for (let i = 0; i < vertices.length; ++i) {
       let pos = <vec4> new Float32Array(buffer0, positionByteOffset + i * 4 * Float32Array.BYTES_PER_ELEMENT, 4);
+      //console.log(this.radius);
       vec4.scaleAndAdd(pos, this.center, vertices[i], this.radius);
     }
 

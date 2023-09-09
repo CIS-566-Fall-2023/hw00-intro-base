@@ -1,4 +1,4 @@
-import {vec4, mat4} from 'gl-matrix';
+import {vec2, vec3, vec4, mat4} from 'gl-matrix';
 import Drawable from './Drawable';
 import {gl} from '../../globals';
 
@@ -23,6 +23,7 @@ class ShaderProgram {
 
   attrPos: number;
   attrNor: number;
+  attrUV: number;
   attrCol: number;
 
   unifModel: WebGLUniformLocation;
@@ -43,6 +44,7 @@ class ShaderProgram {
 
     this.attrPos = gl.getAttribLocation(this.prog, "vs_Pos");
     this.attrNor = gl.getAttribLocation(this.prog, "vs_Nor");
+    this.attrUV = gl.getAttribLocation(this.prog, "vs_UV");
     this.attrCol = gl.getAttribLocation(this.prog, "vs_Col");
     this.unifModel      = gl.getUniformLocation(this.prog, "u_Model");
     this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
@@ -84,6 +86,54 @@ class ShaderProgram {
       gl.uniform4fv(this.unifColor, color);
     }
   }
+  setUniformInt(name : string, value : number)
+  {
+    this.use();
+    var location = gl.getUniformLocation(this.prog, name);
+    if (location !== -1) {
+      gl.uniform1i(location, value);
+    }
+  }
+  setUniformFloat(name : string, value : number)
+  {
+    this.use();
+    var location = gl.getUniformLocation(this.prog, name);
+    if (location !== -1) {
+      gl.uniform1f(location, value);
+    }
+  }
+  setUniformFloat2(name : string, value : vec2)
+  {
+    this.use();
+    var location = gl.getUniformLocation(this.prog, name);
+    if (location !== -1) {
+      gl.uniform2fv(location, value);
+    }
+  }
+  setUniformFloat3(name : string, value : vec3)
+  {
+    this.use();
+    var location = gl.getUniformLocation(this.prog, name);
+    if (location !== -1) {
+      gl.uniform3fv(location, value);
+    }
+  }
+  setUniformFloat4(name : string, value : vec4)
+  {
+    this.use();
+    var location = gl.getUniformLocation(this.prog, name);
+    if (location !== -1) {
+      gl.uniform4fv(location, value);
+    }
+  }
+  setUniformMat4(name : string, value : mat4)
+  {
+    this.use();
+    var location = gl.getUniformLocation(this.prog, name);
+    if (location !== -1) {
+      gl.uniformMatrix4fv(location, false, value);
+    }
+  }
 
   draw(d: Drawable) {
     this.use();
@@ -98,11 +148,17 @@ class ShaderProgram {
       gl.vertexAttribPointer(this.attrNor, 4, gl.FLOAT, false, 0, 0);
     }
 
+    if (this.attrUV != -1 && d.bindUV()) {
+      gl.enableVertexAttribArray(this.attrUV);
+      gl.vertexAttribPointer(this.attrUV, 2, gl.FLOAT, false, 0, 0);
+    }
+
     d.bindIdx();
     gl.drawElements(d.drawMode(), d.elemCount(), gl.UNSIGNED_INT, 0);
 
     if (this.attrPos != -1) gl.disableVertexAttribArray(this.attrPos);
     if (this.attrNor != -1) gl.disableVertexAttribArray(this.attrNor);
+    if (this.attrUV != -1) gl.disableVertexAttribArray(this.attrUV);
   }
 };
 
