@@ -7,6 +7,7 @@ class Square extends Drawable {
   indices: Uint32Array;
   positions: Float32Array;
   normals: Float32Array;
+
   center: vec4;
 
   constructor(center: vec3) {
@@ -37,6 +38,7 @@ class Square extends Drawable {
     gl.bindBuffer(gl.ARRAY_BUFFER, this.bufPos);
     gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.STATIC_DRAW);
 
+    // eslint-disable-next-line no-console
     console.log(`Created square`);
   }
 }

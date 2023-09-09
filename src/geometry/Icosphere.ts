@@ -164,6 +164,8 @@ class Icosphere extends Drawable {
           3,
         ));
 
+        // TODO: maybe use this
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const triangleOffset = nextTriangles.length;
         t0.set([v0, v3, v5]);
         t1.set([v3, v4, v5]);
@@ -227,6 +229,7 @@ class Icosphere extends Drawable {
     gl.bindBuffer(gl.ARRAY_BUFFER, this.bufPos);
     gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.STATIC_DRAW);
 
+    // eslint-disable-next-line no-console
     console.log(`Created icosphere with ${vertices.length} vertices`);
   }
 }

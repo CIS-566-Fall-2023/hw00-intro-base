@@ -8,6 +8,7 @@ import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import { setGL } from './globals';
 import ShaderProgram, { Shader } from './rendering/gl/ShaderProgram';
+import Cube from './geometry/Cube';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
@@ -18,6 +19,7 @@ const controls = {
 
 let icosphere: Icosphere;
 let square: Square;
+let cube: Cube;
 let prevTesselations: number = 5;
 
 function loadScene() {
@@ -25,6 +27,8 @@ function loadScene() {
   icosphere.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
+  cube = new Cube(vec3.fromValues(0, 0, 0));
+  cube.create();
 }
 
 function main() {
@@ -45,6 +49,7 @@ function main() {
   const canvas = <HTMLCanvasElement>document.getElementById('canvas');
   const gl = <WebGL2RenderingContext>canvas.getContext('webgl2');
   if (!gl) {
+    // eslint-disable-next-line no-alert
     alert('WebGL 2 not supported!');
   }
   // `setGL` is a function imported above which sets the value of `gl` in the `globals.ts` module.
@@ -77,8 +82,8 @@ function main() {
       icosphere.create();
     }
     renderer.render(camera, lambert, [
-      icosphere,
-      // square,
+      // icosphere,
+      cube,
     ]);
     stats.end();
 
