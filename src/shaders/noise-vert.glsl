@@ -97,13 +97,12 @@ void main()
                                                             // the model matrix.
 
     vec3 local_pos = vs_Pos.xyz;
-    float fbm_1 = NoiseFBM(local_pos);
-    local_pos *= (0.5f * sin(cos(.7f * u_Time) + sin(.7f * u_Time)) + 0.5f) * fbm_1 + 0.3;
-    float fbm_2 = NoiseFBM(local_pos);
+    float fbm = NoiseFBM(local_pos);
+    local_pos *= (0.5f * sin(cos(.7f * u_Time)) + 0.5f) * 0.9 + 0.1;
     vec4 modelposition = u_Model * vec4(local_pos, 1.f);   // Temporarily store the transformed vertex positions for use below
-    modelposition += fs_Nor * fbm_2 * 1.1f;
-    modelposition += fs_Nor * (0.5f * sin(cos(0.5f * u_Time)) + .5f);
 
+    //modelposition += fs_Nor * (0.5f * sin(cos(0.5f * u_Time)) + .5f);
+    modelposition += fs_Nor * fbm * 0.5f;
     fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
 
     gl_Position = u_ViewProj * modelposition;// gl_Position is a built-in variable of OpenGL which is
