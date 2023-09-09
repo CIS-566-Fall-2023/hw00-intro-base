@@ -2,7 +2,7 @@
 
 # Outcome
 ![](./capture.png)
-- Implement Worly noise and use it for alpha blend
+- Implement Worley noise and use it for alpha blend
 - Color gradient
 - Use FBM noise to modify the vertices on the sphere and cube
 - use sin, cos functions to modify vertices on the cube
