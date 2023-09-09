@@ -4,7 +4,7 @@
 
 * Added a Cube class that inherits from Drawable. Then added a Cube instance to the scene to be rendered.
 
-* Updated existing GUI in main.ts with a parameter to alter the color passed to u_Color in the Lambert shader.
+* Updated existing GUI in main.ts with a parameter to alter the color passed to u_Color in the Lambert shader based on user input.
 
 * Implemented custom fragment shader that uses Absolute Value 3D Perlin Noise to modify fragment color. I wanted to create an inky paint effect on the cube that animates with respect to time.
 
