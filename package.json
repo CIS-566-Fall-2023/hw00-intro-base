@@ -2,7 +2,8 @@
   "scripts": {
     "start": "webpack-dev-server --no-hot --live-reload",
     "build": "webpack",
-    "lint": "eslint ./src --report-unused-disable-directives"
+    "lint": "eslint ./src --report-unused-disable-directives",
+    "format": "prettier -w ."
   },
   "dependencies": {
     "3d-view-controls": "^2.2.2",
