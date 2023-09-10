@@ -19,7 +19,6 @@ out vec4 fs_Pos;
 
 const vec4 lightPos = vec4(5, 5, 3, 1); 
 
-
 vec3 random3(vec3 st) {
     float rand = fract(sin(dot(st, vec3(12.9898, 78.233, 45.5431))) * 43758.5453);
     return normalize(fract(vec3(2.0, 3.0, 5.0) * rand));

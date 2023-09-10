@@ -69,6 +69,11 @@ function main() {
 
   const lambert = new ShaderProgram([
     new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+  ]);
+
+  const custom = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/noise-frag.glsl')),
   ]);
   
@@ -92,12 +97,13 @@ function main() {
 
     time++;
     lambert.setTime(time);
+    custom.setTime(time);
 
-    renderer.render(camera, lambert, [
-      // icosphere,
+    renderer.render(camera, custom, [
+      icosphere,
       // square,
-      cube,
-    ], colorVec); // pass in color
+      // cube,
+    ], colorVec); // pass in color for lambert
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame

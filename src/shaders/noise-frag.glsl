@@ -57,9 +57,9 @@ void main()
         float greenComponent = 0.5 + 0.5 * cos(u_Time * 0.003);
         float blueComponent = 0.5 + 0.5 * sin(u_Time * 0.004); // A faster oscillation
 
-        vec4 dynamicColor = vec4(redComponent, greenComponent, -blueComponent, 1);
-        vec4 dynamicColor2 = vec4(blueComponent, -redComponent, greenComponent, 1);
-        vec4 dynamicColor3 = vec4(-greenComponent, blueComponent, redComponent, 1);
+        vec4 dynamicColor = vec4(redComponent * 0.9, greenComponent, -blueComponent, 1);
+        vec4 dynamicColor2 = vec4(blueComponent, -redComponent, greenComponent * 1.1, 1);
+        vec4 dynamicColor3 = vec4(-greenComponent, blueComponent * 0.9, redComponent, 1);
 
         diffuseColor = dynamicColor;
     
