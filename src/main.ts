@@ -1,8 +1,10 @@
-import {vec3} from 'gl-matrix';
+import {vec3, vec4} from 'gl-matrix';
 const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
 import Icosphere from './geometry/Icosphere';
 import Square from './geometry/Square';
+import Cube from './geometry/Cube';
+
 import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
@@ -13,10 +15,12 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
+  color: [150, 150, 150, 1],
 };
 
 let icosphere: Icosphere;
 let square: Square;
+let cube: Cube;
 let prevTesselations: number = 5;
 
 function loadScene() {
@@ -24,6 +28,9 @@ function loadScene() {
   icosphere.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
+
+  cube = new Cube(vec3.fromValues(0, 0, 0));
+  cube.create();
 }
 
 function main() {
@@ -39,6 +46,7 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
+  gui.addColor(controls, 'color');
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -61,8 +69,10 @@ function main() {
 
   const lambert = new ShaderProgram([
     new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
-    new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/noise-frag.glsl')),
   ]);
+  
+  let time = 0;
 
   // This function will be called every frame
   function tick() {
@@ -70,16 +80,24 @@ function main() {
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
+
+    const colorVec = vec4.fromValues(controls.color[0] / 255, controls.color[1] / 255, controls.color[2] / 255, 1);
+    
     if(controls.tesselations != prevTesselations)
     {
       prevTesselations = controls.tesselations;
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
     }
+
+    time++;
+    lambert.setTime(time);
+
     renderer.render(camera, lambert, [
-      icosphere,
+      // icosphere,
       // square,
-    ]);
+      cube,
+    ], colorVec); // pass in color
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame
