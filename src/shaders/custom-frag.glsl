@@ -61,7 +61,7 @@ void main()
 
         diffuseColor *= 1.0 - abs(perlinNoise3D(vec3(fs_Pos) * 5.0)) - 0.4;
 
-        diffuseColor += perlinNoise3D(vec3(fs_Pos) * 10.0 * cos(u_Time * 0.001));
+        diffuseColor += perlinNoise3D(vec3(fs_Pos) * 10.0 * (cos(u_Time * 0.0015 + 0.9)));
 
         float diffuseBound = diffuseColor.a;
         diffuseColor.a = 1.f;
