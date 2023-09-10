@@ -7,7 +7,7 @@ uniform mat4 u_ViewProj;
 uniform mat4 u_ModelInvTr;
 uniform float u_Time;
 in vec4 vs_Pos;    
-in vec4 vs_Nor;         
+in vec4 vs_Nor;      
 
 out vec4 fs_Pos;
 /* 
