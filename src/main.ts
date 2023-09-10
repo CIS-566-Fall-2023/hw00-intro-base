@@ -89,7 +89,7 @@ function main() {
     //   icosphere,
     renderer.render(camera, lambert, [
       cube],
-      vec4.fromValues(controls.color[0], controls.color[1], controls.color[2], controls.color[3])
+      vec4.fromValues(controls.color[0] / 255, controls.color[1] / 255, controls.color[2] / 255, controls.color[3] / 255)
     );
     stats.end();
 
