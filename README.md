@@ -1,9 +1,23 @@
 # HW 0: Intro to Javascript and WebGL
 
-<p align="center">
-  <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
-</p>
-<p align="center">(source: Ken Perlin)</p>
+## Description of my project - Sherry Li
+
+The color picker lets you alter the color if the Lambert shader is being applied.
+
+<img src="3.png" width="60%">
+
+For my custom fragment shader (noise-frag.glsl), I implemented Perlin noise to make the 60s-looking effect. random3() generates random 3d gradients at grid points and noise() interpolates between 8 corners of a cube to produce noise values in 3d space. I initially looked at https://thebookofshaders.com/11/ and 2D gradient noise by Inigo Quilez, converted them to 3d inputs, and then remapped and floored the values to get the bands of lines. The colors interpolate as a function of time.
+
+<img src="1.png" width="60%">
+<img src="2.png" width="60%">
+
+For my custom vertex shader (trig-frag.glsl), I messed around with sin functions and value noise to get non-uniform vertex transformations as a function of time.
+
+<img src="4.png" width="60%">
+<img src="5.png" width="60%">
+<img src="6.png" width="60%">
+
+Link to live demo: https://sherryli02.github.io/cis-566-hw00-intro-base/
 
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
