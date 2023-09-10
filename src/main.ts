@@ -1,4 +1,4 @@
-import {vec3} from 'gl-matrix';
+import {mat4, vec3, vec4} from 'gl-matrix';
 const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
 import Icosphere from './geometry/Icosphere';
@@ -6,24 +6,38 @@ import Square from './geometry/Square';
 import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
-import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
+import ShaderProgram, {Shader, ShaderData} from './rendering/gl/ShaderProgram';
+import Cube from './geometry/Cube';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
-  'Load Scene': loadScene, // A function pointer, essentially
+  'Load Scene': loadScene, // A function pointer, essentially，
+  color: {
+    r: 1.0,
+    g: 0.0,
+    b: 0.0
+  }
 };
 
 let icosphere: Icosphere;
 let square: Square;
 let prevTesselations: number = 5;
 
+let cube : Cube;
+let shaderData: ShaderData;
+
+let time:GLfloat = 0.0;
+
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
   icosphere.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
+
+  cube = new Cube(vec3.fromValues(0,0,0), vec3.fromValues(1,1,1));
+  cube.create();
 }
 
 function main() {
@@ -39,6 +53,12 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
+
+  const colorFolder = gui.addFolder('color');
+  colorFolder.add(controls.color, 'r', 0.0, 1.0).step(0.02);
+  colorFolder.add(controls.color, 'g', 0.0, 1.0).step(0.02);
+  colorFolder.add(controls.color, 'b', 0.0, 1.0).step(0.02);
+  colorFolder.open();
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -64,8 +84,14 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
 
+  const perlinNoise = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/perlin-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/perlin-frag.glsl')),
+  ]);
+
   // This function will be called every frame
   function tick() {
+    time  = time + 1.0;
     camera.update();
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
@@ -76,10 +102,16 @@ function main() {
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
     }
-    renderer.render(camera, lambert, [
-      icosphere,
-      // square,
+    shaderData = new ShaderData(mat4.create(), 
+                                mat4.create(), 
+                                vec4.fromValues(controls.color.r, controls.color.g, controls.color.b, 1.0),
+                                time);
+    renderer.render(camera, perlinNoise, shaderData, [
+      // icosphere,
+      // // square,
+      cube,
     ]);
+    //renderer.drawNoise(camera, perlinNoise, shaderData, [cube]);
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame

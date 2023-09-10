@@ -18,6 +18,21 @@ export class Shader {
   }
 };
 
+export class ShaderData{
+  model: mat4;
+  viewProj:  mat4;
+  color: vec4;
+  time: GLfloat;
+
+  constructor(model: mat4, viewProj: mat4, color: vec4, time: GLfloat){
+    this.model = model;
+    this.viewProj = viewProj;
+    this.color = color;
+    this.time = time;
+  }
+
+};
+
 class ShaderProgram {
   prog: WebGLProgram;
 
@@ -29,6 +44,7 @@ class ShaderProgram {
   unifModelInvTr: WebGLUniformLocation;
   unifViewProj: WebGLUniformLocation;
   unifColor: WebGLUniformLocation;
+  unifTime: WebGLUniformLocation;
 
   constructor(shaders: Array<Shader>) {
     this.prog = gl.createProgram();
@@ -44,6 +60,8 @@ class ShaderProgram {
     this.attrPos = gl.getAttribLocation(this.prog, "vs_Pos");
     this.attrNor = gl.getAttribLocation(this.prog, "vs_Nor");
     this.attrCol = gl.getAttribLocation(this.prog, "vs_Col");
+
+    this.unifTime       = gl.getUniformLocation(this.prog, "u_Time");
     this.unifModel      = gl.getUniformLocation(this.prog, "u_Model");
     this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
     this.unifViewProj   = gl.getUniformLocation(this.prog, "u_ViewProj");
@@ -85,6 +103,13 @@ class ShaderProgram {
     }
   }
 
+  setTime(time: GLfloat){
+    this.use();
+    if(this.unifTime !== -1){
+      gl.uniform1f(this.unifTime, time);
+    }
+  }
+
   draw(d: Drawable) {
     this.use();
 
@@ -103,6 +128,11 @@ class ShaderProgram {
 
     if (this.attrPos != -1) gl.disableVertexAttribArray(this.attrPos);
     if (this.attrNor != -1) gl.disableVertexAttribArray(this.attrNor);
+  }
+
+  drawArray(d: Drawable){
+    this.use();
+    gl.drawArrays(d.drawMode(), 0, 6);
   }
 };
 
