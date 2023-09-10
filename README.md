@@ -59,8 +59,6 @@ Once your built code is pushed to `gh-pages`, Github can automatically publish a
 
 3. Done! Now, any new commits on the `master` branch will be built and pushed to `gh-pages`. The project should be visible at http://username.github.io/repo-name.
 
-
-
 To check if everything is on the right track:
 
 1. Make sure the `gh-pages` branch of your repo has a files called `index.html`, `bundle.js`, and `bundle.js.map`
