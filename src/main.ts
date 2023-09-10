@@ -73,7 +73,7 @@ function main() {
   ]);
 
   const custom = new ShaderProgram([
-    new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
+    new Shader(gl.VERTEX_SHADER, require('./shaders/trig-vert.glsl')),
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/noise-frag.glsl')),
   ]);
   
@@ -100,9 +100,9 @@ function main() {
     custom.setTime(time);
 
     renderer.render(camera, custom, [
-      icosphere,
+      // icosphere,
       // square,
-      // cube,
+      cube,
     ], colorVec); // pass in color for lambert
     stats.end();
 

@@ -17,6 +17,7 @@ For my custom vertex shader (trig-frag.glsl), I messed around with sin functions
 <img src="5.png" width="60%">
 <img src="6.png" width="60%">
 
+Link to live demo: https://sherryli02.github.io/cis-566-hw00-intro-base/
 
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.

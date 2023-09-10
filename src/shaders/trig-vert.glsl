@@ -37,22 +37,17 @@ void main()
 
     vec4 new_Pos = vec4(0);
 
-    float sinTime = sin(u_Time * 0.01) * cos(u_Time * 0.02) * 0.7;
+    float sinTime = sin(u_Time * 0.01) * cos(u_Time * 0.02) * 0.2;
 
     vec3 st = fs_Pos.xyz;
 
-    float pattern = lines(random3(st), 0.9 * sinTime); 
+    float pattern = lines(random3(st * 10.), 0.9 * sinTime); 
 
     new_Pos = fs_Pos * vec4(vec3(pattern), 1.0);
 
     mat3 invTranspose = mat3(u_ModelInvTr);
-    fs_Nor = vec4(invTranspose * vec3(vs_Nor), 0);          // Pass the vertex normals to the fragment shader for interpolation.
-                                                            // Transform the geometry's normals by the inverse transpose of the
-                                                            // model matrix. This is necessary to ensure the normals remain
-                                                            // perpendicular to the surface after the surface is transformed by
-                                                            // the model matrix.
-
-
+    fs_Nor = vec4(invTranspose * vec3(vs_Nor), 0);
+    
     vec4 modelposition = u_Model * new_Pos;   // Temporarily store the transformed vertex positions for use below
 
     fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies

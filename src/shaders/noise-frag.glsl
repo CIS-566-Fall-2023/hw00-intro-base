@@ -14,8 +14,7 @@ in vec4 fs_Pos;
 
 out vec4 out_Col;
 
-// define a gradient at each integer point on the lattice
-// Function to generate random gradients at grid points
+// define a gradient at each integer point on the lattice / generate random gradients at grid points
 
 vec3 random3(vec3 st) {
     float rand = fract(sin(dot(st, vec3(12.9898, 78.233, 45.5431))) * 43758.5453);
