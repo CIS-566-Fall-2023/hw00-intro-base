@@ -69,7 +69,7 @@ void main()
     //float fbm = fbm(fs_Pos.xyz * 2. + u_Time * 0.003);
 
     //loat noiseVal = fbm;
-    //https://www.shadertoy.com/view/lltcWl
+    //adapted from https://www.shadertoy.com/view/lltcWl
     vec2 uv = gl_FragCoord.xy / 500.;
 
     const int ITERATIONS = 5;

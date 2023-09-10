@@ -1,5 +1,17 @@
 # HW 0: Intro to Javascript and WebGL
 
+## submission
+
+- For this project I implemented FBM with Perlin noise
+- The scene contains a moving cube
+- In the vertex shader, the vertices are moving based on trigonometric functions
+- In the fragment shader, the color is generated with a FBM function with 3D Perlin noise
+- [Live Demo](https://horo-ursa.github.io/hw00-intro-base/)
+
+### Screenshots
+
+![screenshot](image-1.png)
+
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>
