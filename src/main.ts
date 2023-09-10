@@ -81,12 +81,11 @@ function main() {
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
     }
-
     renderer.render(camera, lambert, [
       //icosphere,
       //square,
       cube
-    ], vec4.fromValues(controls.colour[0], controls.colour[1], controls.colour[2], controls.colour[3]));
+    ], vec4.fromValues(controls.colour[0], controls.colour[1], controls.colour[2], 1));
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame
