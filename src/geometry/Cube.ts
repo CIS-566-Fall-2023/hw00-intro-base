@@ -14,26 +14,84 @@ class Cube extends Drawable {
     }
 
     createPositions() {
-        const i = 0;
         // Initialise new float array.
-        const vertList = new Float32Array(36);
+        const vertList = new Float32Array([1, 1, 1, 1,
+            1, -1, 1, 1,
+            -1, -1, 1, 1,
+            -1, 1, 1, 1,
+            1, 1, -1, 1,
+            1, -1, -1, 1,
+            1, -1, 1, 1,
+            1, 1, 1, 1,
+            -1, 1, 1, 1,
+            -1, -1, 1, 1,
+            -1, -1, -1, 1,
+            -1, 1, -1, 1,
+            -1, 1, -1, 1,
+            -1, -1, -1, 1,
+            1, -1, -1, 1,
+            1, 1, -1, 1,
+            1, 1, -1, 1,
+            1, 1, 1, 1,
+            -1, 1, 1, 1,
+            -1, 1, -1, 1,
+            1, -1, 1, 1,
+            1, -1, -1, 1,
+            -1, -1, -1, 1,
+            -1, -1, 1, 1]);
 
-        vertList[i] = 1;
         return vertList;
     }
 
     createNormals() {
-        // TODO
+        const normList = new Float32Array([0, 0, 1, 0,
+            0, 0, 1, 0,
+            0, 0, 1, 0,
+            0, 0, 1, 0,
+            1, 0, 0, 0,
+            1, 0, 0, 0,
+            1, 0, 0, 0,
+            1, 0, 0, 0,
+            -1, 0, 0, 0,
+            -1, 0, 0, 0,
+            -1, 0, 0, 0,
+            -1, 0, 0, 0,
+            0, 0, -1, 0,
+            0, 0, -1, 0,
+            0, 0, -1, 0,
+            0, 0, -1, 0,
+            0, 1, 0, 0,
+            0, 1, 0, 0,
+            0, 1, 0, 0,
+            0, 1, 0, 0,
+            0, -1, 0, 0,
+            0, -1, 0, 0,
+            0, -1, 0, 0,
+            0, -1, 0, 0]);
+        return normList;
     }
 
     createIndices() {
-        // TODO
+        const inds = new Uint32Array([0, 1, 2,
+            0, 2, 3,
+            4, 5, 6,
+            4, 6, 7,
+            8, 9, 10,
+            8, 10, 11,
+            12, 13, 14,
+            12, 14, 15,
+            16, 17, 18,
+            16, 18, 19,
+            20, 21, 22,
+            20, 22, 23]);
+        return inds;
     }
 
     // The override. 
-    create(): Drawable {
-        // TODO
+    create() {
         this.positions = this.createPositions();
+        this.normals = this.createNormals();
+        this.indices = this.createIndices();
 
         this.generateIdx();
         this.generatePos();
@@ -41,8 +99,17 @@ class Cube extends Drawable {
 
         this.count = this.indices.length;
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufIdx);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.indices, gl.STATIC_DRAW);
 
-        return;
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.bufNor);
+        gl.bufferData(gl.ARRAY_BUFFER, this.normals, gl.STATIC_DRAW);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.bufPos);
+        gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.STATIC_DRAW);
+
+        console.log('Created cube.');
     }
 
 }
+
+export default Cube;
