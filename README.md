@@ -1,5 +1,18 @@
 # HW 0: Intro to Javascript and WebGL
 
+## Thomas Shaw
+
+I wanted to mess around a bit since I'm already somewhat familiar with WebGL, so I implemented half-Lambert + Blinn-Phong shading (reminiscent of the Source engine) and parameterized the shininess factor of the Blinn-Phong lighting. I also implemented a modified Reinhard tonemapping operator, gamma correction, and reverse gamma correction for color selection.
+
+[Live demo](https://printer83mph.github.io/cis5660-hw00-intro-base/)
+
+<div style="display:flex;flex-wrap:wrap;grid-template-columns:1fr 1fr;align-items:center">
+  <img src="./media/blob.png" style="height:350px"></img>
+  <img src="./media/greycube.png" style="height:350px"></img>
+  <img src="./media/whiteman.png" style="height:350px"></img>
+  <img src="./media/lowpolyflesh.png" style="height:350px"></img>
+</div>
+
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>
