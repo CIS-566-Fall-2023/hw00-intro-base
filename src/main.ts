@@ -6,32 +6,42 @@ import Camera from './Camera';
 import { GAMMA } from './constants';
 import Cube from './geometry/Cube';
 import Icosphere from './geometry/Icosphere';
-import Square from './geometry/Square';
 import { setGL } from './globals';
 import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import ShaderProgram, { Shader } from './rendering/gl/ShaderProgram';
+import Drawable from './rendering/gl/Drawable';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
-  color: [113, 106, 195] as [number, number, number],
+  color: [55, 45, 55] as [number, number, number],
   'Load Scene': loadScene, // A function pointer, essentially
+  'Switch Object': switchObject,
 };
 
 let icosphere: Icosphere;
-let square: Square;
 let cube: Cube;
+
 let prevTesselations: number = controls.tesselations;
 let prevColor = [0, 0, 0] as [number, number, number];
+let currentObject: 'icosphere' | 'cube' = 'cube';
+
+const renderQueue: Drawable[] = [];
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
   icosphere.create();
-  square = new Square(vec3.fromValues(0, 0, 0));
-  square.create();
   cube = new Cube(vec3.fromValues(0, 0, 0));
   cube.create();
+
+  switchObject();
+}
+
+function switchObject() {
+  const newObject = currentObject === 'cube' ? icosphere : cube;
+  renderQueue[0] = newObject;
+  currentObject = currentObject === 'cube' ? 'icosphere' : 'cube';
 }
 
 function main() {
@@ -47,6 +57,7 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
+  gui.add(controls, 'Switch Object');
   gui.addColor(controls, 'color');
 
   // get canvas and webgl context
@@ -67,6 +78,7 @@ function main() {
 
   const renderer = new OpenGLRenderer(canvas);
   renderer.setClearColor(0.2, 0.2, 0.2, 1);
+  renderer.setStartTime(Date.now());
   gl.enable(gl.DEPTH_TEST);
 
   const fancyShader = new ShaderProgram([
@@ -81,10 +93,14 @@ function main() {
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
-    if (controls.tesselations !== prevTesselations) {
+    if (
+      controls.tesselations !== prevTesselations &&
+      currentObject === 'icosphere'
+    ) {
       prevTesselations = controls.tesselations;
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
+      renderQueue[0] = icosphere;
     }
     if (!vec3.equals(controls.color, prevColor)) {
       prevColor = controls.color;
@@ -96,10 +112,7 @@ function main() {
       newColor[3] = 1;
       fancyShader.setGeometryColor(newColor);
     }
-    renderer.render(camera, fancyShader, [
-      // icosphere,
-      cube,
-    ]);
+    renderer.render(camera, fancyShader, renderQueue);
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame

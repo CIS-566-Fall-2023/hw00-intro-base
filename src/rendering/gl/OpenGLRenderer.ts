@@ -8,10 +8,16 @@ import ShaderProgram from './ShaderProgram';
 
 // In this file, `gl` is accessible because it is imported above
 class OpenGLRenderer {
+  startTime: number;
+
   constructor(public canvas: HTMLCanvasElement) {}
 
   setClearColor(r: number, g: number, b: number, a: number) {
     gl.clearColor(r, g, b, a);
+  }
+
+  setStartTime(time: number) {
+    this.startTime = time;
   }
 
   setSize(width: number, height: number) {
@@ -31,6 +37,7 @@ class OpenGLRenderer {
     mat4.multiply(viewProj, camera.projectionMatrix, camera.viewMatrix);
     prog.setModelMatrix(model);
     prog.setViewProjMatrix(viewProj);
+    prog.setTime((Date.now() - this.startTime) * 0.001);
     prog.setCamPos(
       vec4.fromValues(
         camera.controls.eye[0],

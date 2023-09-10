@@ -30,8 +30,84 @@ out vec4 out_Col; // This is the final output color that you will see on your
 const float LAMBERT_INTENSITY = 150.;
 const vec3 LIGHT_COLOR = vec3(1, 1, 1);
 
-const float PHONG_INTENSITY = 8.;
-const float SHININESS = 10.;
+const float PHONG_INTENSITY = 0.2;
+const float SHININESS_MIN = 20.;
+const float SHININESS_MAX = 200.;
+
+//	Classic Perlin 3D Noise 
+//	by Stefan Gustavson
+//
+vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
+vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
+vec3 fade(vec3 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
+
+float cnoise(vec3 P){
+  vec3 Pi0 = floor(P); // Integer part for indexing
+  vec3 Pi1 = Pi0 + vec3(1.0); // Integer part + 1
+  Pi0 = mod(Pi0, 289.0);
+  Pi1 = mod(Pi1, 289.0);
+  vec3 Pf0 = fract(P); // Fractional part for interpolation
+  vec3 Pf1 = Pf0 - vec3(1.0); // Fractional part - 1.0
+  vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
+  vec4 iy = vec4(Pi0.yy, Pi1.yy);
+  vec4 iz0 = Pi0.zzzz;
+  vec4 iz1 = Pi1.zzzz;
+
+  vec4 ixy = permute(permute(ix) + iy);
+  vec4 ixy0 = permute(ixy + iz0);
+  vec4 ixy1 = permute(ixy + iz1);
+
+  vec4 gx0 = ixy0 / 7.0;
+  vec4 gy0 = fract(floor(gx0) / 7.0) - 0.5;
+  gx0 = fract(gx0);
+  vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
+  vec4 sz0 = step(gz0, vec4(0.0));
+  gx0 -= sz0 * (step(0.0, gx0) - 0.5);
+  gy0 -= sz0 * (step(0.0, gy0) - 0.5);
+
+  vec4 gx1 = ixy1 / 7.0;
+  vec4 gy1 = fract(floor(gx1) / 7.0) - 0.5;
+  gx1 = fract(gx1);
+  vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
+  vec4 sz1 = step(gz1, vec4(0.0));
+  gx1 -= sz1 * (step(0.0, gx1) - 0.5);
+  gy1 -= sz1 * (step(0.0, gy1) - 0.5);
+
+  vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);
+  vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);
+  vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);
+  vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);
+  vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);
+  vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);
+  vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);
+  vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
+
+  vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
+  g000 *= norm0.x;
+  g010 *= norm0.y;
+  g100 *= norm0.z;
+  g110 *= norm0.w;
+  vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
+  g001 *= norm1.x;
+  g011 *= norm1.y;
+  g101 *= norm1.z;
+  g111 *= norm1.w;
+
+  float n000 = dot(g000, Pf0);
+  float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
+  float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
+  float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
+  float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
+  float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
+  float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
+  float n111 = dot(g111, Pf1);
+
+  vec3 fade_xyz = fade(Pf0);
+  vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
+  vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
+  float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x); 
+  return 2.2 * n_xyz;
+}
 
 vec3 reinhardJodie(vec3 color) {
     float luminance = dot(color, vec3(0.2126, 0.7152, 0.0722));
@@ -48,6 +124,12 @@ void main()
     // Material base color (before shading)
         vec4 diffuseColor = u_Color;
 
+        float noise = (cnoise(fs_Pos.xyz * 4.) + 1.) * 0.5;
+        noise = 1. - min(noise, -noise + 1.) * 2.;
+
+        diffuseColor.rgb *= mix(0.4, 1.0, noise);
+        float shininess = mix(SHININESS_MIN, SHININESS_MAX, noise);
+
         // Calculate the diffuse term for Lambert shading
         float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));
         // Remap to half-lambert shading
@@ -57,22 +139,22 @@ void main()
         vec3 ambientTerm = vec3(10);
 
         // Calculate light falloff
-        float lightInvSqIntensity = 1. / dot(vec3(fs_LightVec), vec3(fs_LightVec));
+        float lightInvSqIntensity = 1. / dot(fs_LightVec.xyz, fs_LightVec.xyz);
 
         // Calculate blinn-phong reflection model
-        vec3 lightDir   = normalize(vec3(fs_LightVec));
+        vec3 lightDir   = normalize(fs_LightVec.xyz);
         vec3 viewDir    = normalize(vec3(u_CamPos - fs_Pos));
         vec3 halfwayDir = normalize(lightDir + viewDir);
 
-        float specularIntensity = pow(max(dot(vec3(fs_Nor), halfwayDir), 0.0), SHININESS);
+        float specularIntensity = pow(max(dot(fs_Nor.xyz, halfwayDir), 0.0), shininess);
         vec3 specular = LIGHT_COLOR * specularIntensity;
-        if (dot(lightDir, vec3(fs_Nor)) < 0.) {
+        if (dot(lightDir, fs_Nor.xyz) < -0.5) {
           specular = vec3(0);
         }
 
         vec3 finalLinearColor = lightInvSqIntensity
               * ((vec3(halfLambert * LAMBERT_INTENSITY) + ambientTerm) * diffuseColor.rgb
-                  + specular * PHONG_INTENSITY);
+                  + specular * shininess * PHONG_INTENSITY);
 
         // Compute final shaded color
         out_Col = vec4(gammaCorrect(reinhardJodie(finalLinearColor)), diffuseColor.a);
