@@ -14,7 +14,7 @@ import ShaderProgram, { Shader } from './rendering/gl/ShaderProgram';
 const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
-  colour: [0.349, 0.93, 1, 1]
+  colour: [34, 153, 176, 1]
 };
 
 let icosphere: Icosphere;
@@ -65,9 +65,15 @@ function main() {
   renderer.setClearColor(0.2, 0.2, 0.2, 1);
   gl.enable(gl.DEPTH_TEST);
 
-  const lambert = new ShaderProgram([
-    new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
-    new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+  // const lambert = new ShaderProgram([
+  //   new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
+  //   new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+  // ]);
+
+  // New shader.
+  const noiseModifier = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/noise-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/noise-frag.glsl')),
   ]);
 
   // This function will be called every frame
@@ -81,9 +87,16 @@ function main() {
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
     }
-    renderer.render(camera, lambert, [
-      //icosphere,
-      //square,
+
+    // Render lambert shader.
+    // renderer.render(camera, lambert, [
+    //   //icosphere,
+    //   //square,
+    //   cube
+    // ], vec4.fromValues(controls.colour[0] / 255, controls.colour[1] / 255, controls.colour[2] / 255, 1));
+
+    // Render noise shader.
+    renderer.render(camera, noiseModifier, [
       cube
     ], vec4.fromValues(controls.colour[0] / 255, controls.colour[1] / 255, controls.colour[2] / 255, 1));
     stats.end();
