@@ -15,7 +15,7 @@ import Drawable from './rendering/gl/Drawable';
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
-  color: [55, 45, 55] as [number, number, number],
+  color: [52, 100, 63] as [number, number, number],
   'Load Scene': loadScene, // A function pointer, essentially
   'Switch Object': switchObject,
 };
