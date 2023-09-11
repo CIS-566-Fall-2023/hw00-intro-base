@@ -88,6 +88,14 @@ function main() {
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
+
+    // Enable blending for transparency
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    // Disable writing to the depth buffer
+    gl.depthMask(false);
+
     if(controls.tesselations != prevTesselations)
     {
       prevTesselations = controls.tesselations;
