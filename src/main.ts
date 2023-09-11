@@ -28,7 +28,7 @@ function loadScene() {
   icosphere.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
-  cube = new Cube(vec3.fromValues(0, 0, 0));
+  cube = new Cube(vec3.fromValues(3, 0, 0));
   cube.create();
 }
 
@@ -92,7 +92,7 @@ function main() {
     renderer.render(camera, custom, [
       icosphere,
       //square,
-      //cube
+      cube
     ], controls.color, time);
     stats.end();
 

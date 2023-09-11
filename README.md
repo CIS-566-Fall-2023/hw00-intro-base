@@ -6,6 +6,10 @@
 
 I use a FBM shader aside with cosine function to create vertex displacement along normal, and a worley noise to create water wave-like effect on sphere's surface.
 
+Here is a screenshot with cube included:
+
+![](screenshot.png)
+
 # HW 0: Intro to Javascript and WebGL
 
 <p align="center">
