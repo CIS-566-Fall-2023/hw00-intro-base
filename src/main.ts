@@ -16,7 +16,9 @@ const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
   color: [56, 147, 248],
-  Scale: 3.5
+  Scale: 3.5,
+  Persistency: 2,
+  Transparency: 2
 };
 
 let icosphere: Icosphere;
@@ -48,6 +50,8 @@ function main() {
   gui.add(controls, 'Load Scene');
   gui.addColor(controls, 'color');
   gui.add(controls, 'Scale', 1, 10).step(0.1);
+  gui.add(controls, 'Persistency', 1, 10).step(0.1);
+  gui.add(controls, 'Transparency', 1, 50).step(1);
 
 
   // get canvas and webgl context
@@ -113,7 +117,7 @@ function main() {
       // icosphere,
       // square,
       cube,
-    ], MyColor, controls.Scale);
+    ], MyColor, controls.Scale, controls.Persistency, controls.Transparency);
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame

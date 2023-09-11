@@ -30,6 +30,8 @@ class ShaderProgram {
   unifViewProj: WebGLUniformLocation;
   unifColor: WebGLUniformLocation;
   unifScale: WebGLUniformLocation;
+  unifPersistency: WebGLUniformLocation;
+  unifTransparency: WebGLUniformLocation;
 
   constructor(shaders: Array<Shader>) {
     this.prog = gl.createProgram();
@@ -49,7 +51,9 @@ class ShaderProgram {
     this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
     this.unifViewProj   = gl.getUniformLocation(this.prog, "u_ViewProj");
     this.unifColor      = gl.getUniformLocation(this.prog, "u_Color");
-    this.unifScale      = gl.getUniformLocation(this.prog, "u_scale");
+    this.unifScale      = gl.getUniformLocation(this.prog, "u_Scale");
+    this.unifPersistency      = gl.getUniformLocation(this.prog, "u_Persistency");
+    this.unifTransparency      = gl.getUniformLocation(this.prog, "u_Transparency");
   }
 
   use() {
@@ -90,6 +94,18 @@ class ShaderProgram {
     this.use();
     if (this.unifScale !== -1) {
       gl.uniform1f(this.unifScale, MyScale);
+    }
+  }
+  setPersistency(Persistency: GLfloat) {
+    this.use();
+    if (this.unifTransparency !== -1) {
+      gl.uniform1f(this.unifPersistency, Persistency);
+    }
+  }
+  setTransparency(Transparency: GLfloat) {
+    this.use();
+    if (this.unifTransparency !== -1) {
+      gl.uniform1f(this.unifTransparency, Transparency);
     }
   }
 

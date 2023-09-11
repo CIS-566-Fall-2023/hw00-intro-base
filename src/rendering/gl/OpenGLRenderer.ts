@@ -22,7 +22,7 @@ class OpenGLRenderer {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   }
 
-  render(camera: Camera, prog: ShaderProgram, drawables: Array<Drawable>,  MyColor: vec4, MyScale: GLfloat) {
+  render(camera: Camera, prog: ShaderProgram, drawables: Array<Drawable>,  MyColor: vec4, MyScale: GLfloat, Persistency: GLfloat, Transparency: GLfloat) {
     let model = mat4.create();
     let viewProj = mat4.create();
 
@@ -32,6 +32,8 @@ class OpenGLRenderer {
     prog.setViewProjMatrix(viewProj);
     prog.setGeometryColor(MyColor);
     prog.setScale(MyScale);
+    prog.setPersistency(Persistency);
+    prog.setTransparency(Transparency);
 
     for (let drawable of drawables) {
       prog.draw(drawable);

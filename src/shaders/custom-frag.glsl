@@ -4,12 +4,14 @@
 precision highp float;
 
 uniform vec4 u_Color;
-uniform float u_scale;
+uniform float u_Scale;
 in vec4 fs_Nor;
 in vec4 fs_LightVec;
 in vec4 fs_Col;
 in vec4 fs_Pos;
 uniform float u_Time;
+uniform float u_Persistency;
+uniform float u_Transparency;
 out vec4 out_Col;
 
 
@@ -90,10 +92,10 @@ float OctavePerlin(vec3 position, int octaves, float persistence) {
 
 void main()
 {
-    float factor = OctavePerlin(fs_Pos.xyz * u_scale + vec3(u_Time, u_Time, u_Time), 2, 10.00);
+    float factor = OctavePerlin(fs_Pos.xyz * u_Scale + vec3(u_Time, u_Time, u_Time), 2, u_Persistency);
     vec3 color = u_Color.rgb;
     float alphaThreshold = 0.5;
-    float transparencyFactor = abs(factor - alphaThreshold) * 2.0;
+    float transparencyFactor = abs(factor - alphaThreshold) * u_Transparency;
     float alpha = clamp(1.0 - transparencyFactor, 0.0, 1.0);
     out_Col = vec4(color.rgb, alpha);
 }
