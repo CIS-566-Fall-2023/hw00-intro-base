@@ -90,5 +90,5 @@ I added a button in the upper right control section called "Use Lambert Shader".
   <img width="640" height="360" src="https://github.com/Jeff-Ling/hw00-intro-base/blob/master/ScreenShot/sc1.png?raw=true">
   <img width="640" height="360" src="https://github.com/Jeff-Ling/hw00-intro-base/blob/master/ScreenShot/sc2.png?raw=true">
 </p>
-
+ 
 Link to live demo: https://jeff-ling.github.io/hw00-intro-base/
