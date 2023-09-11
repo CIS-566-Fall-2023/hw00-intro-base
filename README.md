@@ -5,6 +5,16 @@
 </p>
 <p align="center">(source: Ken Perlin)</p>
 
+## Kisha Yan
+Here is my final project! I used FBM for my noise function, along with an extra modification to add a fractal/tesselation looking texture.
+
+![Noise](https://github.com/kishayan02/hw00-intro-base/assets/97934823/7ee5df63-bb97-4981-864c-1fca031fe715)
+
+In addition, I added multiple sin function modifications to the cube's vertex positions to create a deformation using a time variable.
+
+![Cube](https://github.com/kishayan02/hw00-intro-base/assets/97934823/7a247ade-f30e-4b14-932e-7c7768740a83)
+
+
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
