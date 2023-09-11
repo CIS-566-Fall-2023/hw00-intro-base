@@ -13,14 +13,53 @@ precision highp float;
 
 uniform vec4 u_Color; // The color with which to render this instance of geometry.
 
+uniform float u_Time;
+uniform float u_MovingSpeed;
+uniform float u_CellNum;
+uniform float u_PatternSize;
+
 // These are the interpolated values out of the rasterizer, so you can't know
 // their specific values without knowing the vertices that contributed to them
 in vec4 fs_Nor;
 in vec4 fs_LightVec;
 in vec4 fs_Col;
+in vec2 fs_UV;
+in vec3 fs_Pos;
 
 out vec4 out_Col; // This is the final output color that you will see on your
                   // screen for the pixel that is currently being processed.
+
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+// Returns the point in a given cell
+vec3 get_cell_point(ivec3 cell) {
+	vec3 cell_base = vec3(cell) / u_CellNum;
+	float noise_x = rand(vec2(cell.xy));
+    float noise_y = rand(vec2(cell.yz));
+    float noise_z = rand(vec2(cell.xz));
+    return cell_base + (0.5 + 1.5 * vec3(noise_x, noise_y, noise_z)) / u_CellNum;
+}
+
+float worley(vec3 coord) {
+    ivec3 cell = ivec3(coord * u_CellNum);
+    float dist = 1.0;
+    
+    // Search in the surrounding cell block
+    for (int x = 0; x < 5; x++) { 
+        for (int y = 0; y < 5; y++) {
+            for (int z = 0; z < 5; z++) {
+                vec3 cell_point = get_cell_point(cell + ivec3(x-2, y-2, z-2));
+                dist = min(dist, distance(cell_point, coord));
+            }
+        }
+    }
+    
+    dist /= length(vec2(1.0 / u_CellNum));
+    dist = 1.0 - dist;
+    return dist;
+}
 
 void main()
 {
@@ -32,12 +71,19 @@ void main()
         // Avoid negative lighting values
         // diffuseTerm = clamp(diffuseTerm, 0, 1);
 
-        float ambientTerm = 0.2;
+        //float ambientTerm = 0.2;
 
-        float lightIntensity = diffuseTerm + ambientTerm;   //Add a small float value to the color multiplier
+        //float lightIntensity = diffuseTerm + ambientTerm;   //Add a small float value to the color multiplier
                                                             //to simulate ambient lighting. This ensures that faces that are not
                                                             //lit by our point light are not completely black.
 
         // Compute final shaded color
-        out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
+        float time = u_Time;
+        if (time > 10000.0) time -= 10000.0;
+        vec3 uvw = fs_Pos + vec3(0.5, 0.5, 0.5) / u_PatternSize + time * u_MovingSpeed;
+
+        float lightIntensity = 1.0;
+
+
+        out_Col = vec4(diffuseColor.rgb * lightIntensity * worley(uvw ), diffuseColor.a);
 }
