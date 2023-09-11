@@ -3,11 +3,13 @@
 precision highp float;
 
 uniform vec4 u_Color;
+uniform float u_Time;
 
 in vec4 fs_Nor;
 in vec4 fs_LightVec;
 in vec4 fs_Col;
 in vec4 fs_Pos;
+in vec4 fs_CameraPos;
 
 out vec4 out_Col;
 
@@ -54,18 +56,31 @@ void main()
 
         // Apply perlin.
         diffuseColor *= 1.0 - (abs(perlin) - 0.5);
-        diffuseColor += perlinNoise3D(vec3(fs_Pos) * 2.3 + 3.0);
-        diffuseColor *= abs(cos(perlin) * 2.0) - abs(1.0 - sin(perlin));
+        diffuseColor += perlinNoise3D(vec3(fs_Pos) * 2.3 * cos(u_Time * 0.001));
+        if (perlin <= 0.25) {
+            diffuseColor *= cos(perlin) + abs(1.0 - cos(perlin));
+        } else {
+            diffuseColor *= abs(cos(perlin * 0.1) * 2.0) - abs(1.0 - sin(u_Time * 0.001));
+        }
         diffuseColor.a = 1.0;
 
         // Calculate the diffuse term for Lambert shading
+
+        // Blinn Phuong
+        vec4 viewVect = normalize(fs_Pos - fs_CameraPos);
+        vec4 lightingVect = normalize(fs_Pos - fs_LightVec);
+
+        vec4 h = (viewVect + lightingVect) / 2.f;
+
+        float specularIntensity = max(pow(dot(h, fs_Nor), 7.f), 0.f);
+
         float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));
         // Avoid negative lighting values
         // diffuseTerm = clamp(diffuseTerm, 0, 1);
 
         float ambientTerm = 0.5;
 
-        float lightIntensity = diffuseTerm + ambientTerm;   //Add a small float value to the color multiplier
+        float lightIntensity = diffuseTerm + ambientTerm + specularIntensity;   //Add a small float value to the color multiplier
                                                             //to simulate ambient lighting. This ensures that faces that are not
                                                             //lit by our point light are not completely black.
 
