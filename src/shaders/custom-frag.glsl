@@ -41,9 +41,16 @@ vec3 fade(vec3 t) {
 
 float grad(int hash, vec3 dir) {
     int h = hash & 15;
-    float grad = 1.0 + float(h & 7); // Convert to float
-    return (h & 8 ? -grad : grad) * dot(dir, dir); // Ensure both arguments of dot are vectors
+    float gradValue = 1.0 + float(h & 7); // Convert to float
+    float result;
+    if ((h & 8) != 0) {  // Explicitly compare to an integer
+        result = -gradValue;
+    } else {
+        result = gradValue;
+    }
+    return result * dot(dir, dir);
 }
+
 
 // The main function to compute 3D Perlin Noise
 float perlin(vec3 pos) {
