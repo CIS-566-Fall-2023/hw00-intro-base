@@ -62,13 +62,16 @@ function main() {
   loadScene();
 
   const camera = new Camera(vec3.fromValues(0, 0, 5), vec3.fromValues(0, 0, 0));
+  //AKR
+  //const d = new Date();
+  let t = 0.0;
 
   const renderer = new OpenGLRenderer(canvas);
   renderer.setClearColor(0.2, 0.2, 0.2, 1);
   gl.enable(gl.DEPTH_TEST);
 
-  let lambert = new ShaderProgram([
-    new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
+  let fbm = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/trig-vert.glsl')),
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/fbm-frag.glsl')),
   ]);
 
@@ -85,17 +88,23 @@ function main() {
       icosphere.create();
     }
 
+    //AKR:
     if(controls.color != color)
     {
       color = controls.color;
       colorVec = vec4.fromValues(color[0]/255, color[1]/255, color[2]/255, 1);
-      lambert.setGeometryColor(colorVec);
+      fbm.setGeometryColor(colorVec);
     }
-    renderer.render(camera, lambert, [
+    renderer.render(camera, fbm, [
       //icosphere,
       //square,
       cube,
     ]);
+
+    fbm.setTime(t);
+    //console.log(t);
+    t = t + 1.0;
+
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame
