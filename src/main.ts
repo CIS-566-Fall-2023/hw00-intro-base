@@ -9,6 +9,8 @@ import Camera from './Camera';
 import {setGL} from './globals';
 import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 
+let time = 20.0;
+
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
@@ -74,11 +76,12 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/noise-frag.glsl')),
   ]);
   
-  let time = 0;
+  //let time = 0.0;
 
   // This function will be called every frame
   function tick() {
     camera.update();
+    time = time + 1.0;
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
@@ -96,7 +99,6 @@ function main() {
     vec4.fromValues(controls.Red/255, controls.Green/255, controls.Blue/255, 1),
     time);
     stats.end();
-    time += 1;
 
     // Tell the browser to call `tick` again whenever it renders a new frame
     requestAnimationFrame(tick);

@@ -3,6 +3,7 @@
 precision highp float;
 
 uniform vec4 u_Color; // The color with which to render this instance of geometry.
+uniform float u_Time;
 
 // These are the interpolated values out of the rasterizer, so you can't know
 // their specific values without knowing the vertices that contributed to them
@@ -18,7 +19,7 @@ vec3 random3(vec3 p)
     return fract(sin(vec3(dot(p, vec3(127.1, 311.7, 191.999)),
                            dot(p, vec3(269.5, 183.3, 191.999)),
                            dot(p, vec3(420.6, 631.2, 191.999))))
-                   * 43758.5453f);
+                   * 43758.5453);
 }
 
 float surflet(vec3 p, vec3 gridPoint) {
@@ -55,6 +56,7 @@ float perlinNoise3D(vec3 p) {
 
 void main()
 {
+    float t = sin(u_Time * 0.01);
     float a = perlinNoise3D(fs_Pos.xyz);
     float b = perlinNoise3D(fs_Pos.xyz * vec3(5.0));
     float c = perlinNoise3D(fs_Pos.xyz * vec3(10.0));
@@ -63,7 +65,9 @@ void main()
     vec4 diffuseColor1 = vec4(a * u_Color.rgb, 1.0);
     vec4 diffuseColor2 = vec4(b * inverseColor, 1.0);
     vec4 diffuseColor3 = vec4(c * u_Color.rgb, 1.0);
-    vec4 diffuseColor = diffuseColor1 + 0.25 * diffuseColor2 + diffuseColor3;
+    vec4 diffuseColor = diffuseColor1 + 0.25 * t * diffuseColor2 + diffuseColor3;
+
+
 
     float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));
 

@@ -24,8 +24,8 @@ class ShaderProgram {
   attrPos: number;
   attrNor: number;
   attrCol: number;
-  attrTime: number;
-
+  
+  unifTime: WebGLUniformLocation;
   unifModel: WebGLUniformLocation;
   unifModelInvTr: WebGLUniformLocation;
   unifViewProj: WebGLUniformLocation;
@@ -45,7 +45,7 @@ class ShaderProgram {
     this.attrPos = gl.getAttribLocation(this.prog, "vs_Pos");
     this.attrNor = gl.getAttribLocation(this.prog, "vs_Nor");
     this.attrCol = gl.getAttribLocation(this.prog, "vs_Col");
-    this.attrTime = gl.getAttribLocation(this.prog, "u_Time");
+    this.unifTime       = gl.getUniformLocation(this.prog, "u_Time");
     this.unifModel      = gl.getUniformLocation(this.prog, "u_Model");
     this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
     this.unifViewProj   = gl.getUniformLocation(this.prog, "u_ViewProj");
@@ -87,11 +87,11 @@ class ShaderProgram {
     }
   }
 
-  setTime(time: number) {
+  setTime(time: GLfloat) {
     this.use();
-    if (this.attrTime !== -1) {
-      gl.uniform1f(this.attrTime, time); // TODO: HELP!!!
-    }
+    //if (this.unifTime !== -1) {
+      gl.uniform1f(this.unifTime, time); // TODO: HELP!!!
+    //}
   }
 
   draw(d: Drawable) {
