@@ -24,6 +24,8 @@ let icosphere: Icosphere;
 let square: Square;
 let cube: Cube;
 let prevTesselations: number = 5;
+let time:number=0;
+let negate:boolean=false;
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
@@ -75,6 +77,7 @@ function main() {
   ]);
   //lambert.setGeometryColor(vec4.fromValues(1.0,1.0,0.0,1.0));
   // This function will be called every frame
+  
   function tick() {
     camera.update();
     stats.begin();
@@ -90,10 +93,23 @@ function main() {
     //vec4.fromValues(palette.color[0],palette.color[1],palette.color[2],palette.color[3])
     renderer.render(camera, lambert, [
       cube
-    ],vec4.fromValues(palette.color[0]/255,palette.color[1]/255,palette.color[2]/255,palette.color[3]));
+    ],vec4.fromValues(palette.color[0]/255,palette.color[1]/255,palette.color[2]/255,palette.color[3]),time/240.0);
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame
+    time++;
+    /*if(negate==false){
+      time++;
+      if(time==240){
+        negate=true;
+      }
+    }else{
+      time--;
+      if(time==0){
+        negate=false;
+      }
+    }*/
+   
     requestAnimationFrame(tick);
   }
 
