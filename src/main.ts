@@ -76,8 +76,6 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/noise-frag.glsl')),
   ]);
   
-  //let time = 0.0;
-
   // This function will be called every frame
   function tick() {
     camera.update();
