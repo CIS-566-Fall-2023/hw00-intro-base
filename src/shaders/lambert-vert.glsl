@@ -82,7 +82,7 @@ void main()
 {
     fs_Col = vs_Col;                         // Pass the vertex colors to the fragment shader for interpolation
 
-    mat4 randomMat=rotateX(cos(u_Time))*rotateY(sin(u_Time))*rotateY(sin(u_Time)*cos(u_Time));
+    mat4 randomMat=rotateX(cos(u_Time))*rotateY(sin(u_Time))*rotateZ(sin(u_Time)*cos(u_Time));
     fs_uvs.xy=vs_UV.xy;
     mat4 ivrMat=transpose(inverse(randomMat));
     mat3 invTranspose = mat3(ivrMat*u_ModelInvTr);
