@@ -37,7 +37,7 @@ void main()
                                                             // the model matrix.
 
     fs_Pos = vs_Pos;
-    fs_Pos += (fs_Pos - vec4(vec3(0.5f), 1.0)) * sin(u_Time * 0.3) * 0.1;
+    fs_Pos += (fs_Pos - vec4(vec3(0.5f), 1.0)) * sin(u_Time * 0.03) * 0.1;
 
     vec4 modelposition = u_Model * fs_Pos;   // Temporarily store the transformed vertex positions for use below
 

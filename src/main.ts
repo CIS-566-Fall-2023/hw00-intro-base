@@ -14,7 +14,7 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
-  Color: [255,0,0,1]  // default Red color
+  Color: [255,255,255,1]  // default Red color
 };
 
 let icosphere: Icosphere;
