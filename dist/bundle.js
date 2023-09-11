@@ -10864,8 +10864,8 @@ function main() {
             icosphere.create();
         }
         renderer.render(camera, lambert, [
-            icosphere,
-            // cube,
+            // icosphere,
+            cube,
             // square,
         ], gl_matrix__WEBPACK_IMPORTED_MODULE_9__.fromValues(controls.color[0] / 255, controls.color[1] / 255, controls.color[2] / 255, controls.color[3]), tickCount);
         stats.end();
