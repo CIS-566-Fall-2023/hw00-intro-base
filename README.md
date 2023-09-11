@@ -1,8 +1,32 @@
 # HW 0: Intro to Javascript and WebGL
 
+## Description
+In this project, I implemented noise functions and practiced using Typescript and WebGL2. 
+I created a `Cube` class and rendered an instance of `Cube` to the scene. 
+I also updated the GUI to create a color picker that allows user to adjust the color of the object being rendered. 
+I wrote a custom fragment shader that implements Perlin Noise based on 3D inputs to alter the fragment color, as well as a custom vertex shader that uses a `sin` function to non-uniformly alter my cube's vertex positions over time using a Perlin Noise function. 
+
+## Resources used 
+- GLSL Noise Algorithms: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
+- Surflet and PerlinNoise3D functions taken from from CIS 460 notes
+
+## Screenshots of demo
+<p align="center">
+  <img width="720" height="360" src=./demo-screenshots/hw00-pic1.png>
+  <img width="720" height="360" src=./demo-screenshots/hw00-pic3.png>
+  <img width="720" height="360" src=./demo-screenshots/hw00-pic2.png>
+  <img width="720" height="360" src=./demo-screenshots/hw00-pic4.png>
+  <img width="720" height="360" src=./demo-screenshots/hw00-pic5.png>
+  <img width="720" height="360" src=./demo-screenshots/hw00-pic6.png>
+<p align="center">
+  
+## Link to Live Demo
+https://debbylin02.github.io/hw00-intro-base/
+
+
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
-</p>
+<p align="center">
 <p align="center">(source: Ken Perlin)</p>
 
 ## Objective
