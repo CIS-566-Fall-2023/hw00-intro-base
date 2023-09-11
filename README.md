@@ -5,6 +5,18 @@
 </p>
 <p align="center">(source: Ken Perlin)</p>
 
+## Submission
+
+This project contains a WebGL rendering of a hard-coded unit cube. It's colour can be changed in the WebGL viewer by using the "Color" controls. I wrote a custom vertex shader in GLSL to manipulate the vertices of the cube going outward from its center based on a sine wave over time. I also wrote a custom fragment shader that samples perlin noise three times based on sine and cosine offsets and time, and then maps their outputs to the fragment colour's red, green and blue channels separately, based on the chosen color from the WebGL controls.
+
+[Live Demo](https://utkarshdwivedi3997.github.io/cis566-hw00-intro/)
+
+Results:
+
+![](results/image.png)
+
+![](results/gif.gif)
+
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
