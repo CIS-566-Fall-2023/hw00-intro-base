@@ -6,13 +6,13 @@
 <p align="center">(source: Ken Perlin)</p>
 
 ## Finished Visuals
-<br/>
+
 The cube, fragment shader that sets color from noises, and the vertex shader with trigonometric animation.
-![](screenshot.gif){:height="50%" width="50%"}
-<br/>
+![](screenshot.gif)
+
 The gui that enable users to set base color.
-![](gui.png){:height="50%" width="50%"}
-<br/>
+![](gui.png)
+
 
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
