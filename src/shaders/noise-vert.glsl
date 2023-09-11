@@ -25,7 +25,7 @@ in vec4 vs_Nor;             // The array of vertex normals passed to the shader
 
 in vec4 vs_Col;             // The array of vertex colors passed to the shader.
 
-in float u_Time;
+uniform float u_Time;
 
 out vec4 fs_Pos;
 out vec4 fs_Nor;            // The array of normals that has been transformed by u_ModelInvTr. This is implicitly passed to the fragment shader.
@@ -35,6 +35,7 @@ out vec4 fs_Col;            // The color of each vertex. This is implicitly pass
 
 const vec4 lightPos = vec4(5, 5, 3, 1); //The position of our virtual light, which is used to compute the shading of
                                         //the geometry in the fragment shader.
+
 
 void main()
 {
@@ -50,6 +51,32 @@ void main()
 
 
     vec4 modelposition = u_Model * vs_Pos;   // Temporarily store the transformed vertex positions for use below
+
+    float t = cos(u_Time * 0.008);
+    
+    if (modelposition.x < 0.0) {
+        modelposition.x -= t * 0.12;
+    }
+    else 
+    {
+        modelposition.x += cos(t + 0.72) * 0.02;
+    }
+    
+    if (modelposition.y < 0.0) {
+        modelposition.y -= t * 0.15;
+    }
+    else 
+    {
+        modelposition.y += cos(t * 1.22) * 0.01;
+    }
+
+    if (modelposition.z < 0.0) {
+        modelposition.z -= sin(t / 1.22) * 0.02;
+    }
+    else 
+    {
+        modelposition.z += t * 0.1;
+    }
 
     fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
 
