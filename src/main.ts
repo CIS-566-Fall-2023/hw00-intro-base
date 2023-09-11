@@ -17,7 +17,7 @@ const controls = {
 };
 
 var palette = {
-  color: [0,0,0,1], // RGB with alpha
+  color: [118,56,56,1], // RGB with alpha
 }
 
 let icosphere: Icosphere;
