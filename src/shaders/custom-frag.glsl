@@ -11,7 +11,7 @@ in vec4 fs_Col;
 uniform float u_Time;
 out vec4 out_Col;
 
-const int p[512] = int[512](
+const int p[] = int[](
     151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
     190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,88,237,149,56,87,174,20,125,
     136,171,168,68,175,74,165,71,134,139,48,27,166,77,146,158,229,92,239,70,61,28,191,78,107,196,75,67,5,
@@ -41,8 +41,8 @@ vec3 fade(vec3 t) {
 
 float grad(int hash, vec3 dir) {
     int h = hash & 15;
-    float grad = 1.0 + (h & 7); // Gradient value is one of 1.0, 2.0, ..., 8.0
-    return (h & 8 ? -grad : grad) * dot(dir); // and a random orientation
+    float grad = 1.0 + float(h & 7); // Convert to float
+    return (h & 8 ? -grad : grad) * dot(dir, dir); // Ensure both arguments of dot are vectors
 }
 
 // The main function to compute 3D Perlin Noise
