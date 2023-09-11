@@ -7,9 +7,9 @@
 
 ## Finished Visuals
 The cube, fragment shader that sets color from noises, and the vertex shader with trigonometric animation.
-![](screenshot.gif)
+![](screenshot.gif){:height="50%" width="50%"}
 The gui that enable users to set base color.
-![](gui.png)
+![](gui.png){:height="50%" width="50%"}
 
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
