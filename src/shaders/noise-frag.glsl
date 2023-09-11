@@ -12,15 +12,16 @@ in vec4 fs_Pos;
 out vec4 out_Col;
 
 vec3 random3(vec3 p3) {
-    vec3 p = fract(p3 * vec3(.4307,.12349,.33489));
-    p += dot(p, p.yxz+19.89);
-    return fract(vec3((p.x + p.y)*p.z, (p.x+p.z)*p.y, (p.y+p.z)*p.x));
+    vec3 p = fract(p3 * vec3(.1031, .11369, .13787));
+    p += dot(p, p.xzy + 19.19);
+    return -0.5 + 1.5 * fract(vec3((p.x + p.y)*p.z, (p.x+p.z)*p.y, (p.y+p.z)*p.x));
 }
 
 float surflet3D(vec3 p, vec3 gridPoint) {
     float t2x = abs(p.x - gridPoint.x);
     float t2y = abs(p.y - gridPoint.y);
     float t2z = abs(p.z - gridPoint.z);
+    
     float tx = 1.f - 6.f * pow(t2x, 5.f) + 15.f * pow(t2x, 4.f) - 10.f * pow(t2x, 3.f);
     float ty = 1.f - 6.f * pow(t2y, 5.f) + 15.f * pow(t2y, 4.f) - 10.f * pow(t2y, 3.f);
     float tz = 1.f - 6.f * pow(t2z, 5.f) + 15.f * pow(t2z, 4.f) - 10.f * pow(t2z, 3.f);
@@ -54,6 +55,7 @@ void main()
         // Apply perlin.
         diffuseColor *= 1.0 - (abs(perlin) - 0.5);
         diffuseColor += perlinNoise3D(vec3(fs_Pos) * 2.3 + 3.0);
+        diffuseColor *= abs(cos(perlin) * 2.0);
         diffuseColor.a = 1.0;
 
         // Calculate the diffuse term for Lambert shading
