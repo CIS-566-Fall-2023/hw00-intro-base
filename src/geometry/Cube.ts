@@ -7,6 +7,7 @@ class Cube extends Drawable {
   positions: Float32Array;
   normals: Float32Array;
   center: vec4;
+  
 
   constructor(center: vec3) {
     super(); // Call the constructor of the super class. This is required.
