@@ -104,6 +104,13 @@ class ShaderProgram {
     if (this.attrPos != -1) gl.disableVertexAttribArray(this.attrPos);
     if (this.attrNor != -1) gl.disableVertexAttribArray(this.attrNor);
   }
+  setTime(time: number) {
+    this.use();
+    let u_Time = gl.getUniformLocation(this.prog, "u_Time");
+    if (u_Time !== -1) {
+        gl.uniform1f(u_Time, time);
+    }
+}
 };
 
 export default ShaderProgram;
