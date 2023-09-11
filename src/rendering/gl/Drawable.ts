@@ -1,4 +1,4 @@
-import {gl} from '../../globals';
+import { gl } from '../../globals';
 
 abstract class Drawable {
   count: number = 0;
@@ -11,7 +11,7 @@ abstract class Drawable {
   posBound: boolean = false;
   norBound: boolean = false;
 
-  abstract create() : void;
+  abstract create(): void;
 
   destory() {
     gl.deleteBuffer(this.bufIdx);
@@ -62,6 +62,6 @@ abstract class Drawable {
   drawMode(): GLenum {
     return gl.TRIANGLES;
   }
-};
+}
 
 export default Drawable;

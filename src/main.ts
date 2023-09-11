@@ -1,29 +1,35 @@
-import {vec3} from 'gl-matrix';
-const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
-import Icosphere from './geometry/Icosphere';
-import Square from './geometry/Square';
-import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
+import { vec3, vec4 } from 'gl-matrix';
+import Stats from 'stats-js';
+
 import Camera from './Camera';
-import {setGL} from './globals';
-import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
+import { GAMMA } from './constants';
+import Cube from './geometry/Cube';
+import Icosphere from './geometry/Icosphere';
+import { setGL } from './globals';
+import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
+import ShaderProgram, { Shader } from './rendering/gl/ShaderProgram';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
+  color: [52, 100, 63] as [number, number, number],
   'Load Scene': loadScene, // A function pointer, essentially
+  object: 'icosphere',
 };
 
 let icosphere: Icosphere;
-let square: Square;
-let prevTesselations: number = 5;
+let cube: Cube;
+
+let prevTesselations: number = controls.tesselations;
+let prevColor = [0, 0, 0] as [number, number, number];
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
   icosphere.create();
-  square = new Square(vec3.fromValues(0, 0, 0));
-  square.create();
+  cube = new Cube(vec3.fromValues(0, 0, 0));
+  cube.create();
 }
 
 function main() {
@@ -39,11 +45,14 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
+  gui.add(controls, 'object').options(['cube', 'icosphere']);
+  gui.addColor(controls, 'color');
 
   // get canvas and webgl context
-  const canvas = <HTMLCanvasElement> document.getElementById('canvas');
-  const gl = <WebGL2RenderingContext> canvas.getContext('webgl2');
+  const canvas = <HTMLCanvasElement>document.getElementById('canvas');
+  const gl = <WebGL2RenderingContext>canvas.getContext('webgl2');
   if (!gl) {
+    // eslint-disable-next-line no-alert
     alert('WebGL 2 not supported!');
   }
   // `setGL` is a function imported above which sets the value of `gl` in the `globals.ts` module.
@@ -57,12 +66,14 @@ function main() {
 
   const renderer = new OpenGLRenderer(canvas);
   renderer.setClearColor(0.2, 0.2, 0.2, 1);
+  renderer.setStartTime(Date.now());
   gl.enable(gl.DEPTH_TEST);
 
-  const lambert = new ShaderProgram([
+  const fancyShader = new ShaderProgram([
     new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
-    new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/fancy-frag.glsl')),
   ]);
+  fancyShader.setGeometryColor([1, 0, 0, 1]);
 
   // This function will be called every frame
   function tick() {
@@ -70,15 +81,23 @@ function main() {
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
-    if(controls.tesselations != prevTesselations)
-    {
+    if (controls.tesselations !== prevTesselations) {
       prevTesselations = controls.tesselations;
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
     }
-    renderer.render(camera, lambert, [
-      icosphere,
-      // square,
+    if (!vec3.equals(controls.color, prevColor)) {
+      prevColor = controls.color;
+      const newColor = vec4.fromValues(...prevColor, 0);
+      vec4.scale(newColor, newColor, 1 / 256);
+      for (let component = 0; component < 3; ++component) {
+        newColor[component] **= GAMMA;
+      }
+      newColor[3] = 1;
+      fancyShader.setGeometryColor(newColor);
+    }
+    renderer.render(camera, fancyShader, [
+      controls.object === 'cube' ? cube : icosphere,
     ]);
     stats.end();
 
@@ -86,11 +105,15 @@ function main() {
     requestAnimationFrame(tick);
   }
 
-  window.addEventListener('resize', function() {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.setAspectRatio(window.innerWidth / window.innerHeight);
-    camera.updateProjectionMatrix();
-  }, false);
+  window.addEventListener(
+    'resize',
+    () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.setAspectRatio(window.innerWidth / window.innerHeight);
+      camera.updateProjectionMatrix();
+    },
+    false,
+  );
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.setAspectRatio(window.innerWidth / window.innerHeight);

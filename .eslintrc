@@ -1,0 +1,28 @@
+{
+  "root": true,
+  "extends": [
+    "airbnb-base",
+    "airbnb-typescript/base",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "parserOptions": {
+    "project": "tsconfig.json"
+  },
+  "rules": {
+    "global-require": "off",
+    "import/order": ["warn", { "newlines-between": "always" }],
+    "max-classes-per-file": "off",
+    "no-bitwise": "off",
+    "class-methods-use-this": "off",
+    "no-plusplus": "off",
+
+    "@typescript-eslint/no-throw-literal": "off",
+    "@typescript-eslint/no-use-before-define": [
+      "error",
+      { "classes": false, "functions": false }
+    ],
+    "@typescript-eslint/lines-between-class-members": "off",
+    "@typescript-eslint/no-var-requires": "off"
+  }
+}
