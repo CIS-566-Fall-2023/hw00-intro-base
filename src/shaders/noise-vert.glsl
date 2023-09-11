@@ -6,6 +6,8 @@ uniform mat4 u_ModelInvTr;
 
 uniform mat4 u_ViewProj;
 
+uniform float u_Time;
+
 in vec4 vs_Pos;
 
 in vec4 vs_Nor;
@@ -34,6 +36,12 @@ void main()
     vec4 modelposition = u_Model * vs_Pos;   // Temporarily store the transformed vertex positions for use below
 
     fs_Pos = modelposition;
+
+    float t = u_Time * 0.001;
+
+    modelposition.x += 1.0 - cos(fs_Pos.x * t);
+    modelposition.y += sin(fs_Pos.y * t);
+    modelposition.z *= cos(fs_Pos.z * t * .0001);
 
     fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
 

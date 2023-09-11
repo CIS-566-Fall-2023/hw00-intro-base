@@ -21,6 +21,7 @@ let icosphere: Icosphere;
 let square: Square;
 let cube: Cube;
 let prevTesselations: number = 5;
+let time: number = 0;
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
@@ -98,8 +99,9 @@ function main() {
     // Render noise shader.
     renderer.render(camera, noiseModifier, [
       cube
-    ], vec4.fromValues(controls.colour[0] / 255, controls.colour[1] / 255, controls.colour[2] / 255, 1));
+    ], vec4.fromValues(controls.colour[0] / 255, controls.colour[1] / 255, controls.colour[2] / 255, 1), time);
     stats.end();
+    time++;
 
     // Tell the browser to call `tick` again whenever it renders a new frame
     requestAnimationFrame(tick);

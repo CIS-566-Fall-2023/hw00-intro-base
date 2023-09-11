@@ -55,7 +55,7 @@ void main()
         // Apply perlin.
         diffuseColor *= 1.0 - (abs(perlin) - 0.5);
         diffuseColor += perlinNoise3D(vec3(fs_Pos) * 2.3 + 3.0);
-        diffuseColor *= abs(cos(perlin) * 2.0);
+        diffuseColor *= abs(cos(perlin) * 2.0) - abs(1.0 - sin(perlin));
         diffuseColor.a = 1.0;
 
         // Calculate the diffuse term for Lambert shading
