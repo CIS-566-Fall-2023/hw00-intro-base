@@ -15,8 +15,8 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
-  color: [255, 0, 232],
-  Scale: 1.0
+  color: [0, 113, 255],
+  Scale: 3.5
 };
 
 let icosphere: Icosphere;
@@ -47,7 +47,7 @@ function main() {
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
   gui.addColor(controls, 'color');
-  gui.add(controls, 'Scale', 1, 50).step(0.1);
+  gui.add(controls, 'Scale', 1, 10).step(0.1);
 
 
   // get canvas and webgl context

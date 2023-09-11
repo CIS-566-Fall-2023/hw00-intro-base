@@ -19,8 +19,9 @@ const vec4 lightPos = vec4(5, 5, 3, 1);
 
 void main() {
     vec4 modifiedPos = vs_Pos;
-    modifiedPos.y += sin(u_Time + vs_Pos.x); 
-    
+    modifiedPos.x += sin(u_Time*0.8 + vs_Pos.y * 0.8); 
+    modifiedPos.y += sin(u_Time*0.8 + vs_Pos.z * 0.8); 
+    //modifiedPos.z += sin(u_Time*0.8 + vs_Pos.y * 0.8); 
     fs_Col = vs_Col;
     mat3 invTranspose = mat3(u_ModelInvTr);
     fs_Nor = vec4(invTranspose * vec3(vs_Nor), 0);
