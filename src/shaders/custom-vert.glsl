@@ -1,11 +1,8 @@
 #version 300 es
 
-//This is a vertex shader. While it is called a "shader" due to outdated conventions, this file
-//is used to apply matrix transformations to the arrays of vertex data passed to it.
-//Since this code is run on your GPU, each vertex is transformed simultaneously.
-//If it were run on your CPU, each vertex would have to be processed in a FOR loop, one at a time.
-//This simultaneous transformation allows your program to run much faster, especially when rendering
-//geometry with millions of vertices.
+/*
+ A custom vertex shader that uses a trigonometric function (e.g. sin, tan) to non-uniformly modify a cube's vertex positions over time.
+*/
 
 uniform float u_Time;
 
@@ -34,9 +31,11 @@ out vec4 fs_Col;            // The color of each vertex. This is implicitly pass
 const vec4 lightPos = vec4(5, 5, 3, 1); //The position of our virtual light, which is used to compute the shading of
                                         //the geometry in the fragment shader.
 
+
 void main()
 {
     fs_Col = vs_Col;                         // Pass the vertex colors to the fragment shader for interpolation
+    fs_Pos = vs_Pos;
 
     mat3 invTranspose = mat3(u_ModelInvTr);
     fs_Nor = vec4(invTranspose * vec3(vs_Nor), 0);          // Pass the vertex normals to the fragment shader for interpolation.
@@ -50,6 +49,9 @@ void main()
 
     fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
 
-    gl_Position = u_ViewProj * modelposition;  // gl_Position is a built-in variable of OpenGL which is
-                                               // used to render the final positions of the geometry's vertices
+    gl_Position = u_ViewProj * modelposition;// gl_Position is a built-in variable of OpenGL which is
+                                             // used to render the final positions of the geometry's vertices
+
+    
+
 }
