@@ -15,6 +15,19 @@
 <p align="center">
 <p align="center">(source: Ken Perlin)</p>
 
+## Description
+In this project, I implemented noise functions and practiced using Typescript and WebGL2. 
+I created a `Cube` class and rendered an instance of `Cube` to the scene. 
+I also updated the GUI to create a color picker that allows user to adjust the color of the object being rendered. 
+I wrote a custom fragment shader that implements Perlin Noise based on 3D inputs to alter the fragment color, as well as a custom vertex shader that uses a `sin` function to non-uniformly alter my cube's vertex positions over time using a Perlin Noise function. 
+
+## Resources used 
+- GLSL Noise Algorithms: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
+- Surflet and PerlinNoise3D functions taken from from CIS 460 notes
+
+## Link to Live Demo
+https://debbylin02.github.io/hw00-intro-base/
+
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
