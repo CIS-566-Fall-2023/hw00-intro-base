@@ -1,4 +1,4 @@
-import {vec3} from 'gl-matrix';
+import {vec3, vec4} from 'gl-matrix';
 const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
 import Icosphere from './geometry/Icosphere';
@@ -13,13 +13,19 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
-  'Load Scene': loadScene, // A function pointer, essentially
+  'Load Scene': loadScene,   // A function pointer, essentially
+  colorRGB: [50, 200, 230],  // RGB array
 };
 
 let icosphere: Icosphere;
 let square: Square;
 let cube: Cube;
 let prevTesselations: number = 5;
+let prevColor: vec4 = convertRGBToVec4.apply(null, controls.colorRGB);
+
+function convertRGBToVec4(r: number, g: number, b: number) {
+  return vec4.fromValues(r/255, g/255, b/255, 1);
+}
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
@@ -43,6 +49,7 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
+  gui.addColor(controls, 'colorRGB');
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -80,6 +87,14 @@ function main() {
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
     }
+
+    let color = convertRGBToVec4.apply(null, controls.colorRGB);
+    if(color != prevColor)
+    {
+      prevColor = color
+    }
+    lambert.setGeometryColor(color);
+
     renderer.render(camera, lambert, [
       // icosphere,
       // square,
