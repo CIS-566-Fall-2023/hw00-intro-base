@@ -21,6 +21,7 @@ let icosphere: Icosphere;
 let square: Square;
 let cube: Cube;
 let prevTesselations: number = 5;
+let time = 0;
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
@@ -29,6 +30,7 @@ function loadScene() {
   square.create();
   cube = new Cube(vec3.fromValues(0, 0, 0));
   cube.create();
+  time = 0;
 }
 
 function main() {
@@ -70,6 +72,11 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
 
+  const customShader = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/custom-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/custom-frag.glsl')),
+  ])
+
   // This function will be called every frame
   function tick() {
     camera.update();
@@ -84,14 +91,14 @@ function main() {
     // }
 
     let color = vec4.fromValues(controls.Color[0] / 255.0, controls.Color[1] / 255.0, controls.Color[2] / 255.0, controls.Color[3])
-    renderer.render(camera, lambert, [
+    customShader.setTime(time++);
+    renderer.render(camera, customShader, [
       // icosphere,
       cube,
       // square,
     ], color = color);
     stats.end();
     
-
     // Tell the browser to call `tick` again whenever it renders a new frame
     requestAnimationFrame(tick);
   }
