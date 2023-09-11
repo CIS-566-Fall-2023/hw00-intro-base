@@ -22,8 +22,10 @@ export default class Cube extends Drawable {
     indices.push(x, x+2, x+3); 
   }  
   this.indices = new Uint32Array(indices);
-  // Making Normals
+  // Making Normals and Positions
+  let rot = mat4.create();
   const normals = [];
+  const positions = [];
   for (let i = 0; i < 6; i++) {
     let n;
     n = i % 2 == 0 ? 1 : -1;
@@ -35,28 +37,18 @@ export default class Cube extends Drawable {
     } else {
       normal = [0, 0, n, 0];
     }
-    //console.log(normal);
-    for (let i = 0; i < 4; i++) {
-      normals.push(...normal);
-    }
-  }
-  // Making Positions
-  let rot = mat4.create();
-  const positions = [];
-  for (let i = 0; i < 6; i++) {
-    let nor = vec3.fromValues(normals[i*16], normals[i*16 + 1], normals[i*16 + 2]);
-    let sign = (nor[0] == 1 || nor[1] == 1 || nor[2] == 1) ? 1 : -1;
     mat4.identity(rot);
-    mat4.rotate(rot, rot, Math.PI / 2 , nor);
-    let pos = vec4.fromValues(sign, sign, sign, 1);
-    console.log(`normal: ${nor[0]}, ${nor[1]}, ${nor[2]}`);
+    // Rotate 4 times around the normal to get each vertex for each face
+    mat4.rotate(rot, rot, Math.PI / 2 , vec3.fromValues(normal[0], normal[1], normal[2]));
+    // If normal is positive, start from 1,1,1 otherwise start from -1,-1,-1
+    let pos = vec4.fromValues(n, n, n, 1);
+    // Push normals into the arrays
     for (let j = 0; j < 4; j++) {
+      normals.push(...normal);
       vec4.transformMat4(pos, pos, rot);
-      console.log(`${pos[0]}, ${pos[1]}, ${pos[2]}, ${pos[3]}`);
       positions.push(...pos);
     }
   }
-  console.log(positions)
   this.normals = new Float32Array(normals);
   this.positions = new Float32Array(positions);
 
