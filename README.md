@@ -6,7 +6,7 @@
 <p align="center">(source: Ken Perlin)</p>
 
 ## Finished Visuals
-
+Live Demo: https://xchennnw.github.io/hw00-intro-base/
 The cube, fragment shader that sets color from noises, and the vertex shader with trigonometric animation.
 ![](screenshot.gif)
 
