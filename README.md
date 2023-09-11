@@ -2,8 +2,17 @@
 
 ## Screenshots of demo
 <p align="center">
+  <img width="720" height="360" src=./demo-screenshots/hw00-pic1.png>
+  <img width="720" height="360" src=./demo-screenshots/hw00-pic3.png>
+  <img width="720" height="360" src=./demo-screenshots/hw00-pic2.png>
+  <img width="720" height="360" src=./demo-screenshots/hw00-pic4.png>
+  <img width="720" height="360" src=./demo-screenshots/hw00-pic5.png>
+  <img width="720" height="360" src=./demo-screenshots/hw00-pic6.png>
+<p align="center">
+
+<p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
-</p>
+<p align="center">
 <p align="center">(source: Ken Perlin)</p>
 
 ## Objective
