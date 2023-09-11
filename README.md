@@ -79,10 +79,10 @@ To check if everything is on the right track:
 ## Jackie Li Submission
 Here are some images of my final product, and I will attempt to attach a video as well.
 
-Work in Progress:
+# Work in Progress:
 ![](WebGL_Is_Silly.png)
 
-Finished Product Screenshots:
+# Finished Product Screenshots:
 ![](WebGL_Is_Cool.png)
 
 ![](Web_GL_Is_Cool_2.png)
