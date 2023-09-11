@@ -7,6 +7,7 @@ class Cube extends Drawable {
     positions: Float32Array;
     normals: Float32Array;
     center: vec4;
+    uvs: Float32Array;
   
     constructor(center: vec3){
       super();
@@ -86,9 +87,19 @@ class Cube extends Drawable {
             +1, 0, 0, 0,
         ]);
         
+        this.uvs = new Float32Array([
+          0, 0, 1, 0, 1, 1, 0, 1,
+          0, 0, 1, 0, 1, 1, 0, 1,
+          0, 0, 1, 0, 1, 1, 0, 1,
+          0, 0, 1, 0, 1, 1, 0, 1,
+          0, 0, 1, 0, 1, 1, 0, 1,
+          0, 0, 1, 0, 1, 1, 0, 1,
+        ]);
+      
         this.generatePos();
         this.generateNor();
         this.generateIdx();
+        this.generateUvs();
   
         this.count = this.indices.length;
   
@@ -100,6 +111,9 @@ class Cube extends Drawable {
   
         gl.bindBuffer(gl.ARRAY_BUFFER, this.bufPos);
         gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.STATIC_DRAW);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.bufUV);
+        gl.bufferData(gl.ARRAY_BUFFER, this.uvs, gl.STATIC_DRAW);
   
         console.log(`Created cube`);
     }
