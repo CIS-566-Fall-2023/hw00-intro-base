@@ -26,7 +26,7 @@ function loadScene() {
   icosphere.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
-  cube = new Cube(vec3.fromValues(0, 0, 0), 1);
+  cube = new Cube(vec3.fromValues(1, 0, 0), 1);
   cube.create();
 }
 
@@ -42,7 +42,10 @@ function main() {
   // Add controls to the gui
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
-  gui.add(controls, 'Load Scene');
+  var palette = {
+    color1: [ 0, 150, 255], // RGB with alpha
+  };
+  gui.addColor(palette, 'color1');
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -79,9 +82,10 @@ function main() {
       prevTesselations = controls.tesselations;
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
+
     }
     renderer.render(camera, lambert, [
-      icosphere,
+      //icosphere,
       cube,
     ]);
     stats.end();

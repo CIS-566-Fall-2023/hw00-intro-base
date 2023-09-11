@@ -6,11 +6,9 @@ export default class Cube extends Drawable {
   indices: Uint32Array;
   positions: Float32Array;
   normals: Float32Array;
-  center: vec4;
 
-  constructor(center: vec3, public size: number) {
+  constructor(public center: vec3, public size: number) {
     super(); // Call the constructor of the super class. This is required.
-    this.center = vec4.fromValues(center[0], center[1], center[2], 1);
   }
 
   create() {
@@ -41,6 +39,7 @@ export default class Cube extends Drawable {
     // Rotate 4 times around the normal to get each vertex for each face
     mat4.rotate(rot, rot, Math.PI / 2 , vec3.fromValues(normal[0], normal[1], normal[2]));
     // If normal is positive, start from 1,1,1 otherwise start from -1,-1,-1
+    n *= this.size;
     let pos = vec4.fromValues(n, n, n, 1);
     // Push normals into the arrays
     for (let j = 0; j < 4; j++) {
