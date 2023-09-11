@@ -95,7 +95,7 @@ class ShaderProgram {
   setTime(time: number) {
     this.use();
     if (this.attrTime !== -1) {
-        gl.uniform1ui(this.attrTime, time);
+        gl.uniform1f(this.attrTime, time);
         //console.log(time);
     }
   }
