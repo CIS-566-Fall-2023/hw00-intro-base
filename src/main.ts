@@ -9,7 +9,6 @@ import Icosphere from './geometry/Icosphere';
 import { setGL } from './globals';
 import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import ShaderProgram, { Shader } from './rendering/gl/ShaderProgram';
-import Drawable from './rendering/gl/Drawable';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
@@ -17,7 +16,7 @@ const controls = {
   tesselations: 5,
   color: [52, 100, 63] as [number, number, number],
   'Load Scene': loadScene, // A function pointer, essentially
-  'Switch Object': switchObject,
+  object: 'icosphere',
 };
 
 let icosphere: Icosphere;
@@ -25,23 +24,12 @@ let cube: Cube;
 
 let prevTesselations: number = controls.tesselations;
 let prevColor = [0, 0, 0] as [number, number, number];
-let currentObject: 'icosphere' | 'cube' = 'cube';
-
-const renderQueue: Drawable[] = [];
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
   icosphere.create();
   cube = new Cube(vec3.fromValues(0, 0, 0));
   cube.create();
-
-  switchObject();
-}
-
-function switchObject() {
-  const newObject = currentObject === 'cube' ? icosphere : cube;
-  renderQueue[0] = newObject;
-  currentObject = currentObject === 'cube' ? 'icosphere' : 'cube';
 }
 
 function main() {
@@ -57,7 +45,7 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
-  gui.add(controls, 'Switch Object');
+  gui.add(controls, 'object').options(['cube', 'icosphere']);
   gui.addColor(controls, 'color');
 
   // get canvas and webgl context
@@ -93,14 +81,10 @@ function main() {
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
-    if (
-      controls.tesselations !== prevTesselations &&
-      currentObject === 'icosphere'
-    ) {
+    if (controls.tesselations !== prevTesselations) {
       prevTesselations = controls.tesselations;
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
-      renderQueue[0] = icosphere;
     }
     if (!vec3.equals(controls.color, prevColor)) {
       prevColor = controls.color;
@@ -112,7 +96,9 @@ function main() {
       newColor[3] = 1;
       fancyShader.setGeometryColor(newColor);
     }
-    renderer.render(camera, fancyShader, renderQueue);
+    renderer.render(camera, fancyShader, [
+      controls.object === 'cube' ? cube : icosphere,
+    ]);
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame
