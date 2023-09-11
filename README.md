@@ -5,6 +5,21 @@
 </p>
 <p align="center">(source: Ken Perlin)</p>
 
+## Description
+- Added a Cube class that inherits from Drawable to be used to render cubes
+- Updated the GUI to contain an option to change the color of the rendered geometry
+- Created a custom fragment shader that utilized perlin noise based on 3D inputs to modify the fragment's color, as well as a custom vertex shader that utilizes sin and cos to modify the cube's vertex positions non-uniformly over time
+
+## Screenshots
+![Demo Screenshot 1](https://github.com/hansen-yi/hw00-intro-base/assets/97490525/12107d7b-5cf6-49c1-9e2d-1f91625d6306)
+![Demo Screenshot 2](https://github.com/hansen-yi/hw00-intro-base/assets/97490525/eac8f130-d2c0-4023-b898-a9a6da75cbc1)
+![Demo Screenshot 3](https://github.com/hansen-yi/hw00-intro-base/assets/97490525/ed229187-9535-4976-b6f4-7c8a7f9840f4)
+![Demo Screenshot 4](https://github.com/hansen-yi/hw00-intro-base/assets/97490525/4c4ba6be-1844-48d6-843d-73f22561a06b)
+![Demo Screenshot 5](https://github.com/hansen-yi/hw00-intro-base/assets/97490525/d7a31636-fe42-4695-9071-6dd892c0aee8)
+
+## Link to Live Demo
+https://hansen-yi.github.io/hw00-intro-base/
+
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
