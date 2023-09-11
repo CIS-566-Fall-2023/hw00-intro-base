@@ -33,7 +33,7 @@ float fade(float a,float b,float t){
     return a+b*(6.0f*pow(t,5.0f)-15.0f*pow(t,4.0f)+10.0f*pow(t,3.0f));
 }
 
-float sampleNoisei(vec2 pos, float frequency){
+float PerlinNoisei(vec2 pos, float frequency){
     
     vec2 sample_point=pos*(frequency);
 
@@ -54,7 +54,7 @@ float FBM3D(vec2 pos){
     for(int i=0;i<N_OCTAVES;i++){
         float frequency=pow(2.0f,float(i));
         float amplitude=pow(persistance,float(i));
-        total+= sampleNoisei(pos,frequency)*amplitude; 
+        total+= PerlinNoisei(pos,frequency)*amplitude; 
     }
     //return 0.0f;
     return total*0.8f+0.3f;

@@ -84,6 +84,11 @@ void main()
 
     mat4 randomMat=rotateX(cos(u_Time))*rotateY(sin(u_Time))*rotateZ(sin(u_Time)*cos(u_Time));
     fs_uvs.xy=vs_UV.xy;
+
+    //change to distorted cube!
+    //mat4 randomMat=rotateX(cos(u_Time)*noisegen3(vec3(u_Time)))*rotateY(sin(u_Time)*noisegen3(vec3(u_Time)))*rotateZ(sin(u_Time)*cos(u_Time)*noisegen3(vec3(u_Time)));
+    
+    fs_uvs.xy=vs_UV.xy;
     mat4 ivrMat=transpose(inverse(randomMat));
     mat3 invTranspose = mat3(ivrMat*u_ModelInvTr);
     fs_Nor = vec4(invTranspose * vec3(vs_Nor), 0);          // Pass the vertex normals to the fragment shader for interpolation.
