@@ -15,24 +15,27 @@ const controls = {
   tesselations: 5,
   'Load Scene': loadScene,   // A function pointer, essentially
   colorRGB: [50, 200, 230],  // RGB array
+  icospherePos: vec3.fromValues(0, -5 , 0),
+  cubePos: vec3.fromValues(0, 5, 0),
 };
 
 let icosphere: Icosphere;
 let square: Square;
 let cube: Cube;
 let prevTesselations: number = 5;
-let prevColor: vec4 = convertRGBToVec4.apply(null, controls.colorRGB);
+let timer: number = 0;
+var runCustomShader = true;
 
 function convertRGBToVec4(r: number, g: number, b: number) {
   return vec4.fromValues(r/255, g/255, b/255, 1);
 }
 
 function loadScene() {
-  icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
+  icosphere = new Icosphere(controls.icospherePos, 1, controls.tesselations);
   icosphere.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
-  cube = new Cube(vec3.fromValues(0, 0, 0), 1);
+  cube = new Cube(controls.cubePos, 1);
   cube.create();
 }
 
@@ -75,8 +78,16 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
 
+  const disco = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/custom-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/custom-frag.glsl')),
+  ]);
+
+  let currShaderProgram = runCustomShader ? disco : lambert;
+
   // This function will be called every frame
   function tick() {
+    timer++;
     camera.update();
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
@@ -84,19 +95,19 @@ function main() {
     if(controls.tesselations != prevTesselations)
     {
       prevTesselations = controls.tesselations;
-      icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
+      icosphere = new Icosphere(controls.icospherePos, 1, prevTesselations);
       icosphere.create();
     }
 
-    let color = convertRGBToVec4.apply(null, controls.colorRGB);
-    if(color != prevColor)
-    {
-      prevColor = color
-    }
-    lambert.setGeometryColor(color);
+    // pass custom color to shaders
+    let color = runCustomShader ?
+      convertRGBToVec4.apply(null, controls.colorRGB) :
+      vec4.fromValues(1, 0, 0, 1);
+    currShaderProgram.setGeometryColor(color);
+    currShaderProgram.setTime(timer);
 
-    renderer.render(camera, lambert, [
-      // icosphere,
+    renderer.render(camera, currShaderProgram, [
+      icosphere,
       // square,
       cube,
     ]);
