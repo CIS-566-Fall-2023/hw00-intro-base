@@ -15,10 +15,10 @@ out vec4 out_Col; // This is the final output color that you will see on your
                   // screen for the pixel that is currently being processed.
 
 float noise(vec4 seed) {
-    return fract(sin(dot(seed, vec4(324.223, 56.23, 234.354, 6543.0))) * 9834517.23489);
+    return fract(sin(dot(seed, vec4(324.223, 156.23, 234.354, 6543.0))) * 9834517.23489);
 }
 
-float fbm() {
+float fbm(vec4 pos) {
     float total = 0.0f;
     float pers = 1.0f / 2.0f;
     float octaves = 5.0f;
@@ -27,10 +27,9 @@ float fbm() {
         float freq = pow(2.0f, i);
         float amp = pow(pers, i);
 
-        total += amp * noise(fs_Pos * freq);
+        total += amp * noise(pos * freq);
     }
     return total;
-    //return total/octaves;
 }
 
 void main()
@@ -38,8 +37,9 @@ void main()
     // Material base color (before shading)
     vec4 complement = vec4(1.0f) - u_Color;
     complement[3] = 1.0f;
-    float noise = fbm();
-    float fade = fract(6.0f * pow(noise, 5.0f) - 15.0f * pow(noise, 4.0f) + 10.0f * pow(noise, 3.0f));
+    float noise = fbm(fs_Pos * 0.00000001);
+    //float fade = fract(6.0f * pow(noise, 5.0f) - 15.0f * pow(noise, 4.0f) + 10.0f * pow(noise, 3.0f));
+    float fade = fract(noise);
     vec4 diffuseColor = mix(u_Color, complement, fade); //u_Color;
 
     // Calculate the diffuse term for Lambert shading
