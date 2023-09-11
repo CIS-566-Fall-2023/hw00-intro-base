@@ -74,6 +74,7 @@ function main() {
 
   // This function will be called every frame
   function tick() {
+    
     tickCount++;
     camera.update();
     stats.begin();
