@@ -77,7 +77,9 @@ To check if everything is on the right track:
   - Constants https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Constants
 
 ## Jackie Li Submission
-Here are some images of my final product, and I will attempt to attach a video as well.
+Here are some images of my final product.
+
+Live demo: https://sagescherrytree.github.io/hw00-intro-base/
 
 # Work in Progress:
 ![](WebGL_Is_Silly.png)
