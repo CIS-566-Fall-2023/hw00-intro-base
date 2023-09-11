@@ -5,6 +5,20 @@
 </p>
 <p align="center">(source: Ken Perlin)</p>
 
+## Submission
+Kyra Clark (ckyra) 
+
+In this project, I created a cube. 
+Then, I added an RGB color slider in the controls such that a user can easily control the color of the shape. 
+Then I made my custom vertex and fragment shader called noise_vert and noise_frag. 
+The fragment shader uses Perlin noise to add the selected blobs of color to the shape. 
+Then, to add an animated element to the project, I created a tick that is declared in the main function, and incremented every tick. This variable is passed through the OpenGLRenderer to set the uniform variable u_Time in the Shader Program. 
+Finally, I added an animated element to the vertex and fragment shader. In the fragment shader, the inverted selected color in animated, and moves on the shape. Next, I turned to the vertex shader. The vertex shader uses sines and cosines to distort the sides of the cube based on time. 
+The final result showed the distorted cube with moving colors.
+[Live Demo](https://kyrasclark.github.io/hw00-intro-base/)
+![image](https://github.com/kyraSclark/hw00-intro-base/assets/60115638/99933ec5-5621-474c-a90a-e342441fef2d)
+
+
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
