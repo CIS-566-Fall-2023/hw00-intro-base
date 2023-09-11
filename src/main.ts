@@ -15,7 +15,7 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
-  color: [0, 113, 255],
+  color: [56, 147, 248],
   Scale: 3.5
 };
 

@@ -91,12 +91,11 @@ float OctavePerlin(vec3 position, int octaves, float persistence) {
 void main()
 {
     float factor = OctavePerlin(fs_Pos.xyz * u_scale + vec3(u_Time, u_Time, u_Time), 2, 10.00);
-    vec3 color = u_Color.rgb * smoothstep(0.0, 1.0, factor);
-
+    vec3 color = u_Color.rgb;
     float alphaThreshold = 0.5;
-    float transparencyFactor = 1.0 - abs(factor - alphaThreshold) * 2.0;
-    float alpha = clamp(transparencyFactor, 0.0, 1.0);
-
+    float transparencyFactor = abs(factor - alphaThreshold) * 2.0;
+    float alpha = clamp(1.0 - transparencyFactor, 0.0, 1.0);
     out_Col = vec4(color.rgb, alpha);
 }
+
 
