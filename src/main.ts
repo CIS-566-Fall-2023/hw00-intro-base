@@ -1,4 +1,4 @@
-import {vec3} from 'gl-matrix';
+import {vec3, vec4} from 'gl-matrix';
 const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
 import Icosphere from './geometry/Icosphere';
@@ -13,21 +13,24 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
-  'Load Scene': loadScene, // A function pointer, essentially
+  'Switch Obj': loadScene, // A function pointer, essentially
+  color: [0, 125, 255] as [number, number, number],
 };
 
+// true = cube, false = icosphere
+let shape = false;
 let icosphere: Icosphere;
 let square: Square;
 let cube: Cube;
 let prevTesselations: number = 5;
+let prevColor = [0, 0, 0] as [number, number, number];
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
   icosphere.create();
-  square = new Square(vec3.fromValues(0, 0, 0));
-  square.create();
-  cube = new Cube(vec3.fromValues(1, 0, 0), 1);
+  cube = new Cube(1);
   cube.create();
+  shape = !shape;
 }
 
 function main() {
@@ -42,10 +45,8 @@ function main() {
   // Add controls to the gui
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
-  var palette = {
-    color1: [ 0, 150, 255], // RGB with alpha
-  };
-  gui.addColor(palette, 'color1');
+  gui.add(controls, 'Switch Obj');
+  gui.addColor(controls, 'color');
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -82,11 +83,17 @@ function main() {
       prevTesselations = controls.tesselations;
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
-
     }
+    if (!vec3.equals(controls.color, prevColor)) {
+      prevColor = controls.color;
+      const newColor = vec4.fromValues(...prevColor, 256);
+      vec4.scale(newColor, newColor, 1 / 256);
+      lambert.setGeometryColor(newColor);
+    }
+    const renderedObj = shape ? cube : icosphere;
     renderer.render(camera, lambert, [
       //icosphere,
-      cube,
+      renderedObj,
     ]);
     stats.end();
 

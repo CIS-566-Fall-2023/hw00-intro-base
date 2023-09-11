@@ -7,7 +7,7 @@ export default class Cube extends Drawable {
   positions: Float32Array;
   normals: Float32Array;
 
-  constructor(public center: vec3, public size: number) {
+  constructor(public size: number) {
     super(); // Call the constructor of the super class. This is required.
   }
 
