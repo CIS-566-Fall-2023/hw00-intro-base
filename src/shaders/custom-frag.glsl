@@ -1,5 +1,5 @@
 #version 300 es
-//refer to the code: https://adrianb.io/2014/08/09/perlinnoise.html
+// Code reference: Perlin Noise explanation and implementation by Adrian Biagioli, 2014.
 
 precision highp float;
 
