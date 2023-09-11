@@ -75,3 +75,20 @@ To check if everything is on the right track:
   - Interfaces https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API
   - Types https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Types
   - Constants https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Constants
+
+
+# Update From Jiefu Ling
+Added a cube class and passed the color information to the Lambert Shader.
+
+For the fragment shader, I implemented Perlin Noise based on 3D inputs `fs_Pos`. The noise function return back a float as output color.
+
+For the vertex shader, I created a new variable `vec4 move` to determine the magnitude of movement for each vertex. I cooperated the movement with `u_Time` and trigonometric function to make the vertex can move non-uniformly as time goes by. The move direction is just the normal of each vertex. 
+
+I added a button in the upper right control section called "Use Lambert Shader". It can switch between Lambert shader and custom shader I made.
+
+<p align="center">
+  <img width="640" height="360" src="https://github.com/Jeff-Ling/hw00-intro-base/blob/master/ScreenShot/sc1.png?raw=true">
+  <img width="640" height="360" src="https://github.com/Jeff-Ling/hw00-intro-base/blob/master/ScreenShot/sc2.png?raw=true">
+</p>
+
+Link to live demo: https://jeff-ling.github.io/hw00-intro-base/
