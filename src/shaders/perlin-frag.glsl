@@ -82,7 +82,7 @@ void main() {
     float n = PerlinFBM(fs_Pos.xyz * scale + vec3(u_Time), 8); // 8 octaves
 
     // Noise color
-    vec3 perlinColor = vec3(0.f, 200.f / 255.f, 1.f);
+    vec3 perlinColor = vec3(0.f, 201.f / 255.f, 1.f);
     // Modulate the color using the noise
     vec3 finalColor = mix(shadedColor, perlinColor, 0.5 * (n - 0.5));
 
