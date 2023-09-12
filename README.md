@@ -1,5 +1,16 @@
 # HW 0: Intro to Javascript and WebGL
 
+## Dineth Meegoda
+
+This is my first time really using WebGL and one of my first times working with typescript and a web project in general, but the similarness of the GL and renderer setup with OpenGL really helped me get through it fast. I knew I wanted to use Worley to create some sort of circular noise with some techno looking effects so I used Worley with another Worley noise function passed in to create the ring like effects that panned and expanded on the shape. I also 
+
+[Live Demo](https://dinethmeegoda.github.io/hw00-intro-base/)
+
+<img src="./images/techblob.png" </img>
+<img src="./images/coloredblob.png" </img>
+<img src="./images/coloredcube.png" </img>
+<img src="./images/candycube.png" </img>
+
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>
