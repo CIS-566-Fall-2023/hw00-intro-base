@@ -31,7 +31,7 @@ class Cube extends Drawable {
                                     20, 21, 22,
                                     20, 22, 23]);
 
-    // positions
+    // Optimization in filling positions, still BUGGY!
     // let pos: vec4[];
     // for (let row = 0; row < 9; row++)
     // {
@@ -50,6 +50,7 @@ class Cube extends Drawable {
     //     this.positions[i+2] = pos[i][2];
     //     this.positions[i+3] = pos[i][3];
     // }
+
     this.positions = new Float32Array([-1, -1, 1, 1,
                                         1, -1, 1, 1,
                                         1, 1, 1, 1,
@@ -76,6 +77,12 @@ class Cube extends Drawable {
                                         -1, -1, 1, 1,
                                         1, -1, 1, 1,
                                         1, -1, -1, 1]);
+    // apply scaling and translation
+    for (let i = 0; i < this.positions.length; i+=4) {
+        this.positions[i] = this.positions[i] * this.scale + this.center[0];
+        this.positions[i+1] = this.positions[i+1] * this.scale + this.center[1];
+        this.positions[i+2] = this.positions[i+2] * this.scale + this.center[2];
+    }
 
     // normals
     this.normals = new Float32Array([0, 0, 1, 0,

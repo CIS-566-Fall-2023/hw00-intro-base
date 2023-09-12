@@ -30,6 +30,8 @@ class ShaderProgram {
   unifViewProj: WebGLUniformLocation;
   unifColor: WebGLUniformLocation;
   unifTime: WebGLUniformLocation;
+  unifWaveToggle: WebGLUniformLocation;
+  unifDeformToggle: WebGLUniformLocation;
 
   constructor(shaders: Array<Shader>) {
     this.prog = gl.createProgram();
@@ -50,6 +52,8 @@ class ShaderProgram {
     this.unifViewProj   = gl.getUniformLocation(this.prog, "u_ViewProj");
     this.unifColor      = gl.getUniformLocation(this.prog, "u_Color");
     this.unifTime       = gl.getUniformLocation(this.prog, "u_Time");
+    this.unifWaveToggle   = gl.getUniformLocation(this.prog, "u_WaveToggle");
+    this.unifDeformToggle = gl.getUniformLocation(this.prog, "u_DeformToggle");
   }
 
   use() {
@@ -91,6 +95,17 @@ class ShaderProgram {
     this.use();
     if (this.unifTime !== -1) {
       gl.uniform1f(this.unifTime, time);
+    }
+  }
+
+  setToggles(wave: boolean, deform: boolean) {
+    this.use();
+    if (this.unifWaveToggle !== -1) {
+      gl.uniform1i(this.unifWaveToggle, wave ? 1 : -1);
+    }
+
+    if (this.unifDeformToggle !== -1) {
+      gl.uniform1i(this.unifDeformToggle, deform ? 1 : -1);
     }
   }
 

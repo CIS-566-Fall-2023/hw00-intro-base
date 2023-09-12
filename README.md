@@ -1,4 +1,25 @@
-# HW 0: Intro to Javascript and WebGL
+# HW 0: Intro to Javascript and WebGL - Noise!
+
+## Results: A Blooming Cyberpunk Snow Lotus
+
+(live site link)
+
+![A Blooming Cyberpunk Snow Lotus](/images/cover.png)
+
+![Demo GIF](/images/demo-min.gif)
+
+#### Interactions using GUI:
+
+  - Set the geometry with any color you like using the RGB color panel
+  - Toggle "Water Wave" feature to see color variation compared to diffuse color
+  - Toggle "Deformation" feature to see shape change
+
+For the custom fragment shader, I applied a Perlin-based FBM noise to the material base color to create a water wave effect. Specifically, I took the absolute value of a 3D Perlin noise sampled with `fs_Pos * frequency` plus an offset of the accumulative time. The offset calculated using `u_Time` gives the visual of waves passing across the geometry surface.
+
+For the vertex deformation, I chose the classic FBM noise sampled with plain `vs_Pos` to add some organic variation. The spiky flower pedals are animated through trigonometric functions (e.g. `sin`, `cos`) that non-uniformly modify the shape's vertex positions over time.
+
+
+## Project Overview
 
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">

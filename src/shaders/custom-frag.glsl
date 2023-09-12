@@ -13,6 +13,7 @@ precision highp float;
 
 uniform vec4 u_Color; // The color with which to render this instance of geometry.
 uniform float u_Time;
+uniform int u_WaveToggle;
 
 // These are the interpolated values out of the rasterizer, so you can't know
 // their specific values without knowing the vertices that contributed to them
@@ -161,8 +162,11 @@ void main()
         vec4 diffuseColor = u_Color;
 
         /************************** Start: Apply deformation ************************/
-        float noise = fbm(fs_Pos.xyz) + 0.6;
-        diffuseColor *= noise;
+        if (u_WaveToggle > 0)
+        {
+            float noise = fbm(fs_Pos.xyz) + 0.6;
+            diffuseColor *= noise;
+        }
         /************************** End: Apply deformation ************************/
 
         // Calculate the diffuse term for Lambert shading

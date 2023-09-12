@@ -15,14 +15,19 @@ const controls = {
   tesselations: 5,
   'Load Scene': loadScene,   // A function pointer, essentially
   colorRGB: [50, 200, 230],  // RGB array
-  icospherePos: vec3.fromValues(0, -5 , 0),
-  cubePos: vec3.fromValues(0, 5, 0),
+  'Water Wave': true,
+  'Deformation': true,
 };
 
 let icosphere: Icosphere;
 let square: Square;
 let cube: Cube;
 let prevTesselations: number = 5;
+
+let icospherePos = vec3.fromValues(0, 1.5, 0);
+let cubePos = vec3.fromValues(0, -1.5, 0);
+let icosphereRadius = 1;
+let cubeScale = 1;
 let timer: number = 0;
 var runCustomShader = true;
 
@@ -31,11 +36,11 @@ function convertRGBToVec4(r: number, g: number, b: number) {
 }
 
 function loadScene() {
-  icosphere = new Icosphere(controls.icospherePos, 1, controls.tesselations);
+  icosphere = new Icosphere(icospherePos, icosphereRadius, controls.tesselations);
   icosphere.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
-  cube = new Cube(controls.cubePos, 1);
+  cube = new Cube(cubePos, cubeScale);
   cube.create();
 }
 
@@ -53,6 +58,8 @@ function main() {
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
   gui.addColor(controls, 'colorRGB');
+  gui.add(controls, 'Water Wave');
+  gui.add(controls, 'Deformation');
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -95,7 +102,7 @@ function main() {
     if(controls.tesselations != prevTesselations)
     {
       prevTesselations = controls.tesselations;
-      icosphere = new Icosphere(controls.icospherePos, 1, prevTesselations);
+      icosphere = new Icosphere(icospherePos, 1, prevTesselations);
       icosphere.create();
     }
 
@@ -105,10 +112,12 @@ function main() {
       vec4.fromValues(1, 0, 0, 1);
     currShaderProgram.setGeometryColor(color);
     currShaderProgram.setTime(timer);
+    currShaderProgram.setToggles(controls['Water Wave'], controls.Deformation);
 
     renderer.render(camera, currShaderProgram, [
       icosphere,
-      // square,
+    ]);
+    !controls.Deformation&&renderer.render(camera, currShaderProgram, [
       cube,
     ]);
     stats.end();

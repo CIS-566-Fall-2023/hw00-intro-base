@@ -19,6 +19,7 @@ uniform mat4 u_ViewProj;    // The matrix that defines the camera's transformati
                             // We've written a static matrix for you to use for HW2,
                             // but in HW3 you'll have to generate one yourself
 uniform float u_Time;
+uniform int u_DeformToggle;
 
 in vec4 vs_Pos;             // The array of vertex positions passed to the shader
 
@@ -198,14 +199,17 @@ void main()
     float noise = fbm(vec3(vs_Pos));
 
     fs_Pos = vs_Pos;
-    fs_Pos += normalize(fs_Nor)
-        * (cos(u_Time * 0.001) + sin(u_Time * 0.0005))
-        * noise;
+    if (u_DeformToggle > 0)
+    {
+        fs_Pos += normalize(fs_Nor)
+            * min(0.5 - abs(cos(u_Time * 0.001) + sin(u_Time * 0.002)), -1.0)
+            * noise;
+    }
     /************************** End: Apply deformation ************************/
 
     vec4 modelposition = u_Model * fs_Pos;   // Temporarily store the transformed vertex positions for use below
     fs_Pos = modelposition;
-    
+
     fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
 
     gl_Position = u_ViewProj * modelposition;// gl_Position is a built-in variable of OpenGL which is
