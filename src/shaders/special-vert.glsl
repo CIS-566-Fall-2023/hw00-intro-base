@@ -130,8 +130,6 @@ void main()
     vec4 norPos = normalize(vec4(vec3(modelposition), 0));
     float timeFunc2 = cos(0.03 * float(u_Time));
 
-    float size = 0.4f;
-    float multFact = sqrt(2.f);
     float perlinFact = cnoise(vec3(norPos[0], norPos[1], timeFunc2));
     //float avg =(norPos.x + norPos.y + norPos.z) / 3.f;
     norPos += perlinFact;
