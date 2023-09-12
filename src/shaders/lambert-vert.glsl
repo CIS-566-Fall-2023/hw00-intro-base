@@ -7,6 +7,8 @@
 //This simultaneous transformation allows your program to run much faster, especially when rendering
 //geometry with millions of vertices.
 
+uniform float u_Time;
+
 uniform mat4 u_Model;       // The matrix that defines the transformation of the
                             // object we're rendering. In this assignment,
                             // this will be the result of traversing your scene graph.
@@ -25,6 +27,7 @@ in vec4 vs_Nor;             // The array of vertex normals passed to the shader
 
 in vec4 vs_Col;             // The array of vertex colors passed to the shader.
 
+out vec4 fs_Pos;
 out vec4 fs_Nor;            // The array of normals that has been transformed by u_ModelInvTr. This is implicitly passed to the fragment shader.
 out vec4 fs_LightVec;       // The direction in which our virtual light lies, relative to each vertex. This is implicitly passed to the fragment shader.
 out vec4 fs_Col;            // The color of each vertex. This is implicitly passed to the fragment shader.
@@ -34,6 +37,8 @@ const vec4 lightPos = vec4(5, 5, 3, 1); //The position of our virtual light, whi
 
 void main()
 {
+    fs_Pos = vs_Pos;
+    fs_Pos.xyz *= (cos(u_Time * 0.05f) + 3.f)/5.f;
     fs_Col = vs_Col;                         // Pass the vertex colors to the fragment shader for interpolation
 
     mat3 invTranspose = mat3(u_ModelInvTr);
@@ -44,7 +49,7 @@ void main()
                                                             // the model matrix.
 
 
-    vec4 modelposition = u_Model * vs_Pos;   // Temporarily store the transformed vertex positions for use below
+    vec4 modelposition = u_Model * fs_Pos;   // Temporarily store the transformed vertex positions for use below
 
     fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
 

@@ -25,13 +25,13 @@ class OpenGLRenderer {
   render(camera: Camera, prog: ShaderProgram, drawables: Array<Drawable>) {
     let model = mat4.create();
     let viewProj = mat4.create();
-    let color = vec4.fromValues(1, 0, 0, 1);
+    //let color = vec4.fromValues(1, 0, 0, 1);
 
     mat4.identity(model);
     mat4.multiply(viewProj, camera.projectionMatrix, camera.viewMatrix);
     prog.setModelMatrix(model);
     prog.setViewProjMatrix(viewProj);
-    prog.setGeometryColor(color);
+    //prog.setGeometryColor(color);
 
     for (let drawable of drawables) {
       prog.draw(drawable);
