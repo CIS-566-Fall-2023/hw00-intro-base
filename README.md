@@ -5,6 +5,15 @@
 </p>
 <p align="center">(source: Ken Perlin)</p>
 
+
+## Video
+I haven't been able to successfully deploy, will update this when I can but here is a video showing my obscuris-esque noise isosphere with some worley effects for the colour.
+
+https://github.com/inshalak/hw00-intro-base/assets/104465349/bf1e20fa-eec8-4c60-aa4e-ea93589481e8
+
+
+
+
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
