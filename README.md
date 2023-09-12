@@ -11,7 +11,7 @@
 - Practice implementing noise
 
 ## Forking the Code
-Rather than cloning the homework repository, please __fork__ the code into your own repository using the `Fork` button in the upper-right hand corner of the Github UI. This will enable you to have your own personal repository copy of the code, and let you make a live demo (described later in this document).
+Rather than cloning the homework repository, please __fork__ the code into your own repository using the `Fork` button in the upper-right hand corner of the Github UI. This will enable you to have your own personal repository copy of the code, and let you make a live demo (described later in this document). 
 
 ## Running the Code
 
@@ -75,3 +75,13 @@ To check if everything is on the right track:
   - Interfaces https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API
   - Types https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Types
   - Constants https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Constants
+
+## Rachel Lin's Submission
+
+On the fragment shader, I used offsets of fractal brownian motion based on the xyz position to set the rgb values. I then used the mix function to interpolate between the calculated color and the color set by the user. 
+
+For animation purposes, I added a uniform variable to represent the time passed. In my vertex shader, I had three different sinusoidal functions as a function of time. I multiplied and added the xyz coordinates of the position by the values of each of these functions.
+
+live demo link: https://racheldlin.github.io/hw00-intro-base/
+
+
