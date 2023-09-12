@@ -14,21 +14,22 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 const controls = {
   tesselations: 5,
   'Switch Obj': loadScene, // A function pointer, essentially
-  color: [0, 125, 255] as [number, number, number],
+  color: [13, 13, 13] as [number, number, number],
 };
 
-// true = cube, false = icosphere
-let shape = false;
+// true = cube, false = icosphere, it gets swapped at initialize 
+let shape = true;
 let icosphere: Icosphere;
 let square: Square;
 let cube: Cube;
 let prevTesselations: number = 5;
 let prevColor = [0, 0, 0] as [number, number, number];
+let time = 0;
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
   icosphere.create();
-  cube = new Cube(1);
+  cube = new Cube(1.5);
   cube.create();
   shape = !shape;
 }
@@ -72,12 +73,18 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
 
+  const noise = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/noise-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/noise-frag.glsl')),
+  ]);
+
   // This function will be called every frame
   function tick() {
     camera.update();
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
+    noise.setTime(time);
     if(controls.tesselations != prevTesselations)
     {
       prevTesselations = controls.tesselations;
@@ -88,16 +95,17 @@ function main() {
       prevColor = controls.color;
       const newColor = vec4.fromValues(...prevColor, 256);
       vec4.scale(newColor, newColor, 1 / 256);
-      lambert.setGeometryColor(newColor);
+      noise.setGeometryColor(newColor);
     }
     const renderedObj = shape ? cube : icosphere;
-    renderer.render(camera, lambert, [
+    renderer.render(camera, noise, [
       //icosphere,
       renderedObj,
     ]);
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame
+    time++;
     requestAnimationFrame(tick);
   }
 
