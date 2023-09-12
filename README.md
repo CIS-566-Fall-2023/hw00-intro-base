@@ -10,6 +10,8 @@ I was able to expriment and get familiar with the TypeScript and WebGL environme
 
 Here is a screenshot：<img width="979" alt="perlinNoise" src="https://github.com/xcupsilon/hw00-intro-base/assets/50472308/bf8d3c4d-263e-4162-a1e7-7203b79cb83a">
 
+Interactive demo: https://xcupsilon.github.io/hw00-intro-base/
+
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
