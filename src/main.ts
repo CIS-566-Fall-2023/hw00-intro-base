@@ -13,7 +13,7 @@ import ShaderProgram, { Shader } from "./rendering/gl/ShaderProgram"
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
-  color: [93, 136, 154], // color of the object
+  color: [255, 0, 0], // color of the object
   "Load Scene": loadScene, // A function pointer, essentially
 }
 
@@ -65,13 +65,11 @@ function main() {
 
   const lambert = new ShaderProgram([
     new Shader(gl.VERTEX_SHADER, require("./shaders/noise-vertex.glsl")),
-    new Shader(gl.FRAGMENT_SHADER, require("./shaders/noise-frag.glsl")),
+    new Shader(gl.FRAGMENT_SHADER, require("./shaders/perlin-frag.glsl")),
   ])
 
   // Set default color to red
-  lambert.setGeometryColor(
-    new Float32Array([93 / 255, 136 / 255, 154 / 255, 1])
-  )
+  lambert.setGeometryColor(new Float32Array([1, 0, 0, 1]))
 
   // Add controls to the gui
   const gui = new DAT.GUI()
