@@ -13,7 +13,7 @@
 I manually created the cube geometry in `Cube.ts` following the examples of `Square.ts` and
 `Icosphere.ts`.
 
-### Fractal Brownian Noise in `fbm-frag.glsl`
+### Fractal Brownian Motion in `fbm-frag.glsl`
 I wrote a fragment shader based on the example given of `lambert-frag.glsl` which implements
 Fractal Brownian Motion. The resulting noise is used as the interpolating value between the user's
 chosen color and that color's complement.
