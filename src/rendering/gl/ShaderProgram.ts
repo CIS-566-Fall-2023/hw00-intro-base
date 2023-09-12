@@ -24,11 +24,17 @@ class ShaderProgram {
   attrPos: number;
   attrNor: number;
   attrCol: number;
+  attrUV: number;
 
   unifModel: WebGLUniformLocation;
   unifModelInvTr: WebGLUniformLocation;
   unifViewProj: WebGLUniformLocation;
   unifColor: WebGLUniformLocation;
+  unifTime: WebGLUniformLocation;
+  unifCellNum: WebGLUniformLocation;
+  unifMovingSpeed: WebGLUniformLocation;
+  unifPatternSize: WebGLUniformLocation;
+  unifMorphingSpeed: WebGLUniformLocation;
 
   constructor(shaders: Array<Shader>) {
     this.prog = gl.createProgram();
@@ -44,10 +50,16 @@ class ShaderProgram {
     this.attrPos = gl.getAttribLocation(this.prog, "vs_Pos");
     this.attrNor = gl.getAttribLocation(this.prog, "vs_Nor");
     this.attrCol = gl.getAttribLocation(this.prog, "vs_Col");
+    this.attrUV = gl.getAttribLocation(this.prog, "vs_UV");
     this.unifModel      = gl.getUniformLocation(this.prog, "u_Model");
     this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
     this.unifViewProj   = gl.getUniformLocation(this.prog, "u_ViewProj");
     this.unifColor      = gl.getUniformLocation(this.prog, "u_Color");
+    this.unifTime      = gl.getUniformLocation(this.prog, "u_Time");
+    this.unifCellNum      = gl.getUniformLocation(this.prog, "u_CellNum");
+    this.unifMovingSpeed      = gl.getUniformLocation(this.prog, "u_MovingSpeed");
+    this.unifPatternSize      = gl.getUniformLocation(this.prog, "u_PatternSize");
+    this.unifMorphingSpeed      = gl.getUniformLocation(this.prog, "u_MorhpingSpeed");
   }
 
   use() {
@@ -85,6 +97,39 @@ class ShaderProgram {
     }
   }
 
+  
+  setMovingSpeed(val: number) {
+    this.use();
+    if (this.unifMovingSpeed !== -1) {
+      gl.uniform1f(this.unifMovingSpeed, val);
+    }
+  }
+  setPatternSize(val: number) {
+    this.use();
+    if (this.unifPatternSize !== -1) {
+      gl.uniform1f(this.unifPatternSize, val);
+    }
+  }
+  setCellNum(val: number) {
+    this.use();
+    if (this.unifCellNum !== -1) {
+      gl.uniform1f(this.unifCellNum, val);
+    }
+  }
+  setMorphingSpeed(val: number) {
+    this.use();
+    if (this.unifMorphingSpeed !== -1) {
+      gl.uniform1f(this.unifMorphingSpeed, val);
+    }
+  }
+
+  setTime(time: number) {
+    this.use();
+    if (this.unifTime !== -1) {
+      gl.uniform1f(this.unifTime, time);
+    }
+  }
+
   draw(d: Drawable) {
     this.use();
 
@@ -98,11 +143,17 @@ class ShaderProgram {
       gl.vertexAttribPointer(this.attrNor, 4, gl.FLOAT, false, 0, 0);
     }
 
+    if (this.attrUV != -1 && d.bindUV()) {
+      gl.enableVertexAttribArray(this.attrUV);
+      gl.vertexAttribPointer(this.attrUV, 2, gl.FLOAT, false, 0, 0);
+    }
+
     d.bindIdx();
     gl.drawElements(d.drawMode(), d.elemCount(), gl.UNSIGNED_INT, 0);
 
     if (this.attrPos != -1) gl.disableVertexAttribArray(this.attrPos);
     if (this.attrNor != -1) gl.disableVertexAttribArray(this.attrNor);
+    if (this.attrUV != -1) gl.disableVertexAttribArray(this.attrUV);
   }
 };
 

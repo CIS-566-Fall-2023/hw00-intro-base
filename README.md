@@ -1,11 +1,25 @@
 # HW 0: Intro to Javascript and WebGL
 
+[Live Demo](https://IwakuraRein.github.io/hw00-intro-base/)
+
+## Overview
+
+- I implemented a Worley noise, which is based on the 3d coordinates of the pixels.
+- I altered the position being passed to the noise function over time to create a flow animation.
+- I implemented a vertex animation to morph the cube over time.
+- I procedually generate the cube's vertices so the user can adjust the tessellation.
+
+## Screenshots
+
+![](./doc/screenshot1.png)
+![](./doc/screenshot2.png)
+
+## Objective
+
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>
 <p align="center">(source: Ken Perlin)</p>
-
-## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
 - Practice implementing noise
