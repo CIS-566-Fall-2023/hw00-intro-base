@@ -1,3 +1,10 @@
+# "Strawberry-Lemonade" Shader:
+For this assignment I:
+1. Implemented a Cube class that inherits from Drawable and added an instance of the Cube to the render scene.
+2. Added a color palette to adjust the shading color for the Lambert Shader and the custom fragment shader.
+3. Created a custom fragment shader using FBM noise based on 3D inputs. Noise function implementation based on this ShaderToy project: https://www.shadertoy.com/view/tltXWM
+4. Created a custom vertex shader to animate the cube by offsetting the vertex positions using sin and cos functions.
+
 # HW 0: Intro to Javascript and WebGL
 
 <p align="center">
