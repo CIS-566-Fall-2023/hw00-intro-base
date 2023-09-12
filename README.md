@@ -5,6 +5,12 @@
 </p>
 <p align="center">(source: Ken Perlin)</p>
 
+## Submission
+I was able to expriment and get familiar with the TypeScript and WebGL environment through this HW. For the simple shader test, I implemented a goo-like shifting form with phasing material combining Perlin noise and FBM.
+
+Here is a screenshot：
+
+
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
