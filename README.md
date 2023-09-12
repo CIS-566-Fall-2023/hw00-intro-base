@@ -2,7 +2,7 @@
 
 ## Results: A Blooming Cyberpunk Snow Lotus
 
-(live site link)
+[*Live Site*]()
 
 ![A Blooming Cyberpunk Snow Lotus](/images/cover.png)
 
