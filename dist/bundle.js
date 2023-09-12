@@ -10848,7 +10848,7 @@ function main() {
     const lambert = new _rendering_gl_ShaderProgram__WEBPACK_IMPORTED_MODULE_7__["default"]([
         //  new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
         new _rendering_gl_ShaderProgram__WEBPACK_IMPORTED_MODULE_7__.Shader(gl.VERTEX_SHADER, __webpack_require__(/*! ./shaders/special-vert.glsl */ "./src/shaders/special-vert.glsl")),
-        // new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+        //  new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
         new _rendering_gl_ShaderProgram__WEBPACK_IMPORTED_MODULE_7__.Shader(gl.FRAGMENT_SHADER, __webpack_require__(/*! ./shaders/perlin-frag.glsl */ "./src/shaders/perlin-frag.glsl")),
     ]);
     // This function will be called every frame
@@ -10864,8 +10864,8 @@ function main() {
             icosphere.create();
         }
         renderer.render(camera, lambert, [
-            // icosphere,
-            cube,
+            icosphere,
+            // cube, 
             // square,
         ], gl_matrix__WEBPACK_IMPORTED_MODULE_9__.fromValues(controls.color[0] / 255, controls.color[1] / 255, controls.color[2] / 255, controls.color[3]), tickCount);
         stats.end();
