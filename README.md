@@ -15,7 +15,8 @@ I manually created the cube geometry in `Cube.ts` following the examples of `Squ
 
 ### Fractal Brownian Motion in `fbm-frag.glsl`
 I wrote a fragment shader based on the example given of `lambert-frag.glsl` which implements
-Fractal Brownian Motion. The resulting noise is used as the interpolating value between the user's
+Fractal Brownian Motion. Each octave is composed of 3D Perlin noise from Stefan Gustavson's [impementation](https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83). The noise is animated with
+respect to time. The resulting noise is used as the interpolating value between the user's
 chosen color and that color's complement.
 
 ### Jittering Cube Effect in `trig-vert.glsl`
