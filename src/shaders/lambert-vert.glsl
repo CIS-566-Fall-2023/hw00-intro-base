@@ -86,8 +86,8 @@ void main()
     fs_uvs.xy=vs_UV.xy;
 
     //change to distorted cube!
-    //mat4 randomMat=rotateX(cos(u_Time)*noisegen3(vec3(u_Time)))*rotateY(sin(u_Time)*noisegen3(vec3(u_Time)))*rotateZ(sin(u_Time)*cos(u_Time)*noisegen3(vec3(u_Time)));
-    
+    //mat4 randomMat=rotateX(cos(u_Time)*noisegen3(vec3(vs_Pos)))*rotateY(sin(u_Time)*noisegen3(vec3(vs_Pos)))*rotateY(sin(u_Time)*cos(u_Time)*noisegen3(vec3(vs_Pos)));
+
     fs_uvs.xy=vs_UV.xy;
     mat4 ivrMat=transpose(inverse(randomMat));
     mat3 invTranspose = mat3(ivrMat*u_ModelInvTr);
