@@ -1,5 +1,8 @@
 # HW 0: Intro to Javascript and WebGL
 
+## Submission
+Implemented a perlin-noise based grayscale frag shader and a vertex shader that moves each face along its normal axis in a sine-pattern. Modify the color using the 3 rgb sliders. Toggle the frag/vert shaders from the default using the frag and vert toggle buttons.
+
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>
