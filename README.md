@@ -75,3 +75,18 @@ To check if everything is on the right track:
   - Interfaces https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API
   - Types https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Types
   - Constants https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Constants
+
+## Jackie Li Submission
+Here are some images of my final product.
+
+Live demo: https://sagescherrytree.github.io/hw00-intro-base/
+
+# Work in Progress:
+![](WebGL_Is_Silly.png)
+
+# Finished Product Screenshots:
+![](WebGL_Is_Cool.png)
+
+![](Web_GL_Is_Cool_2.png)
+
+![](stretchyBox.png)

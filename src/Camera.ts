@@ -1,5 +1,5 @@
 var CameraControls = require('3d-view-controls');
-import {vec3, mat4} from 'gl-matrix';
+import { vec3, mat4 } from 'gl-matrix';
 
 class Camera {
   controls: any;
@@ -35,6 +35,10 @@ class Camera {
     this.controls.tick();
     vec3.add(this.target, this.position, this.direction);
     mat4.lookAt(this.viewMatrix, this.controls.eye, this.controls.center, this.controls.up);
+  }
+
+  getPosition() {
+    return this.position;
   }
 };
 
