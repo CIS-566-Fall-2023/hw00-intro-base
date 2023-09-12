@@ -19,6 +19,8 @@ uniform mat4 u_ViewProj;    // The matrix that defines the camera's transformati
                             // We've written a static matrix for you to use for HW2,
                             // but in HW3 you'll have to generate one yourself
 
+uniform float u_Time;
+
 in vec4 vs_Pos;             // The array of vertex positions passed to the shader
 
 in vec4 vs_Nor;             // The array of vertex normals passed to the shader
@@ -35,21 +37,27 @@ const vec4 lightPos = vec4(5, 5, 3, 1); //The position of our virtual light, whi
 
 void main()
 {
-    fs_Col = vs_Col;                         // Pass the vertex colors to the fragment shader for interpolation
-    fs_Pos = vs_Pos;                         // Pass the vertex pos
+    float time = u_Time * 10.f; 
+
+    // Displace the y-pos of the vertex based on the x-pos of the vertex
+    float yOffset = sin(vs_Pos.x + time) * 0.5;
+    // Displace the z-pos of the vertex based on the y-pos of the vertex
+    float zOffset = cos(vs_Pos.x + time) * 0.5;
+
+    // Apply the yOffset to the original vertex position
+    vec4 displacedPosition = vs_Pos + vec4(0, yOffset, 0, 0);
+    // Apply the zOffset to the displaced vertex position
+    displacedPosition += vec4(0, 0, zOffset, 0);
+
+    fs_Col = vs_Col;  // Pass the vertex colors to the fragment shader for interpolation
+    fs_Pos = displacedPosition;  // Use the displaced position
 
     mat3 invTranspose = mat3(u_ModelInvTr);
-    fs_Nor = vec4(invTranspose * vec3(vs_Nor), 0);          // Pass the vertex normals to the fragment shader for interpolation.
-                                                            // Transform the geometry's normals by the inverse transpose of the
-                                                            // model matrix. This is necessary to ensure the normals remain
-                                                            // perpendicular to the surface after the surface is transformed by
-                                                            // the model matrix.
+    fs_Nor = vec4(invTranspose * vec3(vs_Nor), 0);
 
+    vec4 modelposition = u_Model * displacedPosition;
 
-    vec4 modelposition = u_Model * vs_Pos;   // Temporarily store the transformed vertex positions for use below
+    fs_LightVec = lightPos - modelposition;
 
-    fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
-
-    gl_Position = u_ViewProj * modelposition;// gl_Position is a built-in variable of OpenGL which is
-                                             // used to render the final positions of the geometry's vertices
+    gl_Position = u_ViewProj * modelposition;
 }
