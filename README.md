@@ -4,6 +4,8 @@ For this assignment I:
 2. Added a color palette to adjust the shading color for the Lambert Shader and the custom fragment shader.
 3. Created a custom fragment shader using FBM noise based on 3D inputs. Noise function implementation based on this ShaderToy project: https://www.shadertoy.com/view/tltXWM
 4. Created a custom vertex shader to animate the cube by offsetting the vertex positions using sin and cos functions.
+![lambert](https://github.com/CIIINDYXUU/hw00-intro-base/assets/88256581/679f1b8e-b352-49cf-8d4f-11221dc010cc)
+![noise-deform-shader](https://github.com/CIIINDYXUU/hw00-intro-base/assets/88256581/f8b69576-5955-4b4c-9edd-8f9749c95721)
 
 # HW 0: Intro to Javascript and WebGL
 
