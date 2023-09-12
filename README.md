@@ -5,6 +5,31 @@
 </p>
 <p align="center">(source: Ken Perlin)</p>
 
+## Submission / Aboudi Rai
+
+[Here](https://aykae.com/hw00-intro-base) is the link to my live demo.
+
+### Cube Geometry
+I manually created the cube geometry in `Cube.ts` following the examples of `Square.ts` and
+`Icosphere.ts`.
+
+### Fractal Brownian Motion in `fbm-frag.glsl`
+I wrote a fragment shader based on the example given of `lambert-frag.glsl` which implements
+Fractal Brownian Motion. Each octave is composed of 3D Perlin noise from Stefan Gustavson's [impementation](https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83). The noise is animated with
+respect to time. The resulting noise is used as the interpolating value between the user's
+chosen color and that color's complement.
+
+### Jittering Cube Effect in `trig-vert.glsl`
+I wrote a vertex shader that jitters the corner vertices of the cube using a trigonometric noise
+function. The seed is a combination of the position of the vertex as well as a time attribute that
+increments with each tick of the animation. I tweaked the parameters of the jitter function to
+create a slow and steady warping effect on the cube.
+
+### Results
+![](img/cube1.JPG)
+![](img/cube2.JPG)
+---
+
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2

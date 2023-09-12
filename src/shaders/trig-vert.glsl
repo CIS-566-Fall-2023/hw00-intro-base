@@ -19,6 +19,8 @@ uniform mat4 u_ViewProj;    // The matrix that defines the camera's transformati
                             // We've written a static matrix for you to use for HW2,
                             // but in HW3 you'll have to generate one yourself
 
+uniform float u_Time;
+
 in vec4 vs_Pos;             // The array of vertex positions passed to the shader
 
 in vec4 vs_Nor;             // The array of vertex normals passed to the shader
@@ -34,6 +36,12 @@ out vec4 fs_Pos;            // Position to be used to seed noise function
 const vec4 lightPos = vec4(5, 5, 3, 1); //The position of our virtual light, which is used to compute the shading of
                                         //the geometry in the fragment shader.
 
+
+float jitter(float seed, vec4 pos) {
+    float posSeed = fract(dot(pos, vec4(234.234, 365.42, 76.456, 945.4)));
+    return 0.05 * sin(seed * posSeed * 0.1);
+}
+
 void main()
 {
     fs_Col = vs_Col;                         // Pass the vertex colors to the fragment shader for interpolation
@@ -46,8 +54,8 @@ void main()
                                                             // perpendicular to the surface after the surface is transformed by
                                                             // the model matrix.
 
-
     vec4 modelposition = u_Model * vs_Pos;   // Temporarily store the transformed vertex positions for use below
+    modelposition = modelposition + jitter(u_Time, vs_Pos);
 
     fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
 
