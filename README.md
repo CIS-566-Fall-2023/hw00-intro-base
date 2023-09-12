@@ -6,10 +6,24 @@ This is my first time really using WebGL and one of my first times working with 
 
 [Live Demo](https://dinethmeegoda.github.io/hw00-intro-base/)
 
-<img src="./images/techblob.png" </img>
-<img src="./images/coloredblob.png" </img>
-<img src="./images/coloredcube.png" </img>
-<img src="./images/candycube.png" </img>
+Sample Images
+==================
+Default Blob with Icosphere
+------------
+![](./images/techblob.png)
+
+Icosphere Blob with some COLOR
+-----------
+![](./images/coloredblob.png)
+
+Cube with the same COLOR
+-----------
+![](./images/coloredcube.png)
+
+Candy looking cube
+-----------
+![](./images/candycube.png)
+
 
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
