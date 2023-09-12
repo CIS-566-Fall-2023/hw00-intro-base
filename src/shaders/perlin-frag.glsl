@@ -69,22 +69,23 @@ void main() {
     // Use the normal to influence the color's luminance.
     vec3 adjustedNormal = fs_Nor.xyz * 0.5 + 0.5;
 
-    // Compute luminance using the Rec. 709 formula
+    // Compute luminance
     float luminance = dot(controlledColor.rgb, vec3(0.2126, 0.7152, 0.0722));
-    vec3 luminanceColor = vec3(luminance, luminance, luminance);
+    vec3 luminanceColor = vec3(luminance);
 
-    // Blend controlledColor with luminanceColor based on the adjustedNormal
+    // Blend selected color with luminanceColor based on the adjustedNormal
     vec3 shadedColor = mix(controlledColor.rgb, luminanceColor, 1.0 - adjustedNormal.x);
 
     // Grid cell scale
     float scale = 10.f;
-
     // Adding 3D Perlin noise effect with multiple octaves
-    float n = PerlinFBM(fs_Pos.xyz * scale + vec3(u_Time), 4); // 4 octaves
+    float n = PerlinFBM(fs_Pos.xyz * scale + vec3(u_Time), 8); // 8 octaves
 
+    // Noise color
+    vec3 perlinColor = vec3(0.f, 200.f / 255.f, 1.f);
     // Modulate the color using the noise
-    shadedColor *= 1.0 + 0.5 * (n - 0.5); 
+    vec3 finalColor = mix(shadedColor, perlinColor, 0.5 * (n - 0.5));
 
-    out_Col = vec4(shadedColor, controlledColor.a); // Retaining the original alpha value
+    out_Col = vec4(finalColor, controlledColor.a); // Retaining the original alpha value
 }
 
