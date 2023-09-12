@@ -5,6 +5,29 @@
 </p>
 <p align="center">(source: Ken Perlin)</p>
 
+## Demo + help log
+Live Demo Link: https://wc41.github.io/hw00-intro-base/index.html
+
+Cube + Color GUI (lambert frag / lambert vert shaders)
+
+![image](https://github.com/wc41/hw00-intro-base/assets/97757188/88c589fe-7851-4845-89bc-e33e221575bd)
+
+Perlin frag shader
+
+![image](https://github.com/wc41/hw00-intro-base/assets/97757188/b5eefb73-508a-4246-be4e-0bbc0e787ff3)
+
+Perlin vert + perlin frag shader, cube
+
+![image](https://github.com/wc41/hw00-intro-base/assets/97757188/1f68b50c-5ede-41a8-9592-ae12a1d107bf)
+
+Perlin vert + perlin frag shader, icosphere
+
+![image](https://github.com/wc41/hw00-intro-base/assets/97757188/780caadb-b854-4ba0-a558-f699cdb2a099)
+
+3D Perlin noise function taken from: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
+
+FBM functionality inspired by: https://www.shadertoy.com/view/XsX3zB
+
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
