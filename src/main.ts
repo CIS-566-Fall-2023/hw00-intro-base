@@ -14,15 +14,14 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
-   color: [0, 80, 255, 255] // RGBA value
+   color: [255, 0, 217, 255] // RGBA value
 };
 
 let icosphere: Icosphere;
 let square: Square;
 let cube: Cube;
 let prevTesselations: number = 5;
-let prevColor: number[] = [0, 80, 255, 255];
-let time: number = 0;
+const start = Date.now();
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
@@ -68,17 +67,16 @@ function main() {
   renderer.setClearColor(0.2, 0.2, 0.2, 1);
   gl.enable(gl.DEPTH_TEST);
 
-
+/*
   const lambert = new ShaderProgram([
     new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
-  ]); 
+  ]); */
 
-  /*
   const custom = new ShaderProgram([
     new Shader(gl.VERTEX_SHADER, require('./shaders/custom-vert.glsl')),
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/custom-frag.glsl')),
-  ]); */
+  ]);
 
   // This function will be called every frame
   function tick() {
@@ -93,22 +91,14 @@ function main() {
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
     }
-
-    // altering color
-    if (controls.color != prevColor) {
-      prevColor = controls.color;
-      renderer.setGeomColor(prevColor[0], prevColor[1], prevColor[2], prevColor[3]);
-    }
-
   
-    renderer.render(camera, lambert, [
+    renderer.render(camera, custom, controls.color,  (Date.now() - start) / 600, [
       // icosphere,
       // square,
        cube
     ]);
     stats.end();
 
-    lambert.setTime(++time);
     // Tell the browser to call `tick` again whenever it renders a new frame
     requestAnimationFrame(tick);
   }
