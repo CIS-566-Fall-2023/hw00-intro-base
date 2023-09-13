@@ -1,14 +1,20 @@
-import {vec4, mat4} from 'gl-matrix';
+import { vec4, mat4, vec3 } from 'gl-matrix';
 import Drawable from './Drawable';
 import {gl} from '../../globals';
 
-var activeProgram: WebGLProgram = null;
+var activeProgram: WebGLProgram | null = null;
 
 export class Shader {
   shader: WebGLShader;
 
   constructor(type: number, source: string) {
-    this.shader = gl.createShader(type);
+     const createdShader = gl.createShader(type);
+    
+    if (!createdShader) {
+      throw new Error('Failed to create the WebGL shader.');
+    }
+
+    this.shader = createdShader;
     gl.shaderSource(this.shader, source);
     gl.compileShader(this.shader);
 
@@ -25,13 +31,19 @@ class ShaderProgram {
   attrNor: number;
   attrCol: number;
 
-  unifModel: WebGLUniformLocation;
-  unifModelInvTr: WebGLUniformLocation;
-  unifViewProj: WebGLUniformLocation;
-  unifColor: WebGLUniformLocation;
+  unifModel: WebGLUniformLocation | null;
+  unifModelInvTr: WebGLUniformLocation | null;
+  unifViewProj: WebGLUniformLocation | null;
+  unifColor: WebGLUniformLocation | null;
+  unifTime: WebGLUniformLocation | null;
 
   constructor(shaders: Array<Shader>) {
-    this.prog = gl.createProgram();
+    const createdProgram = gl.createProgram();
+
+    if (!createdProgram) { 
+      throw new Error('Failed to create the WebGL program.');
+    }
+    this.prog = createdProgram;
 
     for (let shader of shaders) {
       gl.attachShader(this.prog, shader.shader);
@@ -48,6 +60,7 @@ class ShaderProgram {
     this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
     this.unifViewProj   = gl.getUniformLocation(this.prog, "u_ViewProj");
     this.unifColor      = gl.getUniformLocation(this.prog, "u_Color");
+    this.unifTime       = gl.getUniformLocation(this.prog, "u_Time");
   }
 
   use() {
@@ -82,6 +95,13 @@ class ShaderProgram {
     this.use();
     if (this.unifColor !== -1) {
       gl.uniform4fv(this.unifColor, color);
+    }
+  }
+
+  setTime(time: number) {
+    this.use();
+    if (this.unifTime !== -1) {
+      gl.uniform1f(this.unifTime, time);
     }
   }
 
