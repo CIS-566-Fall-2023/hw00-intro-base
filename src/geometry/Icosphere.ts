@@ -111,7 +111,7 @@ class Icosphere extends Drawable {
           edgeMap.set(key, vertices.length);
           vertices.push(midpoint);
         }
-        return edgeMap.get(key);
+        return edgeMap.get(key) as number;
       }
 
       for (let t = 0; t < triangles.length; ++t) {

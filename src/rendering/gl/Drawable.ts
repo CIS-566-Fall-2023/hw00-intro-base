@@ -3,9 +3,9 @@ import {gl} from '../../globals';
 abstract class Drawable {
   count: number = 0;
 
-  bufIdx: WebGLBuffer;
-  bufPos: WebGLBuffer;
-  bufNor: WebGLBuffer;
+  bufIdx: WebGLBuffer | null;
+  bufPos: WebGLBuffer | null;
+  bufNor: WebGLBuffer | null;
 
   idxBound: boolean = false;
   posBound: boolean = false;
