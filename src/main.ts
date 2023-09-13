@@ -21,7 +21,9 @@ const controls = {
 let icosphere: Icosphere;
 let square: Square;
 let prevTesselations: number = 5;
+let prevColor : number[] = [255.0, 0.0, 0.0];
 let cube: Cube;
+let time: number = 0;
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
@@ -29,7 +31,7 @@ function loadScene() {
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
 
-  cube = new Cube(vec3.fromValues(0, 0, 0), 2);
+  cube = new Cube(vec3.fromValues(0, 0, 0), 1);
   cube.create();
 }
 
@@ -45,7 +47,7 @@ function main() {
   // Add controls to the gui
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
-  gui.addColor(controls, 'color').onChange(updateColor);
+  gui.addColor(controls, 'color');
   gui.add(controls, 'Load Scene');
 
   // get canvas and webgl context
@@ -67,14 +69,23 @@ function main() {
   renderer.setClearColor(0.2, 0.2, 0.2, 1);
   gl.enable(gl.DEPTH_TEST);
 
-  const lambert = new ShaderProgram([
-    new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
-    new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+  // const lambert = new ShaderProgram([
+  //   new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
+  //   new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+  // ]);
+
+
+
+  const custom_shader = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/custom-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/custom-frag.glsl')),
   ]);
+
 
   function updateColor() {
     const [r, g, b] = controls.color;
-    lambert.setUniformVec4('u_Color',vec4.fromValues(r/255, g/255, b/255, 1));
+    //lambert.setUniformVec4('u_Color',vec4.fromValues(r/255, g/255, b/255, 1));
+    custom_shader.setUniformVec4('u_Color',vec4.fromValues(r/255, g/255, b/255, 1));
     
   }
 
@@ -84,6 +95,7 @@ function main() {
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
+    
     if(controls.tesselations != prevTesselations)
     {
       prevTesselations = controls.tesselations;
@@ -91,8 +103,16 @@ function main() {
       icosphere.create();
     }
 
-    
-    renderer.render(camera, lambert, [
+    //add time
+    if (controls.color != prevColor) {
+      prevColor = controls.color;
+
+      updateColor();
+    }
+
+    time = time + 1;
+
+    renderer.render(camera, custom_shader, [
       //icosphere,
       // square,
       cube,
