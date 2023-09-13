@@ -80,7 +80,7 @@ void main()
     vec4 modelposition = u_Model * pos;   // Temporarily store the transformed vertex positions for use below
 
     modelposition.x +=  0.2 * WorleyNoise(vec2(sin(u_Time/100.0) + modelposition.x , cos(u_Time/150.0)));
-    modelposition.y +=  0.2 * WorleyNoise(vec2(sin(u_Time/100.0) , cos(u_Time/150.0) + + modelposition.y ));
+    modelposition.y +=  0.2 * WorleyNoise(vec2(sin(u_Time/100.0) , cos(u_Time/150.0) + modelposition.y ));
 
     modelposition.xyz *=   1.0 + 0.5 * sin(u_Time / 200.0);
 
