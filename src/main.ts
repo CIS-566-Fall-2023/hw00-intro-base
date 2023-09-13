@@ -14,12 +14,15 @@ import ShaderProgram, { Shader } from './rendering/gl/ShaderProgram';
 const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
+  Color: [50, 50, 50, 1],
+  BG: [217, 139, 255, 1],
 };
 
 let icosphere: Icosphere;
 let square: Square;
 let cube: Cube;
 let prevTesselations: number = 5;
+let time = 0;
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
@@ -30,6 +33,8 @@ function loadScene() {
 
   cube = new Cube(vec3.fromValues(0, 0, 0));
   cube.create();
+
+  time = 0;
 }
 
 function main() {
@@ -45,12 +50,8 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
-
-  var palette = {
-    color: [ 255, 0, 0, 255 ], // RGB with alpha
-  };
-
-  gui.addColor(palette, 'color');
+  gui.addColor(controls, 'Color');
+  gui.addColor(controls, 'BG')
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement>document.getElementById('canvas');
@@ -68,12 +69,17 @@ function main() {
   const camera = new Camera(vec3.fromValues(0, 0, 5), vec3.fromValues(0, 0, 0));
 
   const renderer = new OpenGLRenderer(canvas);
-  renderer.setClearColor(0.2, 0.2, 0.2, 1);
+
   gl.enable(gl.DEPTH_TEST);
 
-  const lambert = new ShaderProgram([
-    new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
-    new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+  // const lambert = new ShaderProgram([
+  //   new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
+  //   new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+  // ]);
+
+  const myShader = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/myshader-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/myshader-frag.glsl')),
   ]);
 
   // This function will be called every frame
@@ -87,19 +93,28 @@ function main() {
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
     }
-    
-    renderer.render(camera, lambert,
-      [
-        //icosphere,
-        //square,
-        cube,
-      ]);
 
-      lambert.setGeometryColor(vec4.fromValues(
-        palette.color[0]/255,
-        palette.color[1]/255,
-        palette.color[2]/255,
-        palette.color[3]/255));
+    let color = vec4.fromValues(
+      controls.Color[0] / 255.0, 
+      controls.Color[1] / 255.0, 
+      controls.Color[2] / 255.0, 
+      controls.Color[3]);
+
+      renderer.setClearColor(
+        controls.BG[0] / 255.0,
+        controls.BG[1] / 255.0, 
+        controls.BG[2] / 255.0, 
+        controls.BG[3] 
+      );
+
+    myShader.setTime(time++);
+    renderer.render(
+      camera, 
+      myShader,
+      [
+        cube,
+      ], 
+      color = color);
 
     stats.end();
 
