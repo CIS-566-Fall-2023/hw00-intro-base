@@ -95,7 +95,7 @@ function main() {
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
-    
+
     if(controls.tesselations != prevTesselations)
     {
       prevTesselations = controls.tesselations;
@@ -111,7 +111,8 @@ function main() {
     }
 
     time = time + 1;
-
+    custom_shader.setTime(time);
+    
     renderer.render(camera, custom_shader, [
       //icosphere,
       // square,

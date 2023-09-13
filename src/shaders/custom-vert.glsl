@@ -35,6 +35,32 @@ out vec4 fs_Pos;
 const vec4 lightPos = vec4(5, 5, 3, 1); //The position of our virtual light, which is used to compute the shading of
                                         //the geometry in the fragment shader.
 
+vec2 random2( vec2 p ) {
+    return fract(sin(vec2(dot(p, vec2(127.1, 311.7)),
+                 dot(p, vec2(269.5,183.3))))
+                 * 43758.5453);
+}
+
+float WorleyNoise(vec2 uv) {
+    uv *= 10.0; // Now the space is 10x10 instead of 1x1. Change this to any number you want.
+    vec2 uvInt = floor(uv);
+    vec2 uvFract = fract(uv);
+    float minDist = 1.0; // Minimum distance initialized to max.
+    for(int y = -1; y <= 1; ++y) {
+        for(int x = -1; x <= 1; ++x) {
+            vec2 neighbor = vec2(float(x), float(y)); // Direction in which neighbor cell lies
+            vec2 point = random2(uvInt + neighbor); // Get the Voronoi centerpoint for the neighboring cell
+            vec2 diff = neighbor + point - uvFract; // Distance between fragment coord and neighbor’s Voronoi point
+            float dist = length(diff);
+            minDist = min(minDist, dist);
+        }
+    }
+    return minDist;
+}
+
+
+
+
 void main()
 {
     fs_Col = vs_Col;                         // Pass the vertex colors to the fragment shader for interpolation
@@ -46,12 +72,17 @@ void main()
                                                             // perpendicular to the surface after the surface is transformed by
                                                             // the model matrix.
 
-    vec4 pos = vec4(vec3(vs_Pos) + sin(u_Time), 1.f);
+    
+    vec4 pos = vs_Pos;
+    //pos += vec4( vec3(pos) + 0.2 * WorleyNoise(vec2(sin(u_Time/100.0) +0.5 , cos(u_Time/150.0))) , 0.f);
 
 
     vec4 modelposition = u_Model * pos;   // Temporarily store the transformed vertex positions for use below
 
-    //modelposition.xyz +=  0.2 * sin(u_Time) * tan(u_Time);
+    modelposition.x +=  0.2 * WorleyNoise(vec2(sin(u_Time/100.0) + modelposition.x , cos(u_Time/150.0)));
+    modelposition.y +=  0.2 * WorleyNoise(vec2(sin(u_Time/100.0) , cos(u_Time/150.0) + + modelposition.y ));
+
+    modelposition.xyz *=   1.0 + 0.5 * sin(u_Time / 200.0);
 
     fs_Pos = modelposition;
 
