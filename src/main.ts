@@ -1,8 +1,10 @@
 import {vec3} from 'gl-matrix';
+import {vec4} from 'gl-matrix';
 const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
 import Icosphere from './geometry/Icosphere';
 import Square from './geometry/Square';
+import Cube from './geometry/Cube';
 import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
@@ -12,16 +14,20 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
+  color: [100, 100, 100] as [number, number, number],
   'Load Scene': loadScene, // A function pointer, essentially
 };
 
 let icosphere: Icosphere;
 let square: Square;
+let cube: Cube;
 let prevTesselations: number = 5;
 
 function loadScene() {
-  icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
-  icosphere.create();
+  // icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
+  // icosphere.create();
+  cube = new Cube(vec3.fromValues(0, 0, 0));
+  cube.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
 }
@@ -37,6 +43,7 @@ function main() {
 
   // Add controls to the gui
   const gui = new DAT.GUI();
+  gui.addColor(controls, 'color');
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
 
@@ -70,15 +77,22 @@ function main() {
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
+
     if(controls.tesselations != prevTesselations)
     {
       prevTesselations = controls.tesselations;
-      icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
-      icosphere.create();
+      cube = new Cube(vec3.fromValues(0, 0, 0));
+      cube.create();
+      // icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
+      // icosphere.create();
     }
+
+    lambert.setGeometryColor(vec4.fromValues(controls.color[0] / 255, controls.color[1] / 255, controls.color[2] / 255, 1));
+
     renderer.render(camera, lambert, [
-      icosphere,
+      // icosphere,
       // square,
+      cube,
     ]);
     stats.end();
 
