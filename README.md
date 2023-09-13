@@ -1,5 +1,22 @@
 # HW 0: Intro to Javascript and WebGL
 
+## Overview
+
+- For my custom fragment shader, I chose to use Worley noise to create a fun, rainbow-colored pattern on my Cube.
+
+- For my custom vertex shader, I created a simple animation using sin/cos functions to combine a side-to-side, up-and-down, and stretch-and-shrink motion to make it look like the cube is jumping back and forth.
+
+- I also modified the existing GUI to allow the user to change the color of the cube, as well as the color of the background.
+
+- Overall this was a very fun assignmnent! I'm excited to learn how to implement more complicated designs in future homeworks :)
+
+- Note: I wasn't planning to use a late day on this assignment, but I wasn't able to submit on canvas since I wasn't registered for the course and had issues with the live demo, so I guess I used one? :D
+
+# Screenshot:
+
+![](/hw0.gif)
+
+
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>

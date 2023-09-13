@@ -40,15 +40,14 @@ void main()
                                                             // the model matrix.
 
     fs_Pos = vs_Pos;
-    fs_Pos += sin(u_Time * 0.00001);
 
     vec4 modelposition = u_Model * fs_Pos;   // Temporarily store the transformed vertex positions for use below
 
-    if(vs_Pos.y > -1.0)
-    {
-        modelposition.y *= cos(u_Time * 0.05);
-        modelposition.x += sin(u_Time * 0.05);
-    }
+
+    modelposition.y += cos(u_Time * 0.05);
+    modelposition.y *= cos(u_Time * 0.05);
+    modelposition.x += sin(u_Time * 0.05);
+
 
     gl_Position = u_ViewProj * modelposition;
 }
