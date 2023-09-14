@@ -9,7 +9,7 @@ class Cube extends Drawable {
   center: vec4;
 
   constructor(center: vec3) {
-    super(); // Call the constructor of the super class. This is required.
+    super(); // Call the constructor of the super class. This is required
     this.center = vec4.fromValues(center[0], center[1], center[2], 1);
   }
 
