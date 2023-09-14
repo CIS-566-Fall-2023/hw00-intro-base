@@ -16,20 +16,24 @@ const controls = {
   tesselations: 5,
   color: [100, 100, 100] as [number, number, number],
   'Load Scene': loadScene, // A function pointer, essentially
+  // time: 0,
 };
 
 let icosphere: Icosphere;
 let square: Square;
 let cube: Cube;
 let prevTesselations: number = 5;
+let time: GLfloat = 0;
+let isCube: Boolean = true;
 
 function loadScene() {
-  // icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
-  // icosphere.create();
+  icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
+  icosphere.create();
   cube = new Cube(vec3.fromValues(0, 0, 0));
   cube.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
+  isCube = !isCube;
 }
 
 function main() {
@@ -77,24 +81,29 @@ function main() {
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
+    lambert.setTime(time);
 
     if(controls.tesselations != prevTesselations)
     {
       prevTesselations = controls.tesselations;
       cube = new Cube(vec3.fromValues(0, 0, 0));
       cube.create();
-      // icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
-      // icosphere.create();
+      icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
+      icosphere.create();
     }
 
     lambert.setGeometryColor(vec4.fromValues(controls.color[0] / 255, controls.color[1] / 255, controls.color[2] / 255, 1));
+    
+
+    const obj = isCube ? cube : icosphere;
 
     renderer.render(camera, lambert, [
-      // icosphere,
+      obj,
       // square,
-      cube,
+      //cube,
     ]);
     stats.end();
+    time++;
 
     // Tell the browser to call `tick` again whenever it renders a new frame
     requestAnimationFrame(tick);
