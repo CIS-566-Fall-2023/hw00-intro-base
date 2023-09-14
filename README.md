@@ -5,6 +5,26 @@
 </p>
 <p align="center">(source: Ken Perlin)</p>
 
+## Claire Lu
+For the fragment shader, I used fbm to create the transitions between colors and the soft fractal noise textures. I parametrized the color changes based on time as well, helping to create the glow effect, where the shape transitions from blue/green to pink and then white. For the vertex shader, I used a combination of worley noise and fbm. When looking at the icosphere, this creates soft bumpy mountains, which pulse according to time. The cube also wobbles because of these vertex deformations. 
+
+[Live Demo](https://clairel21.github.io/hw00-intro-base/)
+
+## Icosphere
+<img width="545" alt="Screenshot 2023-09-13 at 11 36 27 PM" src="https://github.com/ClaireL21/hw00-intro-base/assets/102630261/a6382ad9-1ae1-4d5b-a878-bfb5fbbe2fc7">
+
+<img width="535" alt="Screenshot 2023-09-14 at 12 27 59 AM" src="https://github.com/ClaireL21/hw00-intro-base/assets/102630261/9bb8d5d2-eea1-4e3e-9408-75f22e970384">
+
+<img width="500" alt="Screenshot 2023-09-13 at 11 37 21 PM" src="https://github.com/ClaireL21/hw00-intro-base/assets/102630261/e23acd94-2287-44ed-a9f4-92d2a7ac2069">
+
+## Cube
+<img width="686" alt="Screenshot 2023-09-13 at 11 40 13 PM" src="https://github.com/ClaireL21/hw00-intro-base/assets/102630261/f8fb6ee6-4a38-4f35-ae78-e48ea6630804">
+
+<img width="534" alt="Screenshot 2023-09-14 at 12 29 31 AM" src="https://github.com/ClaireL21/hw00-intro-base/assets/102630261/7ae104bb-0f5d-400f-ade3-979cccdfc92b">
+
+<img width="548" alt="Screenshot 2023-09-13 at 11 37 29 PM" src="https://github.com/ClaireL21/hw00-intro-base/assets/102630261/336df77a-6a16-4880-aa4f-01e17cd5d942">
+
+
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
