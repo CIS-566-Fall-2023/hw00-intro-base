@@ -4,7 +4,7 @@
 
 This is my first time really using WebGL and one of my first times working with typescript and a web project in general, but the similarness of the GL and renderer setup with OpenGL really helped me get through it fast. I knew I wanted to use Worley to create some sort of circular noise with some techno looking effects so I used Worley with another Worley noise function passed in to create the ring like effects that panned and expanded on the shape. I also 
 
-[Live Demo](https://dinethmeegoda.github.io/hw00-intro-base/)
+[Live Demo](https://dinethmeegoda.github.io/Intro-WebGL-Shader/)
 
 Sample Images
 ==================
