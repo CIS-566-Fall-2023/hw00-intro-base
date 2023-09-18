@@ -8,6 +8,11 @@
 ### My project
 [View Live Demo](https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/f8aa3f7e-6c5f-416e-8694-e6b3bdeb95cd.gif?ClientID=vimeo-core-prod&Date=1695020552&Signature=565d95aa875d0ca26e2c0678bd36b9996d4905b5)
 
+In this WebGL project structured similarly to CIS 460's OpenGL assignments, I familiarized myself with the existing TypeScript codebase and explored key resources to enhance my understanding of JavaScript modules and shader programming. I extended the project by adding a Cube class that inherits from the 'Drawable' class and implemented its constructor and 'create' function to render a cube instance in the scene. I also updated the GUI in 'main.ts' to allow for dynamic color adjustments in the Lambert shader. Additionally, I crafted a custom fragment shader implementing 3D Perlin noise algorithm to modify fragment colors and wrote a custom vertex shader that employs trigonometric functions to animate the cube's vertices over time. This project involved both graphical and algorithmic enhancements, enriching the existing WebGL application.
+
+A screenshot of my project can be viewed here:
+
+
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
