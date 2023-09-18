@@ -5,6 +5,9 @@
 </p>
 <p align="center">(source: Ken Perlin)</p>
 
+### My project
+[View Live Demo](https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/f8aa3f7e-6c5f-416e-8694-e6b3bdeb95cd.gif?ClientID=vimeo-core-prod&Date=1695020552&Signature=565d95aa875d0ca26e2c0678bd36b9996d4905b5)
+
 ## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
