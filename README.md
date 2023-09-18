@@ -11,6 +11,7 @@
 In this WebGL project structured similarly to CIS 460's OpenGL assignments, I familiarized myself with the existing TypeScript codebase and explored key resources to enhance my understanding of JavaScript modules and shader programming. I extended the project by adding a Cube class that inherits from the 'Drawable' class and implemented its constructor and 'create' function to render a cube instance in the scene. I also updated the GUI in 'main.ts' to allow for dynamic color adjustments in the Lambert shader. Additionally, I crafted a custom fragment shader implementing 3D Perlin noise algorithm to modify fragment colors and wrote a custom vertex shader that employs trigonometric functions to animate the cube's vertices over time. This project involved both graphical and algorithmic enhancements, enriching the existing WebGL application.
 
 A screenshot of my project can be viewed here:
+![screenshot](https://github.com/uluyek/hw00-intro-base/blob/master/CIS5660%20HW0.png)
 
 
 ## Objective
