@@ -29,6 +29,9 @@ class ShaderProgram {
   unifModelInvTr: WebGLUniformLocation;
   unifViewProj: WebGLUniformLocation;
   unifColor: WebGLUniformLocation;
+  unifScale: WebGLUniformLocation;
+  unifPersistency: WebGLUniformLocation;
+  unifTransparency: WebGLUniformLocation;
 
   constructor(shaders: Array<Shader>) {
     this.prog = gl.createProgram();
@@ -48,6 +51,9 @@ class ShaderProgram {
     this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
     this.unifViewProj   = gl.getUniformLocation(this.prog, "u_ViewProj");
     this.unifColor      = gl.getUniformLocation(this.prog, "u_Color");
+    this.unifScale      = gl.getUniformLocation(this.prog, "u_Scale");
+    this.unifPersistency      = gl.getUniformLocation(this.prog, "u_Persistency");
+    this.unifTransparency      = gl.getUniformLocation(this.prog, "u_Transparency");
   }
 
   use() {
@@ -84,6 +90,24 @@ class ShaderProgram {
       gl.uniform4fv(this.unifColor, color);
     }
   }
+  setScale(MyScale: GLfloat) {
+    this.use();
+    if (this.unifScale !== -1) {
+      gl.uniform1f(this.unifScale, MyScale);
+    }
+  }
+  setPersistency(Persistency: GLfloat) {
+    this.use();
+    if (this.unifTransparency !== -1) {
+      gl.uniform1f(this.unifPersistency, Persistency);
+    }
+  }
+  setTransparency(Transparency: GLfloat) {
+    this.use();
+    if (this.unifTransparency !== -1) {
+      gl.uniform1f(this.unifTransparency, Transparency);
+    }
+  }
 
   draw(d: Drawable) {
     this.use();
@@ -104,6 +128,13 @@ class ShaderProgram {
     if (this.attrPos != -1) gl.disableVertexAttribArray(this.attrPos);
     if (this.attrNor != -1) gl.disableVertexAttribArray(this.attrNor);
   }
+  setTime(time: number) {
+    this.use();
+    let u_Time = gl.getUniformLocation(this.prog, "u_Time");
+    if (u_Time !== -1) {
+        gl.uniform1f(u_Time, time);
+    }
+}
 };
 
 export default ShaderProgram;
